@@ -20,7 +20,7 @@ const validateEmail = (email) => {
 
 const validatePassword = (password) => {
   // At least 8 characters, 1 uppercase, 1 lowercase, 1 number
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
   return passwordRegex.test(password);
 };
 
@@ -110,7 +110,7 @@ app.post("/register", async (req, res) => {
     errors.password = "Password is required";
   } else if (!validatePassword(password)) {
     errors.password =
-      "Password must be at least 8 characters with 1 uppercase, 1 lowercase, and 1 number";
+      "Password must be at least 6 characters with 1 uppercase, 1 lowercase, and 1 number";
   }
 
   if (Object.keys(errors).length > 0) {

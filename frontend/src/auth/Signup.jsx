@@ -97,7 +97,6 @@ export default function Signup() {
       <div className="absolute bottom-10 right-10 w-32 h-32 bg-pink-400 rounded-full blur-xl opacity-50"></div>
 
       <div className="relative bg-white p-8 rounded-[2rem] shadow-[0_20px_0_0_rgba(0,0,0,0.1)] border-4 border-indigo-900 w-full max-w-md transform transition-all hover:scale-[1.01]">
-       
         <h1 className="text-4xl font-black text-center text-indigo-900 mb-2 tracking-tight">
           HERO SIGNUP
         </h1>
