@@ -3,6 +3,7 @@ import { RigidBody } from "@react-three/rapier";
 import Office from "./gameModels/office";
 import CharacterController from "./gameModels/timmy";
 import ThirdPersonCamera from "./utils/ThirdPersonCamera";
+import GirlCharacterController from "./gameModels/girl";
 import { useEffect } from "react";
 
 export default function Scene() {
@@ -25,7 +26,8 @@ export default function Scene() {
       <directionalLight position={[5, 10, 5]} intensity={1} />
 
       {/* Character Controller */}
-      <CharacterController scale={1} position={[-2, 3, 3]} />
+      {/* <CharacterController scale={1} position={[-2, 3, 3]} /> */}
+      <GirlCharacterController scale={1} position={[-2, 3, 3]} />
 
       {/* Environment */}
       <Office scale={1.5} position={[0, 0, 0]} />

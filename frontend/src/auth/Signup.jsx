@@ -111,7 +111,7 @@ export default function Signup() {
             </label>
             <input
               type="text"
-              placeholder="SuperCoder_12"
+              placeholder="Hero123"
               className={`w-full mt-1 px-4 py-3 rounded-2xl border-4 bg-indigo-50 font-bold transition-all focus:ring-4 focus:ring-yellow-300 outline-none ${
                 errors.username ? "border-red-400" : "border-indigo-100"
               }`}
@@ -131,7 +131,7 @@ export default function Signup() {
             </label>
             <input
               type="email"
-              placeholder="hero@safeweb.com"
+              placeholder="hero@gmail.com"
               className={`w-full mt-1 px-4 py-3 rounded-2xl border-4 bg-indigo-50 font-bold transition-all focus:ring-4 focus:ring-yellow-300 outline-none ${
                 errors.email ? "border-red-400" : "border-indigo-100"
               }`}
