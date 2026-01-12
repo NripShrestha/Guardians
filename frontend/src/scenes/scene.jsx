@@ -4,12 +4,14 @@ import Office from "./gameModels/office";
 import CharacterController from "./gameModels/timmy";
 import ThirdPersonCamera from "./utils/ThirdPersonCamera";
 import GirlCharacterController from "./gameModels/girl";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Scene() {
-  // Debug: Log when Scene mounts
+  const [selectedCharacter, setSelectedCharacter] = useState(null);
+
   useEffect(() => {
-    console.log("Scene mounted - Camera should initialize");
+    const character = sessionStorage.getItem("selectedCharacter");
+    setSelectedCharacter(character || "timmy"); // Default to timmy if none selected
   }, []);
 
   return (
@@ -22,12 +24,15 @@ export default function Scene() {
       />
 
       {/* Lights */}
-      <ambientLight intensity={0.8} />
+      <ambientLight intensity={1.6} />
       <directionalLight position={[5, 10, 5]} intensity={1} />
 
-      {/* Character Controller */}
-      {/* <CharacterController scale={1} position={[-2, 3, 3]} /> */}
-      <GirlCharacterController scale={1} position={[-2, 3, 3]} />
+      {selectedCharacter === "timmy" && (
+        <CharacterController scale={1} position={[-2, 2.5, 3]} />
+      )}
+      {selectedCharacter === "girl" && (
+        <GirlCharacterController scale={1} position={[-2, 2.5, 3]} />
+      )}
 
       {/* Environment */}
       <Office scale={1.5} position={[0, 0, 0]} />

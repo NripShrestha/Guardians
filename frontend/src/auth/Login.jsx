@@ -45,7 +45,7 @@ export default function Login() {
 
       if (result.data.success) {
         localStorage.setItem("token", result.data.token);
-        navigate("/home");
+        navigate("/choose-character");
       } else {
         alert(
           "⚠️ " + (result.data.message || "Wait! That's not right. Try again!")

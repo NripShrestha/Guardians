@@ -15,6 +15,18 @@ export default function ThirdPersonCamera({
   const targetBody = useRef(null);
   const characterGroup = useRef(null);
 
+  // Raycaster for obstruction detection (reused every frame for performance)
+  const raycaster = useRef(new THREE.Raycaster());
+
+  // Current camera distance (smoothly interpolated)
+  const currentDistance = useRef(null);
+
+  // Safety margin to prevent camera clipping into walls
+  const SAFETY_OFFSET = 0.3;
+
+  // Minimum distance to prevent camera going inside character
+  const MIN_DISTANCE = 0.5;
+
   const { scene, camera } = useThree();
 
   useEffect(() => {
@@ -61,7 +73,7 @@ export default function ThirdPersonCamera({
 
     if (!characterPosition) return;
 
-    // ✅ CRITICAL FIX: Read Y rotation from the CHARACTER MESH, not RigidBody
+    // Read Y rotation from the CHARACTER MESH, not RigidBody
     // This is the character's actual facing direction
     const characterYRotation = characterGroup.current.rotation.y;
 
@@ -76,34 +88,106 @@ export default function ThirdPersonCamera({
       characterYRotation
     );
 
-    // Calculate desired camera position in world space
-    const desiredPosition = new THREE.Vector3(
-      characterPosition.x + rotatedOffset.x,
-      characterPosition.y + rotatedOffset.y,
-      characterPosition.z + rotatedOffset.z
-    );
-
-    // Calculate look-at target (character's upper body)
-    const desiredLookAt = new THREE.Vector3(
+    // Calculate look-at target (character's upper body/chest height)
+    // This is our raycast origin point
+    const lookAtTarget = new THREE.Vector3(
       characterPosition.x + lookAtOffset.x,
       characterPosition.y + lookAtOffset.y,
       characterPosition.z + lookAtOffset.z
     );
 
+    // Calculate IDEAL camera position (where we want to be without obstructions)
+    const idealCameraPosition = new THREE.Vector3(
+      characterPosition.x + rotatedOffset.x,
+      characterPosition.y + rotatedOffset.y,
+      characterPosition.z + rotatedOffset.z
+    );
+
+    // ═══════════════════════════════════════════════════════════════
+    // OBSTRUCTION DETECTION - Core AAA TPP Camera Logic
+    // ═══════════════════════════════════════════════════════════════
+
+    // Calculate ideal distance from look-at point to desired camera position
+    const idealDistance = lookAtTarget.distanceTo(idealCameraPosition);
+
+    // Initialize current distance on first frame
+    if (currentDistance.current === null) {
+      currentDistance.current = idealDistance;
+    }
+
+    // Direction vector from character to ideal camera position
+    const rayDirection = new THREE.Vector3()
+      .subVectors(idealCameraPosition, lookAtTarget)
+      .normalize();
+
+    // Setup raycaster: shoot ray from character toward ideal camera position
+    raycaster.current.set(lookAtTarget, rayDirection);
+
+    // Raycast against all scene objects
+    const intersects = raycaster.current.intersectObjects(scene.children, true);
+
+    // Filter out character's own meshes (we don't want to collide with ourselves)
+    const validIntersects = intersects.filter((intersect) => {
+      // Traverse up the hierarchy to check if this object is part of the character
+      let obj = intersect.object;
+      while (obj) {
+        if (obj === characterGroup.current) {
+          return false; // Skip character's own meshes
+        }
+        obj = obj.parent;
+      }
+      return true; // Valid obstruction
+    });
+
+    // Determine actual camera distance based on obstructions
+    let targetDistance = idealDistance;
+
+    if (validIntersects.length > 0) {
+      // We hit something! Find the closest obstruction
+      const closestHit = validIntersects[0];
+      const hitDistance = closestHit.distance;
+
+      // Only adjust if obstruction is between character and ideal camera position
+      if (hitDistance < idealDistance) {
+        // Pull camera closer, but leave safety margin to prevent wall clipping
+        targetDistance = Math.max(hitDistance - SAFETY_OFFSET, MIN_DISTANCE);
+      }
+    }
+
+    // Smoothly interpolate current distance toward target distance
+    // This prevents jarring snaps when obstructions appear/disappear
+    // Use a slightly faster lerp for distance to make it feel responsive
+    const distanceSmoothness = Math.min(smoothness * 1.5, 0.3);
+    currentDistance.current = THREE.MathUtils.lerp(
+      currentDistance.current,
+      targetDistance,
+      distanceSmoothness
+    );
+
+    // ═══════════════════════════════════════════════════════════════
+    // CAMERA POSITIONING - Apply obstruction-adjusted distance
+    // ═══════════════════════════════════════════════════════════════
+
+    // Calculate actual camera position using adjusted distance
+    // Start from look-at point, move in ray direction by current distance
+    const actualCameraPosition = new THREE.Vector3()
+      .copy(lookAtTarget)
+      .add(rayDirection.multiplyScalar(currentDistance.current));
+
     // Initialize on first frame (no smoothing for instant camera placement)
     if (!initialized.current) {
-      currentPosition.current.copy(desiredPosition);
-      currentLookAt.current.copy(desiredLookAt);
-      camera.position.copy(desiredPosition);
-      camera.lookAt(desiredLookAt);
+      currentPosition.current.copy(actualCameraPosition);
+      currentLookAt.current.copy(lookAtTarget);
+      camera.position.copy(actualCameraPosition);
+      camera.lookAt(lookAtTarget);
       initialized.current = true;
-      console.log("✓ Camera initialized at:", desiredPosition);
+      console.log("✓ Camera initialized at:", actualCameraPosition);
       return;
     }
 
-    // Smooth camera movement using LERP
-    currentPosition.current.lerp(desiredPosition, smoothness);
-    currentLookAt.current.lerp(desiredLookAt, smoothness);
+    // Smooth camera movement using LERP (maintains existing feel)
+    currentPosition.current.lerp(actualCameraPosition, smoothness);
+    currentLookAt.current.lerp(lookAtTarget, smoothness);
 
     // Apply to camera
     camera.position.copy(currentPosition.current);
