@@ -4,6 +4,7 @@ import Scene from "./scenes/scene";
 import { Physics } from "@react-three/rapier";
 import LoadingScreen from "./scenes/gameUI/LoadScreen";
 import CharacterSelection from "./scenes/gameUI/CharacterSelect";
+import HUD from "./scenes/gameUI/HUD/Hud";
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
@@ -19,6 +20,7 @@ export default function Home() {
           </Physics>
         </Suspense>
       </Canvas>
+      <HUD />
     </div>
   );
 }
