@@ -1,15 +1,18 @@
 import { useState } from "react";
-import { X, Volume2, Sun, LogOut, Check} from "lucide-react";
+import { X, Volume2, Sun, LogOut, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useBrightness } from "../../utils/BrightnessContext";
+import { useVolume } from "../../utils/VolumeContext"; // Add this import
 
 export default function SettingsModal({ onClose }) {
   const navigate = useNavigate();
   const [confirmExit, setConfirmExit] = useState(false);
+  const { brightness, setBrightness } = useBrightness();
+  const { volume, setVolume } = useVolume(); // Add this hook
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-indigo-900/20 backdrop-blur-md px-4">
       <div className="w-full max-w-sm bg-white border-4 border-indigo-900 p-8 rounded-[3rem] shadow-[15px_15px_0_0_#4338ca] relative">
-        {/* Close Button - Hidden during confirmation to force a choice */}
         {!confirmExit && (
           <button
             onClick={onClose}
@@ -26,22 +29,32 @@ export default function SettingsModal({ onClose }) {
             </h2>
 
             <div className="space-y-8">
+              {/* VOLUME SLIDER - NOW FUNCTIONAL */}
               <div className="flex items-center gap-4">
                 <div className="bg-indigo-100 p-3 rounded-xl border-2 border-indigo-900">
                   <Volume2 className="text-indigo-900" />
                 </div>
                 <input
                   type="range"
+                  min="0"
+                  max="100"
+                  value={volume}
+                  onChange={(e) => setVolume(Number(e.target.value))}
                   className="w-full accent-indigo-600 h-3 bg-indigo-50 rounded-lg appearance-none border-2 border-indigo-900"
                 />
               </div>
 
+              {/* BRIGHTNESS SLIDER */}
               <div className="flex items-center gap-4">
                 <div className="bg-indigo-100 p-3 rounded-xl border-2 border-indigo-900">
                   <Sun className="text-indigo-900" />
                 </div>
                 <input
                   type="range"
+                  min="0"
+                  max="100"
+                  value={brightness}
+                  onChange={(e) => setBrightness(Number(e.target.value))}
                   className="w-full accent-indigo-600 h-3 bg-indigo-50 rounded-lg appearance-none border-2 border-indigo-900"
                 />
               </div>

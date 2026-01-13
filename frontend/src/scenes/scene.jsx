@@ -4,28 +4,46 @@ import Office from "./gameModels/office";
 import CharacterController from "./gameModels/timmy";
 import ThirdPersonCamera from "./utils/ThirdPersonCamera";
 import GirlCharacterController from "./gameModels/girl";
+import PositionalAudio from "./utils/PositionalAudio";// Import the new component
 import { useEffect, useState } from "react";
+import { useBrightness } from "./utils/BrightnessContext";
 
 export default function Scene() {
   const [selectedCharacter, setSelectedCharacter] = useState(null);
+  const { brightness } = useBrightness(); 
+
+  const ambientIntensity = (brightness / 50) * 1.6;
+  const directionalIntensity = (brightness / 50) * 1; 
 
   useEffect(() => {
     const character = sessionStorage.getItem("selectedCharacter");
-    setSelectedCharacter(character || "timmy"); // Default to timmy if none selected
+    setSelectedCharacter(character || "timmy");
   }, []);
 
   return (
     <>
-      {/* Third-Person Camera - MUST be at the top, outside Suspense boundaries */}
       <ThirdPersonCamera
-        offset={{ x: 0, y: 2, z: -3 }} // 5 units behind, 2.5 up
-        lookAtOffset={{ x: 0, y: 1, z: 0 }} // Look at chest height
-        smoothness={0.1} // Adjust lag (0.05 = more lag, 0.2 = snappier)
+        offset={{ x: 0, y: 2, z: -3 }}
+        lookAtOffset={{ x: 0, y: 1, z: 0 }}
+        smoothness={0.1}
       />
 
-      {/* Lights */}
-      <ambientLight intensity={1.6} />
-      <directionalLight position={[5, 10, 5]} intensity={1} />
+      {/* Positional 3D Audio */}
+      <PositionalAudio
+        url="/audios/office-audio.mp3"
+        position={[-10.69, 2.03, 4.94]}
+        refDistance={5}
+        maxDistance={10}
+        rolloffFactor={1}
+        loop={true}
+        autoplay={true}
+      />
+
+      <ambientLight intensity={ambientIntensity} />
+      <directionalLight
+        position={[5, 10, 5]}
+        intensity={directionalIntensity}
+      />
 
       {selectedCharacter === "timmy" && (
         <CharacterController scale={1} position={[-2, 2.5, 3]} />
@@ -34,7 +52,6 @@ export default function Scene() {
         <GirlCharacterController scale={1} position={[-2, 2.5, 3]} />
       )}
 
-      {/* Environment */}
       <Office scale={1.5} position={[0, 0, 0]} />
     </>
   );
