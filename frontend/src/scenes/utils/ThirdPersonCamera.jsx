@@ -6,6 +6,7 @@ export default function ThirdPersonCamera({
   offset = { x: 0, y: 2.5, z: 5 },
   lookAtOffset = { x: 0, y: 1, z: 0 },
   smoothness = 0.1,
+  enabled = true, 
 }) {
   const currentPosition = useRef(new THREE.Vector3());
   const currentLookAt = useRef(new THREE.Vector3());
@@ -34,6 +35,7 @@ export default function ThirdPersonCamera({
   }, []);
 
   useFrame((state, delta) => {
+    if (!enabled) return;
     // Find character references if not found yet
     if (!targetBody.current || !characterGroup.current) {
       scene.traverse((child) => {
@@ -85,7 +87,7 @@ export default function ThirdPersonCamera({
     const rotatedOffset = localOffset.clone();
     rotatedOffset.applyAxisAngle(
       new THREE.Vector3(0, 1, 0),
-      characterYRotation
+      characterYRotation,
     );
 
     // Calculate look-at target (character's upper body/chest height)
@@ -93,14 +95,14 @@ export default function ThirdPersonCamera({
     const lookAtTarget = new THREE.Vector3(
       characterPosition.x + lookAtOffset.x,
       characterPosition.y + lookAtOffset.y,
-      characterPosition.z + lookAtOffset.z
+      characterPosition.z + lookAtOffset.z,
     );
 
     // Calculate IDEAL camera position (where we want to be without obstructions)
     const idealCameraPosition = new THREE.Vector3(
       characterPosition.x + rotatedOffset.x,
       characterPosition.y + rotatedOffset.y,
-      characterPosition.z + rotatedOffset.z
+      characterPosition.z + rotatedOffset.z,
     );
 
     // ═══════════════════════════════════════════════════════════════
@@ -161,7 +163,7 @@ export default function ThirdPersonCamera({
     currentDistance.current = THREE.MathUtils.lerp(
       currentDistance.current,
       targetDistance,
-      distanceSmoothness
+      distanceSmoothness,
     );
 
     // ═══════════════════════════════════════════════════════════════
