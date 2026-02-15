@@ -1,22 +1,36 @@
 import React, { useRef, useEffect } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 
-export default function Npc(props) {
+const EXPLAINING_STAGES = new Set(["TALKING_TO_MANAGER", "DEBRIEFING"]);
+
+export default function Npc({ missionStage, ...props }) {
   const group = useRef();
   const { nodes, materials, animations } = useGLTF("/models/NPC.glb");
   const { actions } = useAnimations(animations, group);
 
+  const isExplaining = EXPLAINING_STAGES.has(missionStage);
+
   useEffect(() => {
-    if (actions && actions["Idle"]) {
-      actions["Idle"].reset().fadeIn(0.3).play();
+    if (!actions) return;
+
+    const explainAction = actions["Explaining"];
+    const idleAction = actions["Idle"];
+
+    if (isExplaining && explainAction) {
+      // Cross-fade from Idle → Explaining
+      idleAction?.fadeOut(0.3);
+      explainAction.reset().fadeIn(0.3).play();
+    } else if (idleAction) {
+      // Cross-fade from Explaining → Idle
+      explainAction?.fadeOut(0.3);
+      idleAction.reset().fadeIn(0.3).play();
     }
 
     return () => {
-      if (actions && actions["Idle"]) {
-        actions["Idle"].fadeOut(0.3);
-      }
+      explainAction?.fadeOut(0.1);
+      idleAction?.fadeOut(0.1);
     };
-  }, [actions]);
+  }, [actions, isExplaining]);
 
   return (
     <group ref={group} {...props} dispose={null}>

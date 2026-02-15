@@ -3,11 +3,11 @@ import { Suspense, useState } from "react";
 import Scene from "./scenes/scene";
 import { Physics } from "@react-three/rapier";
 import LoadingScreen from "./scenes/gameUI/LoadScreen";
-import CharacterSelection from "./scenes/gameUI/CharacterSelect";
 import HUD from "./scenes/gameUI/HUD/Hud";
 import { MissionProvider } from "./scenes/missions/MissionContext";
 import MissionDebugger from "./scenes/missions/MissionDebugger";
 import FormPopup from "./scenes/gameUI/tasks/Form";
+import DialogueScene from "./scenes/gameUI/tasks/DialogueScene";
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
@@ -15,9 +15,11 @@ export default function Home() {
   return (
     <div className="relative h-screen w-screen overflow-hidden">
       {!loaded && <LoadingScreen onFinish={() => setLoaded(true)} />}
-      {/* <CharacterSelection /> */}
+
       <MissionProvider>
         <MissionDebugger />
+
+        {/* 3D Canvas */}
         <Canvas shadows camera={{ fov: 50 }}>
           <Suspense fallback={null}>
             <Physics>
@@ -25,8 +27,12 @@ export default function Home() {
             </Physics>
           </Suspense>
         </Canvas>
+
+        {/* 2D UI Overlays (render on top of canvas) */}
+        <DialogueScene />
         <FormPopup />
       </MissionProvider>
+
       <HUD />
     </div>
   );

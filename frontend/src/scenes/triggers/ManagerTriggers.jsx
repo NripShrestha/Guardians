@@ -10,23 +10,17 @@ export default function ManagerTrigger({ position }) {
       sensor
       onIntersectionEnter={() => {
         if (mission.stage === "TALK_TO_MANAGER") {
-          // First conversation
-          setMission({ ...mission, stage: "GO_TO_WORKSPACE" });
+          // Open Scene 1 dialogue
+          setMission({ ...mission, stage: "TALKING_TO_MANAGER" });
         } else if (mission.stage === "RETURN_TO_MANAGER") {
-          // Show result after form
-          if (mission.result === "PASS") {
-            console.log("Manager says: You passed! The form was a test.");
-          } else {
-            console.log("Manager says: The form was a test. You failed.");
-          }
-          // Then lecture about personal info (you'll add dialogue later)
-          setMission({ ...mission, stage: "COMPLETED" });
+          // Open Scene 2 debrief dialogue
+          setMission({ ...mission, stage: "DEBRIEFING" });
         }
       }}
     >
       <mesh position={position}>
-        <boxGeometry args={[2, 2, 2]} />
-        <meshStandardMaterial transparent opacity={0.3} />
+        <boxGeometry args={[1, 2, 2.3]} />
+        <meshStandardMaterial transparent opacity={0} />
       </mesh>
     </RigidBody>
   );

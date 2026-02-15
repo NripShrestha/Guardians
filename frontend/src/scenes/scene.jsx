@@ -1,5 +1,3 @@
-import { useGLTF } from "@react-three/drei";
-import { RigidBody } from "@react-three/rapier";
 import Office from "./gameModels/office";
 import CharacterController from "./gameModels/CharacterController";
 import Npc from "./gameModels/npc";
@@ -13,9 +11,22 @@ import MissionMarker from "./triggers/MissionMarker";
 import { useMission } from "./missions/MissionContext";
 import LaptopCamera from "./utils/LaptopCamera";
 
+// Stages where player control is locked
+const LOCKED_STAGES = new Set([
+  "TALKING_TO_MANAGER",
+  "FILL_FORM",
+  "DEBRIEFING",
+]);
+
+const MANAGER_CAMERA_STAGES = new Set(["TALKING_TO_MANAGER", "DEBRIEFING"]);
+
 export default function Scene() {
   const [selectedCharacter, setSelectedCharacter] = useState(null);
   const { brightness } = useBrightness();
+  const { mission } = useMission();
+
+  const playerLocked = LOCKED_STAGES.has(mission.stage);
+  const useManagerCamera = MANAGER_CAMERA_STAGES.has(mission.stage);
 
   const ambientIntensity = (brightness / 50) * 1.6;
   const directionalIntensity = (brightness / 50) * 1;
@@ -25,72 +36,72 @@ export default function Scene() {
     setSelectedCharacter(character || "timmy");
   }, []);
 
-  const handlePositionUpdate = useCallback(
-    (pos) => {
-      if (!pos) return;
-
-      // Define the same lookAt offset used in the ThirdPersonCamera component
-      const lookAtOffset = { x: 0, y: 1, z: 0 };
-
-      // Calculate the LookAt target position
-      const lookAt = {
-        x: pos.x + lookAtOffset.x,
-        y: pos.y + lookAtOffset.y,
-        z: pos.z + lookAtOffset.z,
-      };
-
-      // console.log(
-      //   `selectedCharacter (${selectedCharacter})`,
-      //   `| Position: [${pos.x.toFixed(2)}, ${pos.y.toFixed(2)}, ${pos.z.toFixed(2)}]`,
-      //   `| LookAt: [${lookAt.x.toFixed(2)}, ${lookAt.y.toFixed(2)}, ${lookAt.z.toFixed(2)}]`,
-      // );
-    },
-    [selectedCharacter],
-  );
-
-  const { mission } = useMission();
+  const handlePositionUpdate = useCallback(() => {}, []);
 
   return (
     <>
+      {/* ================= TPP CAMERA ================= */}
       <ThirdPersonCamera
         offset={{ x: 0, y: 2, z: -3 }}
         lookAtOffset={{ x: 0, y: 1, z: 0 }}
         smoothness={0.1}
-        enabled={mission.stage !== "FILL_FORM"}
+        enabled={!playerLocked} // 🔑 THIS NOW WORKS
       />
 
-      {/* Positional 3D Audio */}
+      {/* ================= MANAGER / LAPTOP CAMERAS ================= */}
+      <LaptopCamera
+        active={mission.stage === "FILL_FORM"}
+        position={[-5.35, 1.44, 1.45]}
+        lookAt={[-18, 1.2, 7.4]}
+      />
+
+      <LaptopCamera
+        active={useManagerCamera}
+        position={[-7.25, 1.73, 7.7]}
+        lookAt={[-7, 1, 16]}
+      />
+
+      {/* ================= AUDIO ================= */}
       <PositionalAudio
         url="/audios/office-audio.mp3"
         position={[-10.69, 2.03, 4.94]}
         refDistance={5}
         maxDistance={10}
         rolloffFactor={1}
-        loop={true}
-        autoplay={true}
+        loop
+        autoplay
       />
 
+      {/* ================= LIGHTING ================= */}
       <ambientLight intensity={ambientIntensity} />
       <directionalLight
         position={[5, 10, 5]}
         intensity={directionalIntensity}
       />
 
-      {/* ✅ Single CharacterController handles both character types */}
+      {/* ================= CHARACTER (ALWAYS MOUNTED) ================= */}
       {selectedCharacter && (
         <CharacterController
-          characterType={selectedCharacter} // "timmy" or "girl"
+          characterType={selectedCharacter}
           scale={1}
           position={[-2, 2.5, 3]}
           onPositionUpdate={handlePositionUpdate}
-          disabled={mission.stage === "FILL_FORM"}
+          disabled={playerLocked} // 🔑 movement lock only
         />
       )}
 
-      <Npc scale={1.2} position={[-7.18, 0.03, 10.17]} rotation={[0, 3.5, 0]} />
+      {/* ================= NPC ================= */}
+      <Npc
+        scale={1.2}
+        position={[-7.18, 0.03, 10.17]}
+        rotation={[0, 3.5, 0]}
+        missionStage={mission.stage}
+      />
+
       <Office scale={1.5} position={[0, 0, 0]} />
 
-      <ManagerTrigger position={[-7.18, 0.03, 10.17]} />
+      {/* ================= TRIGGERS ================= */}
+      <ManagerTrigger position={[-7.18, 0.03, 9.17]} />
 
       <MissionMarker
         position={[-5.35, 0.03, 1.99]}
@@ -98,12 +109,6 @@ export default function Scene() {
       />
 
       <WorkspaceTrigger position={[-5.35, 0.03, 1.99]} />
-
-      <LaptopCamera
-        active={mission.stage === "FILL_FORM"}
-        position={[-5.35, 1.44, 1.45]}
-        lookAt={[-18, 1.2, 7.4]}
-      />
     </>
   );
 }
