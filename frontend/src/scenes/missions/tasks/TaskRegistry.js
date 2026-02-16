@@ -136,6 +136,83 @@ export const TASK_REGISTRY = {
     showPhoneInStages: ["TASK2_WAITING_FOR_MESSAGE", "TASK2_PHONE_CHAT"],
   },
 
+  TASK_3_URL_SECURITY: {
+    id: "TASK_3_URL_SECURITY",
+    name: "URL Security - HTTP vs HTTPS",
+
+    stages: [
+      "TASK3_TALK_TO_MANAGER",
+      "TASK3_TALKING_TO_MANAGER",
+      "TASK3_GO_TO_LAPTOP",
+      "TASK3_DESKTOP_SIMULATION",
+      "TASK3_RETURN_TO_MANAGER",
+      "TASK3_DEBRIEFING",
+      "TASK3_COMPLETED",
+    ],
+
+    lockedStages: [
+      "TASK3_TALKING_TO_MANAGER",
+      "TASK3_DESKTOP_SIMULATION",
+      "TASK3_DEBRIEFING",
+    ],
+
+    stageInstructions: {
+      TASK3_TALK_TO_MANAGER: "Go talk to your manager - they seem urgent",
+      TASK3_TALKING_TO_MANAGER: "Listen carefully to your manager's request",
+      TASK3_GO_TO_LAPTOP:
+        "Go to your laptop and make the purchase (follow the green marker)",
+      TASK3_DESKTOP_SIMULATION:
+        "Search for 'blue toy car' and make the purchase carefully",
+      TASK3_RETURN_TO_MANAGER: "Return to your manager to report completion",
+      TASK3_DEBRIEFING: "Receiving feedback on your decision",
+      TASK3_COMPLETED: "Outstanding! You're mastering cybersecurity!",
+    },
+
+    triggers: [
+      {
+        type: "npc",
+        position: [-7.18, 0.03, 9.17],
+        size: [1, 2, 2.3],
+        stages: {
+          TASK3_TALK_TO_MANAGER: "TASK3_TALKING_TO_MANAGER",
+          TASK3_RETURN_TO_MANAGER: "TASK3_DEBRIEFING",
+        },
+      },
+      {
+        type: "workspace",
+        position: [-5.35, 0.03, 1.99],
+        size: [2, 2, 2],
+        stages: {
+          TASK3_GO_TO_LAPTOP: "TASK3_DESKTOP_SIMULATION",
+        },
+      },
+    ],
+
+    markers: [
+      {
+        type: "objective",
+        position: [-5.35, 0.03, 1.99],
+        visibleInStages: ["TASK3_GO_TO_LAPTOP"],
+        color: "green",
+      },
+    ],
+
+    cameras: {
+      TASK3_DESKTOP_SIMULATION: {
+        position: [-5.35, 1.44, 1.45],
+        lookAt: [-18, 1.2, 7.4],
+      },
+      TASK3_TALKING_TO_MANAGER: {
+        position: [-7.25, 1.73, 7.7],
+        lookAt: [-7, 1, 16],
+      },
+      TASK3_DEBRIEFING: {
+        position: [-7.25, 1.73, 7.7],
+        lookAt: [-7, 1, 16],
+      },
+    },
+  },
+
   TASK_2_EMAIL_SECURITY: {
     id: "TASK_2_EMAIL_SECURITY",
     name: "Email Security Training",

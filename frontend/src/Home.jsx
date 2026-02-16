@@ -8,6 +8,7 @@ import { MissionProvider } from "./scenes/missions/MissionContext";
 import MissionDebugger from "./scenes/missions/MissionDebugger";
 import DialogueScene from "./scenes/gameUI/tasksUI/DialogueScene";
 import FormPopup from "./scenes/gameUI/tasksUI/Form";
+import DesktopSimulation from "./scenes/gameUI/tasksUI/DesktopSimulation";
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
@@ -30,11 +31,10 @@ export default function Home() {
 
         {/* 2D UI Overlays (render on top of canvas) */}
         <DialogueScene />
-        
+        <DesktopSimulation />
         <FormPopup />
-      <HUD />
+        <HUD />
       </MissionProvider>
-
     </div>
   );
 }
