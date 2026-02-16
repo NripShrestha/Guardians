@@ -6,8 +6,8 @@ import LoadingScreen from "./scenes/gameUI/LoadScreen";
 import HUD from "./scenes/gameUI/HUD/Hud";
 import { MissionProvider } from "./scenes/missions/MissionContext";
 import MissionDebugger from "./scenes/missions/MissionDebugger";
-import FormPopup from "./scenes/gameUI/tasks/Form";
-import DialogueScene from "./scenes/gameUI/tasks/DialogueScene";
+import DialogueScene from "./scenes/gameUI/tasksUI/DialogueScene";
+import FormPopup from "./scenes/gameUI/tasksUI/Form";
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
@@ -31,9 +31,9 @@ export default function Home() {
         {/* 2D UI Overlays (render on top of canvas) */}
         <DialogueScene />
         <FormPopup />
+      <HUD />
       </MissionProvider>
 
-      <HUD />
     </div>
   );
 }
