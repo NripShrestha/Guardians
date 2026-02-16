@@ -21,7 +21,6 @@ export const TASK_REGISTRY = {
 
     lockedStages: ["TALKING_TO_MANAGER", "FILL_FORM", "DEBRIEFING"],
 
-    // 🆕 User-friendly instructions for each stage
     stageInstructions: {
       TALK_TO_MANAGER: "Go talk to your manager to receive your task briefing",
       TALKING_TO_MANAGER: "Listen carefully to your manager's briefing",
@@ -77,6 +76,64 @@ export const TASK_REGISTRY = {
         lookAt: [-7, 1, 16],
       },
     },
+  },
+
+  TASK_2_PHONE_SECURITY: {
+    id: "TASK_2_PHONE_SECURITY",
+    name: "Phone Security - Social Engineering Detection",
+
+    stages: [
+      "TASK2_TALK_TO_MANAGER",
+      "TASK2_TALKING_TO_MANAGER",
+      "TASK2_WAITING_FOR_MESSAGE",
+      "TASK2_PHONE_CHAT",
+      "TASK2_RETURN_TO_MANAGER",
+      "TASK2_DEBRIEFING",
+      "TASK2_COMPLETED",
+    ],
+
+    // Note: TASK2_PHONE_CHAT is NOT locked by default
+    // The PhoneMessenger component handles locking when modal is open
+    lockedStages: ["TASK2_TALKING_TO_MANAGER", "TASK2_DEBRIEFING"],
+
+    stageInstructions: {
+      TASK2_TALK_TO_MANAGER: "Go talk to your manager for your next assignment",
+      TASK2_TALKING_TO_MANAGER: "Listen carefully to your manager's briefing",
+      TASK2_WAITING_FOR_MESSAGE:
+        "Wait for a message on your office phone (check bottom-right)",
+      TASK2_PHONE_CHAT: "Check your phone and respond to messages carefully",
+      TASK2_RETURN_TO_MANAGER: "Return to your manager to report what happened",
+      TASK2_DEBRIEFING: "Receiving feedback on your performance",
+      TASK2_COMPLETED: "Excellent work! You're becoming a security expert!",
+    },
+
+    triggers: [
+      {
+        type: "npc",
+        position: [-7.18, 0.03, 9.17],
+        size: [1, 2, 2.3],
+        stages: {
+          TASK2_TALK_TO_MANAGER: "TASK2_TALKING_TO_MANAGER",
+          TASK2_RETURN_TO_MANAGER: "TASK2_DEBRIEFING",
+        },
+      },
+    ],
+
+    markers: [],
+
+    cameras: {
+      TASK2_TALKING_TO_MANAGER: {
+        position: [-7.25, 1.73, 7.7],
+        lookAt: [-7, 1, 16],
+      },
+      TASK2_DEBRIEFING: {
+        position: [-7.25, 1.73, 7.7],
+        lookAt: [-7, 1, 16],
+      },
+    },
+
+    // New config for phone UI visibility
+    showPhoneInStages: ["TASK2_WAITING_FOR_MESSAGE", "TASK2_PHONE_CHAT"],
   },
 
   TASK_2_EMAIL_SECURITY: {
@@ -170,8 +227,14 @@ export function getCameraConfig(missionId, stage) {
   return config?.cameras[stage];
 }
 
-// 🆕 Helper to get instruction for current stage
+// Helper to get instruction for current stage
 export function getStageInstruction(missionId, stage) {
   const config = TASK_REGISTRY[missionId];
   return config?.stageInstructions[stage] || "Complete your current objective";
+}
+
+// Helper to check if phone should be visible
+export function shouldShowPhone(missionId, stage) {
+  const config = TASK_REGISTRY[missionId];
+  return config?.showPhoneInStages?.includes(stage) ?? false;
 }

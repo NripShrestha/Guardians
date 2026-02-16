@@ -20,11 +20,14 @@ import CameraManager from "./triggers/CameraManager";
  */
 export default function Scene() {
   const [selectedCharacter, setSelectedCharacter] = useState(null);
-  const { mission } = useMission();
+  const { mission, isPhoneModalOpen } = useMission();
 
   // Get current task configuration
   const taskConfig = getCurrentTaskConfig(mission.id);
-  const playerLocked = isPlayerLocked(mission.id, mission.stage);
+
+  // Player is locked if stage requires it OR phone modal is open
+  const playerLocked =
+    isPlayerLocked(mission.id, mission.stage) || isPhoneModalOpen;
 
   // Load selected character from session
   useEffect(() => {

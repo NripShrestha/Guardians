@@ -30,6 +30,7 @@ export default function Home() {
 
         {/* 2D UI Overlays (render on top of canvas) */}
         <DialogueScene />
+        
         <FormPopup />
       <HUD />
       </MissionProvider>

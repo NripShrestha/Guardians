@@ -27,8 +27,18 @@ export function MissionProvider({ children }) {
     unsafeFields: [], // fields that were filled with sensitive data
   });
 
+  // Phone modal state (for Task 2)
+  const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
+
   return (
-    <MissionContext.Provider value={{ mission, setMission }}>
+    <MissionContext.Provider
+      value={{
+        mission,
+        setMission,
+        isPhoneModalOpen,
+        setIsPhoneModalOpen,
+      }}
+    >
       {children}
     </MissionContext.Provider>
   );

@@ -1,7 +1,12 @@
 import React, { useRef, useEffect } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 
-const EXPLAINING_STAGES = new Set(["TALKING_TO_MANAGER", "DEBRIEFING"]);
+const EXPLAINING_STAGES = new Set([
+  "TALKING_TO_MANAGER",
+  "DEBRIEFING",
+  "TASK2_TALKING_TO_MANAGER",
+  "TASK2_DEBRIEFING"
+]);
 
 export default function Npc({ missionStage, ...props }) {
   const group = useRef();

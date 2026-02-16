@@ -1,36 +1,34 @@
 import { useState, useEffect, useRef } from "react";
 import { useMission } from "../../missions/MissionContext";
 
-// ─── Dialogue Data ────────────────────────────────────────────────────────────
+// ─── TASK 1 DIALOGUE DATA ────────────────────────────────────────────────────
 
-const SCENE_1_OPENING = [
+const TASK1_SCENE_1_OPENING = [
   {
     speaker: "Manager",
-    
     text: "Hey there, new recruit! Before you start your adventure, you need to fill out this quick form in your workspace.",
   },
   {
     speaker: "Manager",
-    
     text: "Everything you do here is part of your training to become a Digital Hero!",
   },
 ];
 
-const SCENE_1_OPTIONS = [
+const TASK1_SCENE_1_OPTIONS = [
   { id: "agree", label: "Okay, I'll go fill out the form!" },
   { id: "resist", label: "Do I have to? Forms are boring." },
   { id: "inquire", label: "What's this form for?" },
 ];
 
-const SCENE_1_RESPONSES = {
-  agree: null, // no extra NPC line — just proceed
+const TASK1_SCENE_1_RESPONSES = {
+  agree: null,
   resist:
     "Haha, I know! But this one is super important. It's your first test!",
   inquire:
     "It's a standard Hero Registration. Be a super thinker and decide what info is safe to share online!",
 };
 
-const LECTURE_LINES = [
+const TASK1_LECTURE_LINES = [
   "Always remember: Never share your Secret Code, passwords, or personal secrets with anyone online!",
   "Real heroes and trusted grown-ups will never ask for secret codes in a message or email.",
   "If this secret info gets into the wrong hands, villains could:",
@@ -39,6 +37,64 @@ const LECTURE_LINES = [
   "• Use your name for sneaky scams.",
   "• Trick your friends and family.",
   "Protect your digital world! Always think before you click or share.",
+];
+
+// ─── TASK 2 DIALOGUE DATA ────────────────────────────────────────────────────
+
+const TASK2_SCENE_1_OPENING = [
+  {
+    speaker: "Manager",
+    text: "Good. You passed the initial assessment. That tells me you can follow instructions — but now we test judgment.",
+  },
+  {
+    speaker: "Manager",
+    text: "This is an office phone. You'll be responding to people who need help completing online forms.",
+  },
+  {
+    speaker: "Manager",
+    text: "Be helpful — but stay alert. Some questions aren't as innocent as they seem.",
+  },
+];
+
+const TASK2_RESULT_LINES_PASS = [
+  {
+    speaker: "Manager",
+    text: "Good instinct.",
+  },
+  {
+    speaker: "Manager",
+    text: "Attackers often ask for help with forms because it lowers suspicion.",
+  },
+  {
+    speaker: "Manager",
+    text: '"Just an email." "Just a code." Those words have caused more breaches than malware ever has.',
+  },
+];
+
+const TASK2_RESULT_LINES_FAIL = [
+  {
+    speaker: "Manager",
+    text: "You failed the test. You are very lucky that the messenger was just an employee testing your ability to detect a dangerous message.",
+  },
+  {
+    speaker: "Manager",
+    text: "You need to be very aware.",
+  },
+];
+
+const TASK2_LECTURE_LINES = [
+  {
+    speaker: "Manager",
+    text: "Verification codes are as sensitive as passwords.",
+  },
+  {
+    speaker: "Manager",
+    text: "Emails aren't harmless identifiers — they are keys.",
+  },
+  {
+    speaker: "Manager",
+    text: "If someone needs access to your contact information to complete their task — that task is already compromised.",
+  },
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -87,7 +143,7 @@ function Avatar({ label, pass }) {
     <div
       className="flex-shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-[4px_4px_0_0_#4338ca] border-4"
       style={{
-        backgroundColor: "#fef3c7", // A creamy yellow
+        backgroundColor: "#fef3c7",
         borderColor: borderColor,
       }}
     >
@@ -104,11 +160,9 @@ function DialogueBubble({ line, onAdvance }) {
       onClick={done ? onAdvance : skip}
       className="cursor-pointer select-none bg-white p-4 rounded-2xl border-4 border-indigo-900"
     >
-      {/* Speaker name */}
       <p className="text-sm font-black text-pink-500 mb-1 tracking-wider uppercase">
         {line.speaker}
       </p>
-      {/* Text body */}
       <p
         className="text-lg font-bold leading-snug text-indigo-900"
         style={{ minHeight: "3.5rem" }}
@@ -147,15 +201,15 @@ function ChoiceMenu({ options, onSelect }) {
   );
 }
 
-// ─── Scene 1: TALK_TO_ROBO_WARDEN ───────────────────────────────────────────
+// ─── TASK 1 SCENES ────────────────────────────────────────────────────────────
 
-function Scene1({ onComplete }) {
+function Task1Scene1({ onComplete }) {
   const [lineIndex, setLineIndex] = useState(0);
   const [phase, setPhase] = useState("opening");
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleOpeningAdvance = () => {
-    if (lineIndex < SCENE_1_OPENING.length - 1) {
+    if (lineIndex < TASK1_SCENE_1_OPENING.length - 1) {
       setLineIndex((i) => i + 1);
     } else {
       setPhase("choice");
@@ -164,7 +218,7 @@ function Scene1({ onComplete }) {
 
   const handleChoice = (id) => {
     setSelectedOption(id);
-    if (SCENE_1_RESPONSES[id]) {
+    if (TASK1_SCENE_1_RESPONSES[id]) {
       setPhase("response");
     } else {
       onComplete();
@@ -177,12 +231,11 @@ function Scene1({ onComplete }) {
 
   const currentLine =
     phase === "opening"
-      ? SCENE_1_OPENING[lineIndex]
+      ? TASK1_SCENE_1_OPENING[lineIndex]
       : phase === "response"
         ? {
             speaker: "Manager",
-            
-            text: SCENE_1_RESPONSES[selectedOption],
+            text: TASK1_SCENE_1_RESPONSES[selectedOption],
           }
         : null;
 
@@ -199,48 +252,41 @@ function Scene1({ onComplete }) {
             }
           />
         ) : (
-          <ChoiceMenu options={SCENE_1_OPTIONS} onSelect={handleChoice} />
+          <ChoiceMenu options={TASK1_SCENE_1_OPTIONS} onSelect={handleChoice} />
         )}
       </div>
     </div>
   );
 }
 
-// ─── Scene 2: RETURN_TO_ROBO_WARDEN ──────────────────────────────────────────
+function Task1Scene2({ result, unsafeFields, onComplete }) {
+  const RESULT_LINES_PASS = [
+    {
+      speaker: "Manager",
+      text: "Awesome! You completed the form and kept your important info super safe. Great job!",
+    },
+    {
+      speaker: "Manager",
+      text: "You passed the first test! You're on your way to being a Digital Hero!",
+    },
+  ];
 
-const RESULT_LINES_PASS = [
-  {
-    speaker: "Manager",
-    
-    text: "Awesome! You completed the form and kept your important info super safe. Great job!",
-  },
-  {
-    speaker: "Manager",
-    
-    text: "You passed the first test! You're on your way to being a Digital Hero!",
-  },
-];
+  const RESULT_LINES_FAIL = [
+    {
+      speaker: "Manager",
+      text: "Uh oh... It looks like you shared some secret information on the form.",
+    },
+    {
+      speaker: "Manager",
+      text: "Don't worry! This was just a test. Let's learn why it's important to be careful.",
+    },
+  ];
 
-const RESULT_LINES_FAIL = [
-  {
-    speaker: "Manager",
-    
-    text: "Uh oh... It looks like you shared some secret information on the form.",
-  },
-  {
-    speaker: "Manager",
-    
-    text: "Don't worry! This was just a test. Let's learn why it's important to be careful.",
-  },
-];
-
-function Scene2({ result, unsafeFields, onComplete }) {
   const resultLines = result === "PASS" ? RESULT_LINES_PASS : RESULT_LINES_FAIL;
   const allLines = [
     ...resultLines,
-    ...LECTURE_LINES.map((text) => ({
+    ...TASK1_LECTURE_LINES.map((text) => ({
       speaker: "Manager",
-      
       text,
     })),
   ];
@@ -259,10 +305,6 @@ function Scene2({ result, unsafeFields, onComplete }) {
 
   return (
     <div className="space-y-4">
-      {/* Result badge */}
-      
-
-      {/* Unsafe fields summary */}
       {result === "FAIL" && !isLectureSection && unsafeFields?.length > 0 && (
         <div className="text-sm p-3 rounded-lg font-bold bg-red-100 border-2 border-red-300 text-red-700">
           <span className="font-black">Flagged Fields: </span>
@@ -270,9 +312,77 @@ function Scene2({ result, unsafeFields, onComplete }) {
         </div>
       )}
 
-      
+      <div className="flex gap-4 items-start">
+        <Avatar
+          label="🧑🏻‍💼"
+          pass={!isLectureSection ? result === "PASS" : undefined}
+        />
+        <div className="flex-1">
+          <DialogueBubble
+            key={lineIndex}
+            line={allLines[lineIndex]}
+            onAdvance={handleAdvance}
+          />
+          {isLast && (
+            <button
+              onClick={handleAdvance}
+              className="mt-4 w-full bg-yellow-400 hover:bg-yellow-500 text-indigo-900 py-3 rounded-2xl text-lg font-black border-b-8 border-yellow-600 active:border-b-0 active:translate-y-2 transition-all"
+            >
+              Finish Task
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
-      {/* Dialogue Content */}
+// ─── TASK 2 SCENES ────────────────────────────────────────────────────────────
+
+function Task2Scene1({ onComplete }) {
+  const [lineIndex, setLineIndex] = useState(0);
+
+  const handleAdvance = () => {
+    if (lineIndex < TASK2_SCENE_1_OPENING.length - 1) {
+      setLineIndex((i) => i + 1);
+    } else {
+      onComplete();
+    }
+  };
+
+  return (
+    <div className="flex gap-4 items-start">
+      <Avatar label="🧑🏻‍💼" />
+      <div className="flex-1">
+        <DialogueBubble
+          key={lineIndex}
+          line={TASK2_SCENE_1_OPENING[lineIndex]}
+          onAdvance={handleAdvance}
+        />
+      </div>
+    </div>
+  );
+}
+
+function Task2Scene2({ result, onComplete }) {
+  const resultLines =
+    result === "PASS" ? TASK2_RESULT_LINES_PASS : TASK2_RESULT_LINES_FAIL;
+  const allLines = [...resultLines, ...TASK2_LECTURE_LINES];
+  const [lineIndex, setLineIndex] = useState(0);
+
+  const handleAdvance = () => {
+    if (lineIndex < allLines.length - 1) {
+      setLineIndex((i) => i + 1);
+    } else {
+      onComplete();
+    }
+  };
+
+  const isLectureSection = lineIndex >= resultLines.length;
+  const isLast = lineIndex === allLines.length - 1;
+
+  return (
+    <div className="space-y-4">
       <div className="flex gap-4 items-start">
         <Avatar
           label="🧑🏻‍💼"
@@ -302,30 +412,64 @@ function Scene2({ result, unsafeFields, onComplete }) {
 
 export default function DialogueScene() {
   const { mission, setMission } = useMission();
-  const isScene1 = mission.stage === "TALKING_TO_MANAGER";
-  const isScene2 = mission.stage === "DEBRIEFING";
 
-  if (!isScene1 && !isScene2) return null;
+  // Task 1 handlers
+  const isTask1Scene1 = mission.stage === "TALKING_TO_MANAGER";
+  const isTask1Scene2 = mission.stage === "DEBRIEFING";
 
-  const handleScene1Complete = () => {
+  // Task 2 handlers
+  const isTask2Scene1 = mission.stage === "TASK2_TALKING_TO_MANAGER";
+  const isTask2Scene2 = mission.stage === "TASK2_DEBRIEFING";
+
+  if (!isTask1Scene1 && !isTask1Scene2 && !isTask2Scene1 && !isTask2Scene2) {
+    return null;
+  }
+
+  const handleTask1Scene1Complete = () => {
     setMission({ ...mission, stage: "GO_TO_WORKSPACE" });
   };
 
-  const handleScene2Complete = () => {
-    setMission({ ...mission, stage: "COMPLETED" });
+  const handleTask1Scene2Complete = () => {
+    // After Task 1 completes, start Task 2
+    setMission({
+      id: "TASK_2_PHONE_SECURITY",
+      stage: "TASK2_TALK_TO_MANAGER",
+      result: null,
+      unsafeFields: [],
+    });
+  };
+
+  const handleTask2Scene1Complete = () => {
+    setMission({ ...mission, stage: "TASK2_WAITING_FOR_MESSAGE" });
+  };
+
+  const handleTask2Scene2Complete = () => {
+    setMission({ ...mission, stage: "TASK2_COMPLETED" });
   };
 
   return (
-    // This container darkens the background to focus on the dialogue
-    <div className="fixed inset-0  bg-opacity-0 z-[900] flex items-end justify-center p-4 font-sans">
+    <div className="fixed inset-0 bg-opacity-0 z-[900] flex items-end justify-center p-4 font-sans">
       <div className="w-full max-w-3xl bg-yellow-400 p-6 rounded-[2rem] border-4 border-indigo-900 shadow-[10px_10px_0_0_#4338ca] mb-4">
-        {/* Scene content */}
-        {isScene1 && <Scene1 onComplete={handleScene1Complete} />}
-        {isScene2 && (
-          <Scene2
+        {/* Task 1 Scenes */}
+        {isTask1Scene1 && (
+          <Task1Scene1 onComplete={handleTask1Scene1Complete} />
+        )}
+        {isTask1Scene2 && (
+          <Task1Scene2
             result={mission.result}
             unsafeFields={mission.unsafeFields}
-            onComplete={handleScene2Complete}
+            onComplete={handleTask1Scene2Complete}
+          />
+        )}
+
+        {/* Task 2 Scenes */}
+        {isTask2Scene1 && (
+          <Task2Scene1 onComplete={handleTask2Scene1Complete} />
+        )}
+        {isTask2Scene2 && (
+          <Task2Scene2
+            result={mission.result}
+            onComplete={handleTask2Scene2Complete}
           />
         )}
       </div>

@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Settings, Save, List } from "lucide-react";
 import SettingsModal from "./SettingsModal";
 import MissionPopup from "./MissionPopup";
+import PhoneMessenger from "../tasksUI/PhoneMessenger";
+import { useMission } from "../../missions/MissionContext";
+import { shouldShowPhone } from "../../missions/tasks/TaskRegistry";
 
 // Reusable Icon Button Component
 const IconButton = ({ onClick, icon: Icon, color = "bg-white" }) => (
@@ -16,6 +19,7 @@ const IconButton = ({ onClick, icon: Icon, color = "bg-white" }) => (
 );
 
 export default function HUD() {
+  const { mission } = useMission();
   const [showSettings, setShowSettings] = useState(false);
   const [showMission, setShowMission] = useState(false);
 
@@ -23,6 +27,9 @@ export default function HUD() {
     console.log("Game Progress Saved!");
     // Add your save logic here
   };
+
+  // Check if phone should be visible
+  const showPhone = shouldShowPhone(mission.id, mission.stage);
 
   return (
     <>
@@ -43,13 +50,15 @@ export default function HUD() {
             onClick={() => setShowMission(!showMission)}
           />
           <IconButton icon={Settings} onClick={() => setShowSettings(true)} />
-          {/* Save Button added below Settings */}
           <IconButton icon={Save} onClick={handleSave} />
         </div>
 
         {/* Mission Panel */}
         {showMission && <MissionPopup />}
       </div>
+
+      {/* Phone Messenger (conditionally rendered) */}
+      {showPhone && <PhoneMessenger />}
 
       {/* Settings Modal */}
       {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
