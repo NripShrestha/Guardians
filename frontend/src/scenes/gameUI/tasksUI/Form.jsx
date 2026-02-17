@@ -207,133 +207,170 @@ export default function FormPopup() {
   const progressPercentage = ((currentSection + 1) / sections.length) * 100;
 
   return (
-    <div className="fixed inset-0 w-screen h-screen bg-black/0 flex justify-center items-center z-[1000] p-4 pl-33">
-      {/* Container resized: max-w-3xl -> max-w-2xl, and reduced vertical margins */}
-      <div className="bg-white rounded-sm shadow-2xl max-w-2xl w-full my-2 max-h-[55vh] flex flex-col overflow-hidden">
-        {/* Header: Reduced padding py-6 -> py-4 */}
-        <div className="bg-blue-600 text-white px-6 py-4 flex-shrink-0">
-          <div className="flex items-center gap-3">
-            <div>
-              <h1 className="text-l font-semibold leading-tight">
-                Guardians Registration Portal
-              </h1>
-              <p className="text-blue-100 text-[10px]">
-                Ministry of Digital Services
-              </p>
-            </div>
-          </div>
-        </div>
+    <div className="fixed inset-0  z-[1000] flex items-center justify-center p-4">
+      {/* Hardware Monitor Frame */}
+      <div className="relative w-[70%] h-[90vh] bg-[#0c0c0c] rounded-xl p-8 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] border-b-[12px] border-x-[12px] border-t-[12px] border-[#222] flex flex-col">
+        {/* Screen Area */}
+        <div className="relative w-full h-full bg-[#0078D7] overflow-hidden flex flex-col shadow-inner">
+          {/* Windows Desktop Background Decor */}
+          <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_bottom_right,_var(--tw-gradient-stops))] from-blue-400 via-transparent to-transparent pointer-events-none"></div>
 
-        {/* Progress Bar */}
-        <div className="bg-gray-100 h-1.5 flex-shrink-0">
-          <div
-            className="bg-blue-600 h-full transition-all duration-300"
-            style={{ width: `${progressPercentage}%` }}
-          />
-        </div>
-
-        {/* Form Content: py-6 -> py-5, space-y-5 -> space-y-4 */}
-        <div className="px-6 py-5 overflow-y-auto flex-grow">
-          <div className="mb-4 border-l-4 border-blue-600 pl-3">
-            <h2 className="text-sm font-semibold text-gray-800">
-              {currentSectionData.title}
-            </h2>
-            <p className="text-gray-600 text-[10px] mt-0.5">
-              {currentSectionData.description}
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            {currentSectionData.fields.map((field) => (
-              <div key={field.id}>
-                <label className="block text-[11px] font-semibold text-black-700 mb-1">
-                  {field.label}{" "}
-                  {field.required && <span className="text-red-500">*</span>}
-                </label>
-                {field.type === "select" ? (
-                  <select
-                    name={field.id}
-                    value={formData[field.id]}
-                    onChange={handleInputChange}
-                    className={`w-full px-3 py-2 text-sm border rounded focus:ring-2 focus:ring-blue-500 outline-none bg-white ${errors[field.id] ? "border-red-500" : "border-gray-300"}`}
+          {/* Centered Form Modal (Simulating an open Windows Application) */}
+          <div className="flex-1 flex justify-center items-center p-4 z-10">
+            <div className="bg-white rounded-sm shadow-2xl w-full max-w-2xl flex flex-col overflow-hidden border border-gray-400 animate-in fade-in zoom-in duration-300">
+              {/* Form Header */}
+              <div className="bg-blue-600 text-white px-6 py-4 flex-shrink-0 flex justify-between items-center">
+                <div>
+                  <h1 className="text-sm font-semibold leading-tight">
+                    Guardians Registration Portal
+                  </h1>
+                  <p className="text-blue-100 text-[10px]">
+                    Ministry of Digital Services
+                  </p>
+                </div>
+                <div className="flex gap-2 text-xs opacity-70">
+                  <span>—</span> <span>▢</span>{" "}
+                  <span
+                    onClick={handleCancel}
+                    className="cursor-pointer hover:text-red-300"
                   >
-                    {field.options.map((option, idx) => (
-                      <option key={idx} value={option}>
-                        {option || "-- Select --"}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <input
-                    type={field.type}
-                    name={field.id}
-                    value={formData[field.id]}
-                    onChange={handleInputChange}
-                    placeholder={field.placeholder}
-                    className={`w-full px-3 py-2 text-sm border rounded focus:ring-2 focus:ring-blue-500 outline-none ${errors[field.id] ? "border-red-500" : "border-gray-300"}`}
-                  />
-                )}
-                {field.helpText && (
-                  <p className="text-[10px] text-gray-500 mt-1">
-                    ℹ️ {field.helpText}
-                  </p>
-                )}
-                {errors[field.id] && (
-                  <p className="text-[10px] text-red-600 mt-1 font-medium">
-                    ⚠️ {errors[field.id]}
-                  </p>
-                )}
+                    ✕
+                  </span>
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* Footer: py-5 -> py-4 */}
-        <div className="bg-gray-50 px-6 py-4 rounded-b-lg border-t flex-shrink-0">
-          <div className="mb-3 p-2 bg-yellow-50 border border-yellow-100 rounded">
-            <p className="text-[10px] text-gray-700 leading-tight">
-              <span className="text-yellow-600 font-bold">⚠️</span>{" "}
-              <strong>Important:</strong> This portal will never ask for
-              sensitive data like passwords or PINs.
-            </p>
-          </div>
+              {/* Progress Bar */}
+              <div className="bg-gray-100 h-1.5 flex-shrink-0">
+                <div
+                  className="bg-blue-600 h-full transition-all duration-300"
+                  style={{ width: `${progressPercentage}%` }}
+                />
+              </div>
 
-          <div className="flex justify-between items-center gap-3">
-            <button
-              onClick={handleCancel}
-              className="px-4 py-2 text-sm border border-gray-300 text-gray-600 rounded hover:bg-gray-100 transition-colors"
-            >
-              Cancel
-            </button>
-            <div className="flex gap-2">
-              {currentSection > 0 && (
-                <button
-                  onClick={handlePrevious}
-                  className="px-4 py-2 text-sm border border-blue-600 text-blue-600 rounded hover:bg-blue-50"
-                >
-                  Back
-                </button>
-              )}
-              {!isLastSection ? (
-                <button
-                  onClick={handleNext}
-                  className="px-5 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 shadow-sm"
-                >
-                  Next
-                </button>
-              ) : (
-                <button
-                  onClick={handleSubmit}
-                  className="px-5 py-2 text-sm bg-green-600 text-white rounded hover:bg-green-700 shadow-sm"
-                >
-                  Submit
-                </button>
-              )}
+              {/* Form Content */}
+              <div className="px-6 py-5 overflow-y-auto max-h-[45vh]">
+                <div className="mb-4 border-l-4 border-blue-600 pl-3">
+                  <h2 className="text-sm font-semibold text-gray-800">
+                    {currentSectionData.title}
+                  </h2>
+                  <p className="text-gray-600 text-[10px] mt-0.5">
+                    {currentSectionData.description}
+                  </p>
+                </div>
+
+                <div className="space-y-4">
+                  {currentSectionData.fields.map((field) => (
+                    <div key={field.id}>
+                      <label className="block text-[11px] font-semibold text-gray-700 mb-1">
+                        {field.label}{" "}
+                        {field.required && (
+                          <span className="text-red-500">*</span>
+                        )}
+                      </label>
+                      {field.type === "select" ? (
+                        <select
+                          name={field.id}
+                          value={formData[field.id]}
+                          onChange={handleInputChange}
+                          className={`w-full px-3 py-2 text-sm border rounded focus:ring-1 focus:ring-blue-500 outline-none bg-white ${errors[field.id] ? "border-red-500" : "border-gray-300"}`}
+                        >
+                          {field.options.map((option, idx) => (
+                            <option key={idx} value={option}>
+                              {option || "-- Select --"}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <input
+                          type={field.type}
+                          name={field.id}
+                          value={formData[field.id]}
+                          onChange={handleInputChange}
+                          placeholder={field.placeholder}
+                          className={`w-full px-3 py-2 text-sm border rounded focus:ring-1 focus:ring-blue-500 outline-none ${errors[field.id] ? "border-red-500" : "border-gray-300"}`}
+                        />
+                      )}
+                      {field.helpText && (
+                        <p className="text-[10px] text-gray-500 mt-1">
+                          ℹ️ {field.helpText}
+                        </p>
+                      )}
+                      {errors[field.id] && (
+                        <p className="text-[10px] text-red-600 mt-1 font-medium">
+                          ⚠️ {errors[field.id]}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="bg-gray-50 px-6 py-4 border-t flex-shrink-0">
+                <div className="mb-3 p-2 bg-yellow-50 border border-yellow-100 rounded">
+                  <p className="text-[10px] text-gray-700 leading-tight">
+                    <span className="text-yellow-600 font-bold">⚠️</span>{" "}
+                    <strong>Important:</strong> This portal will never ask for
+                    sensitive data like passwords or PINs.
+                  </p>
+                </div>
+
+                <div className="flex justify-between items-center">
+                  <button
+                    onClick={handleCancel}
+                    className="px-4 py-2 text-xs border border-gray-300 text-gray-600 rounded hover:bg-gray-100"
+                  >
+                    Cancel
+                  </button>
+                  <div className="flex gap-2">
+                    {currentSection > 0 && (
+                      <button
+                        onClick={handlePrevious}
+                        className="px-4 py-2 text-xs border border-blue-600 text-blue-600 rounded hover:bg-blue-50"
+                      >
+                        Back
+                      </button>
+                    )}
+                    {!isLastSection ? (
+                      <button
+                        onClick={handleNext}
+                        className="px-5 py-2 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 shadow-sm"
+                      >
+                        Next
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleSubmit}
+                        className="px-5 py-2 text-xs bg-green-600 text-white rounded hover:bg-green-700 shadow-sm"
+                      >
+                        Submit
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <p className="mt-3 text-[10px] text-gray-400 text-center">
-            Section {currentSection + 1} of {sections.length}
-          </p>
+
+          {/* Windows Taskbar */}
+          <div className="h-10 bg-[#000000cc] backdrop-blur-md border-t border-white/10 flex items-center px-1 gap-1 z-50">
+            <div className="w-10 h-10 flex items-center justify-center text-blue-400 text-xl cursor-default">
+              ⊞
+            </div>
+            <div className="w-10 h-10 flex items-center justify-center text-white/80 cursor-default">
+              🔍
+            </div>
+            <div className="w-10 h-10 flex items-center justify-center bg-white/20 border-b-2 border-blue-500 shadow-inner">
+              <span className="text-blue-200 text-sm">📄</span>
+            </div>
+            <div className="ml-auto flex items-center h-full px-2 gap-3 text-white/90 text-[10px]">
+              <div className="text-right cursor-default leading-tight">
+                <div>11:05 AM</div>
+                <div>2/17/2026</div>
+              </div>
+              <div className="w-1 border-l border-white/20 h-full"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

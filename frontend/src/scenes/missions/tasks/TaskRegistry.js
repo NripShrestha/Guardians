@@ -213,32 +213,37 @@ export const TASK_REGISTRY = {
     },
   },
 
-  TASK_2_EMAIL_SECURITY: {
-    id: "TASK_2_EMAIL_SECURITY",
-    name: "Email Security Training",
+  // ─── TASK 4: EMAIL SECURITY ────────────────────────────────────────────────
+  TASK_4_EMAIL_SECURITY: {
+    id: "TASK_4_EMAIL_SECURITY",
+    name: "Email Security - Phishing Detection",
 
     stages: [
-      "TALK_TO_MANAGER",
-      "TALKING_TO_MANAGER",
-      "GO_TO_EMAIL_STATION",
-      "CHECK_EMAILS",
-      "RETURN_TO_MANAGER",
-      "DEBRIEFING",
-      "COMPLETED",
+      "TASK4_TALK_TO_MANAGER",
+      "TASK4_TALKING_TO_MANAGER",
+      "TASK4_GO_TO_LAPTOP",
+      "TASK4_DESKTOP_EMAIL",
+      "TASK4_RETURN_TO_MANAGER",
+      "TASK4_DEBRIEFING",
+      "TASK4_COMPLETED",
     ],
 
-    lockedStages: ["TALKING_TO_MANAGER", "CHECK_EMAILS", "DEBRIEFING"],
+    lockedStages: [
+      "TASK4_TALKING_TO_MANAGER",
+      "TASK4_DESKTOP_EMAIL",
+      "TASK4_DEBRIEFING",
+    ],
 
     stageInstructions: {
-      TALK_TO_MANAGER: "Go talk to your manager to receive your task briefing",
-      TALKING_TO_MANAGER: "Listen carefully to your manager's briefing",
-      GO_TO_EMAIL_STATION:
-        "Go to the email station and review suspicious emails (follow the cyan marker)",
-      CHECK_EMAILS:
-        "Review the emails and identify which ones are phishing attempts",
-      RETURN_TO_MANAGER: "Return to your manager to report your findings",
-      DEBRIEFING: "Receiving feedback on your performance",
-      COMPLETED: "Well done! Ready for the next challenge?",
+      TASK4_TALK_TO_MANAGER: "Go talk to your manager for your next assignment",
+      TASK4_TALKING_TO_MANAGER: "Listen carefully to your manager's briefing",
+      TASK4_GO_TO_LAPTOP:
+        "Go to your laptop and check the emails (follow the blue marker)",
+      TASK4_DESKTOP_EMAIL:
+        "Review each email carefully — report, block, delete, or approve",
+      TASK4_RETURN_TO_MANAGER: "Return to your manager to report your findings",
+      TASK4_DEBRIEFING: "Receiving feedback on your email handling",
+      TASK4_COMPLETED: "Outstanding! You're a certified Digital Defender!",
     },
 
     triggers: [
@@ -247,16 +252,16 @@ export const TASK_REGISTRY = {
         position: [-7.18, 0.03, 9.17],
         size: [1, 2, 2.3],
         stages: {
-          TALK_TO_MANAGER: "TALKING_TO_MANAGER",
-          RETURN_TO_MANAGER: "DEBRIEFING",
+          TASK4_TALK_TO_MANAGER: "TASK4_TALKING_TO_MANAGER",
+          TASK4_RETURN_TO_MANAGER: "TASK4_DEBRIEFING",
         },
       },
       {
-        type: "email_station",
-        position: [-8, 0.03, 2],
+        type: "workspace",
+        position: [-5.35, 0.03, 1.99],
         size: [2, 2, 2],
         stages: {
-          GO_TO_EMAIL_STATION: "CHECK_EMAILS",
+          TASK4_GO_TO_LAPTOP: "TASK4_DESKTOP_EMAIL",
         },
       },
     ],
@@ -264,22 +269,22 @@ export const TASK_REGISTRY = {
     markers: [
       {
         type: "objective",
-        position: [-8, 0.03, 2],
-        visibleInStages: ["GO_TO_EMAIL_STATION"],
-        color: "cyan",
+        position: [-5.35, 0.03, 1.99],
+        visibleInStages: ["TASK4_GO_TO_LAPTOP"],
+        color: "blue",
       },
     ],
 
     cameras: {
-      CHECK_EMAILS: {
-        position: [-8, 1.5, 2],
-        lookAt: [-20, 1.2, 5],
+      TASK4_DESKTOP_EMAIL: {
+        position: [-5.35, 1.44, 1.45],
+        lookAt: [-18, 1.2, 7.4],
       },
-      TALKING_TO_MANAGER: {
+      TASK4_TALKING_TO_MANAGER: {
         position: [-7.25, 1.73, 7.7],
         lookAt: [-7, 1, 16],
       },
-      DEBRIEFING: {
+      TASK4_DEBRIEFING: {
         position: [-7.25, 1.73, 7.7],
         lookAt: [-7, 1, 16],
       },
@@ -314,4 +319,11 @@ export function getStageInstruction(missionId, stage) {
 export function shouldShowPhone(missionId, stage) {
   const config = TASK_REGISTRY[missionId];
   return config?.showPhoneInStages?.includes(stage) ?? false;
+}
+
+// Helper to check if email client should be visible
+export function shouldShowEmailClient(missionId, stage) {
+  return (
+    missionId === "TASK_4_EMAIL_SECURITY" && stage === "TASK4_DESKTOP_EMAIL"
+  );
 }

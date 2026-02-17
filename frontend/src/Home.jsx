@@ -9,6 +9,7 @@ import MissionDebugger from "./scenes/missions/MissionDebugger";
 import DialogueScene from "./scenes/gameUI/tasksUI/DialogueScene";
 import FormPopup from "./scenes/gameUI/tasksUI/Form";
 import DesktopSimulation from "./scenes/gameUI/tasksUI/DesktopSimulation";
+import EmailClient from "./scenes/gameUI/tasksUI/EmailClient";
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
@@ -33,6 +34,7 @@ export default function Home() {
         <DialogueScene />
         <DesktopSimulation />
         <FormPopup />
+        <EmailClient />
         <HUD />
       </MissionProvider>
     </div>

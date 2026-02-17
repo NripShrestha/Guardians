@@ -31,6 +31,13 @@ export default function DesktopSimulation() {
     setDesktopState("purchase");
   };
 
+  // New function to handle the autofill
+  const handlePasteBossDetails = () => {
+    setCardNumber("4005 5500 0008 1019");
+    setCardExpiry("05/27");
+    setCardCVV("965");
+  };
+
   const handlePurchase = (e) => {
     e.preventDefault();
     if (!cardNumber || !cardExpiry || !cardCVV) {
@@ -251,6 +258,14 @@ export default function DesktopSimulation() {
                               className="w-1/2 border p-2 text-sm"
                             />
                           </div>
+                          {/* Paste Boss' Details Button Added Below */}
+                          <button
+                            type="button"
+                            onClick={handlePasteBossDetails}
+                            className="w-full bg-gray-200 hover:bg-gray-300 border border-gray-400 py-1 rounded text-xs font-semibold text-gray-700 transition-colors"
+                          >
+                            Paste boss credit card details
+                          </button>
                           <button className="w-full bg-[#f0c14b] border border-[#a88734] py-2 rounded shadow-sm text-sm font-medium">
                             Place your order
                           </button>
@@ -271,7 +286,7 @@ export default function DesktopSimulation() {
             <div className="w-10 h-10 flex items-center justify-center hover:bg-white/10 text-white/80 cursor-default">
               🔍
             </div>
-            
+
             <div className="ml-auto flex items-center h-full px-2 gap-3 text-white/90 text-xs">
               <span className="cursor-default hover:bg-white/10 px-2 py-1">
                 ENG
@@ -286,7 +301,6 @@ export default function DesktopSimulation() {
         </div>
 
         {/* Monitor Branding/Stand Decoration */}
-        
       </div>
     </div>
   );
