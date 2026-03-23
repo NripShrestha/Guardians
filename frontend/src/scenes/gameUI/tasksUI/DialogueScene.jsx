@@ -261,14 +261,10 @@ const TASK4_SCENE_1_OPENING = [
   { speaker: "Manager", text: "Let's see what you do with them." },
 ];
 
-// ─── TASK 4 SCENE 2 — USER RETURN LINE ───────────────────────────────────────
-
 const TASK4_USER_RETURN = {
   speaker: "You",
   text: "I handled the emails you talked about. How did I do?",
 };
-
-// ─── TASK 4 PASS PATH ────────────────────────────────────────────────────────
 
 const TASK4_PASS_INITIAL = [
   { speaker: "Manager", text: "Good." },
@@ -302,17 +298,12 @@ const TASK4_PASS_LECTURE = [
   { speaker: "Manager", text: "They want you to click before you think." },
   { speaker: "Manager", text: "A single click can install malware…" },
   { speaker: "Manager", text: "Steal login credentials…" },
-  {
-    speaker: "Manager",
-    text: "Or give attackers access to internal systems.",
-  },
+  { speaker: "Manager", text: "Or give attackers access to internal systems." },
   {
     speaker: "Manager",
     text: "By reporting and blocking, you stop the threat at its source.",
   },
 ];
-
-// ─── TASK 4 FAIL PATH ────────────────────────────────────────────────────────
 
 const TASK4_FAIL_INITIAL = [
   { speaker: "Manager", text: "I'm stopping you right there." },
@@ -323,10 +314,7 @@ const TASK4_FAIL_INITIAL = [
 ];
 
 const TASK4_FAIL_USER_OPTIONS = [
-  {
-    id: "what",
-    label: "What are the correct ways to handle them, sir?",
-  },
+  { id: "what", label: "What are the correct ways to handle them, sir?" },
   {
     id: "wrong",
     label:
@@ -349,10 +337,7 @@ const TASK4_FAIL_LECTURE = [
     speaker: "Manager",
     text: "Malicious emails spread because people don't report them.",
   },
-  {
-    speaker: "Manager",
-    text: "If one employee clicks a malicious link…",
-  },
+  { speaker: "Manager", text: "If one employee clicks a malicious link…" },
   {
     speaker: "Manager",
     text: "The attacker could gain access to the entire network.",
@@ -363,25 +348,290 @@ const TASK4_FAIL_LECTURE = [
   { speaker: "Manager", text: "All of it can start from a single email." },
   { speaker: "Manager", text: "The correct response is simple." },
   { speaker: "Manager", text: "Report it. Block the sender." },
-  {
-    speaker: "Manager",
-    text: "And never trust urgency without verification.",
-  },
+  { speaker: "Manager", text: "And never trust urgency without verification." },
 ];
 
-// ─── TASK 4 FINAL SHARED OPTIONS ─────────────────────────────────────────────
-
 const TASK4_FINAL_OPTIONS = [
-  {
-    id: "careful",
-    label: "I'll be more careful with emails from now on.",
-  },
+  { id: "careful", label: "I'll be more careful with emails from now on." },
   { id: "convincing", label: "They looked convincing." },
 ];
 
 const TASK4_FINAL_RESPONSES = {
   careful: "Good. Awareness is your first defense.",
   convincing: "That's exactly why scams work.",
+};
+
+// ─── TASK 5 DIALOGUE DATA ────────────────────────────────────────────────────
+
+const TASK5_SCENE_1_OPENING = [
+  { speaker: "Manager", text: "You handled the emails well." },
+  { speaker: "Manager", text: "Now your next task." },
+  { speaker: "Manager", text: "Go back to your laptop." },
+  {
+    speaker: "Manager",
+    text: "I have forwarded some emails — go check and reply to them.",
+  },
+];
+
+const TASK5_SCENE_2_LINES = [
+  {
+    speaker: "You",
+    text: "Sir, my laptop says I need to contact the administrator.",
+  },
+  { speaker: "Manager", text: "That happens sometimes." },
+  { speaker: "Manager", text: "Use the messaging app on your phone." },
+  { speaker: "Manager", text: "Search for IT Support and message them." },
+  { speaker: "Manager", text: "They should help you fix the problem." },
+];
+
+const TASK5_DEBRIEFING_PASS = [
+  { speaker: "You", text: "Sir, I fixed the issue with IT." },
+  { speaker: "Manager", text: "I heard you handled that situation well." },
+  { speaker: "Manager", text: "You didn't share your password." },
+  { speaker: "Manager", text: "That was the correct decision." },
+  { speaker: "Manager", text: "Passwords are like the keys to your house." },
+  { speaker: "Manager", text: "If someone else gets them…" },
+  { speaker: "Manager", text: "They can enter everything." },
+  { speaker: "Manager", text: "That includes emails…" },
+  { speaker: "Manager", text: "Files…" },
+  { speaker: "Manager", text: "And important systems." },
+  { speaker: "Manager", text: "Never share your password with anyone." },
+  { speaker: "Manager", text: "Not even someone claiming to be IT." },
+  { speaker: "Manager", text: "You did well today." },
+];
+
+const TASK5_DEBRIEFING_FAIL = [
+  { speaker: "You", text: "Sir, I fixed the issue with IT." },
+  { speaker: "Manager", text: "I heard what happened." },
+  {
+    speaker: "Manager",
+    text: "You shared your password with someone you didn't know.",
+  },
+  {
+    speaker: "Manager",
+    text: "That is one of the most dangerous mistakes in cybersecurity.",
+  },
+  { speaker: "Manager", text: "Passwords are like the keys to your house." },
+  { speaker: "Manager", text: "If someone else gets them…" },
+  { speaker: "Manager", text: "They can enter everything." },
+  { speaker: "Manager", text: "That includes emails…" },
+  { speaker: "Manager", text: "Files…" },
+  { speaker: "Manager", text: "And important systems." },
+  { speaker: "Manager", text: "Never share your password with anyone." },
+  { speaker: "Manager", text: "Not even someone claiming to be IT." },
+  { speaker: "Manager", text: "This was a lesson. Remember it." },
+];
+
+// ─── TASK 6 DIALOGUE DATA ────────────────────────────────────────────────────
+
+const TASK6_SCENE_1_OPENING = [
+  {
+    speaker: "Manager",
+    text: "You've learned that dangerous messages can come through email and chat.",
+  },
+  { speaker: "Manager", text: "But scams don't only appear in messages." },
+  { speaker: "Manager", text: "Sometimes they hide in places people trust." },
+  { speaker: "Manager", text: "Even inside normal websites." },
+  {
+    speaker: "Manager",
+    text: "These are called malicious advertisements, or malvertising.",
+  },
+  {
+    speaker: "Manager",
+    text: "Attackers sometimes place fake advertisements on websites.",
+  },
+  { speaker: "Manager", text: "They may look like normal ads." },
+  {
+    speaker: "Manager",
+    text: "But clicking them can lead to dangerous websites.",
+  },
+  { speaker: "Manager", text: "I'm sending a link to your laptop." },
+  { speaker: "Manager", text: "Open the website and take a look." },
+  { speaker: "Manager", text: "Your task is simple." },
+  { speaker: "Manager", text: "Find the advertisements that look suspicious." },
+  { speaker: "Manager", text: "Spot all of the malicious ones." },
+];
+
+const TASK6_USER_RETURN = {
+  speaker: "You",
+  text: "I checked the website.",
+};
+
+const TASK6_PASS_INITIAL = [
+  { speaker: "Manager", text: "Good work." },
+  { speaker: "Manager", text: "That website itself was safe." },
+  { speaker: "Manager", text: "But some advertisements were not." },
+];
+
+const TASK6_PASS_USER_OPTIONS = [
+  { id: "convincing", label: "They looked convincing." },
+  { id: "trick", label: "They tried to trick me." },
+];
+
+const TASK6_PASS_EXPLANATION = [
+  { speaker: "Manager", text: "Exactly." },
+  { speaker: "Manager", text: "Attackers sometimes buy advertisement space." },
+  { speaker: "Manager", text: "They design ads to look exciting or urgent." },
+  {
+    speaker: "Manager",
+    text: "But clicking them can lead to dangerous websites.",
+  },
+  { speaker: "Manager", text: "Some may try to install malware." },
+  { speaker: "Manager", text: "Others may try to steal information." },
+  {
+    speaker: "Manager",
+    text: "That's why it's important to be careful with advertisements.",
+  },
+];
+
+const TASK6_LECTURE_LINES = [
+  { speaker: "Manager", text: "Remember these rules." },
+  { speaker: "Manager", text: "Not every advertisement is safe." },
+  {
+    speaker: "Manager",
+    text: "Be careful with ads promising prizes or urgent warnings.",
+  },
+  {
+    speaker: "Manager",
+    text: "If something looks suspicious, don't click it.",
+  },
+  {
+    speaker: "Manager",
+    text: "Thinking before clicking is one of the best ways to stay safe online.",
+  },
+];
+
+const TASK6_FINAL_OPTIONS = [
+  { id: "careful", label: "I'll be more careful with ads from now on." },
+  { id: "understood", label: "I understand. Ads can be dangerous too." },
+];
+
+const TASK6_FINAL_RESPONSES = {
+  careful: "Good. That mindset will protect you.",
+  understood: "Exactly. The internet has many hidden threats.",
+};
+
+// ─── TASK 7 DIALOGUE DATA ────────────────────────────────────────────────────
+
+const TASK7_SCENE_1_OPENING = [
+  {
+    speaker: "Manager",
+    text: "You've learned how attackers trick people through emails.",
+  },
+  { speaker: "Manager", text: "And how they pretend to be people you know." },
+  { speaker: "Manager", text: "But scammers also use something else." },
+  { speaker: "Manager", text: "They pretend to be people in authority." },
+  { speaker: "Manager", text: "Someone important." },
+  { speaker: "Manager", text: "Someone who has power over your accounts." },
+  { speaker: "Manager", text: "They use fear to make people act quickly." },
+  { speaker: "Manager", text: "I want you to continue your work." },
+  {
+    speaker: "Manager",
+    text: "If something unusual happens, deal with it the way you normally would.",
+  },
+  {
+    speaker: "Manager",
+    text: "I will assign you some work — wait a while at your desk.",
+  },
+];
+
+const TASK7_FAIL_LINES = [
+  { speaker: "You", text: "My PC just shut down itself. What happened?" },
+  { speaker: "Manager", text: "Oh no. What did you do?" },
+  {
+    speaker: "You",
+    text: "I was just trying to save my Roblux account from being permanently banned.",
+  },
+  { speaker: "Manager", text: "That was a fake email." },
+];
+
+const TASK7_FAIL_USER_OPTIONS = [
+  { id: "site", label: "But it looked like the real website." },
+  { id: "ban", label: "They said my account would be banned." },
+];
+
+const TASK7_FAIL_EXPLANATION = [
+  { speaker: "Manager", text: "That's how scammers manipulate people." },
+  { speaker: "Manager", text: "They create fear and urgency." },
+  {
+    speaker: "Manager",
+    text: "When people panic, they stop thinking carefully.",
+  },
+  { speaker: "Manager", text: "The fake website collects login information." },
+  { speaker: "Manager", text: "Once attackers have it…" },
+  { speaker: "Manager", text: "They can steal the account." },
+  { speaker: "Manager", text: "And sometimes sell it or lock the owner out." },
+  {
+    speaker: "Manager",
+    text: "That's why verification links should always be checked carefully.",
+  },
+  {
+    speaker: "Manager",
+    text: "Don't worry — I was just testing you. Your account is not going to get permanently banned.",
+  },
+  {
+    speaker: "Manager",
+    text: "And more importantly, your private credentials aren't leaked either.",
+  },
+  { speaker: "Manager", text: "But you have to be more careful." },
+];
+
+const TASK7_PASS_USER_RETURN = {
+  speaker: "You",
+  text: "I got a strange message about my game account.",
+};
+
+const TASK7_PASS_INITIAL = [
+  {
+    speaker: "Manager",
+    text: "That message was part of the training simulation.",
+  },
+  { speaker: "Manager", text: "You handled it well." },
+];
+
+const TASK7_PASS_USER_OPTIONS = [
+  { id: "scared", label: "It almost scared me." },
+  { id: "official", label: "It looked official." },
+];
+
+const TASK7_PASS_EXPLANATION = [
+  { speaker: "Manager", text: "That's exactly how these scams work." },
+  { speaker: "Manager", text: "Attackers copy real websites." },
+  { speaker: "Manager", text: "They use official-looking messages." },
+  { speaker: "Manager", text: "And they create urgency." },
+  { speaker: "Manager", text: "The goal is simple." },
+  {
+    speaker: "Manager",
+    text: "To make you panic and enter your login information.",
+  },
+  { speaker: "Manager", text: "You avoided the trap." },
+];
+
+const TASK7_LECTURE_LINES = [
+  { speaker: "Manager", text: "Remember these rules." },
+  {
+    speaker: "Manager",
+    text: "Real companies do not threaten instant bans through random messages.",
+  },
+  { speaker: "Manager", text: "Never enter your password on unknown links." },
+  {
+    speaker: "Manager",
+    text: "Always go to the official website yourself if you need to verify something.",
+  },
+  {
+    speaker: "Manager",
+    text: "Staying calm is one of the best defenses against scams.",
+  },
+];
+
+const TASK7_FINAL_OPTIONS = [
+  { id: "careful", label: "I'll always check links carefully from now on." },
+  { id: "understood", label: "I understand. Fear is a weapon they use." },
+];
+
+const TASK7_FINAL_RESPONSES = {
+  careful: "Good. That habit could save an account — or more.",
+  understood: "Exactly. Calm thinking is your best defense.",
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -425,7 +675,6 @@ function useTypewriter(text, speed = 30, active = true) {
 function Avatar({ label, pass }) {
   const borderColor =
     pass === true ? "#22c55e" : pass === false ? "#ef4444" : "#4338ca";
-
   return (
     <div
       className="flex-shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-[4px_4px_0_0_#4338ca] border-4"
@@ -438,7 +687,6 @@ function Avatar({ label, pass }) {
 
 function DialogueBubble({ line, onAdvance }) {
   const { displayed, done, skip } = useTypewriter(line.text);
-
   return (
     <div
       onClick={done ? onAdvance : skip}
@@ -549,7 +797,6 @@ function Task1Scene2({ result, unsafeFields, onComplete }) {
       text: "You passed the first test! You're on your way to being a Digital Hero!",
     },
   ];
-
   const RESULT_LINES_FAIL = [
     {
       speaker: "Manager",
@@ -569,11 +816,8 @@ function Task1Scene2({ result, unsafeFields, onComplete }) {
   const [lineIndex, setLineIndex] = useState(0);
 
   const handleAdvance = () => {
-    if (lineIndex < allLines.length - 1) {
-      setLineIndex((i) => i + 1);
-    } else {
-      onComplete();
-    }
+    if (lineIndex < allLines.length - 1) setLineIndex((i) => i + 1);
+    else onComplete();
   };
 
   const isLectureSection = lineIndex >= resultLines.length;
@@ -587,7 +831,6 @@ function Task1Scene2({ result, unsafeFields, onComplete }) {
           {unsafeFields.join(", ")}
         </div>
       )}
-
       <div className="flex gap-4 items-start">
         <Avatar
           label="🧑🏻‍💼"
@@ -619,11 +862,9 @@ function Task2Scene1({ onComplete }) {
   const [lineIndex, setLineIndex] = useState(0);
 
   const handleAdvance = () => {
-    if (lineIndex < TASK2_SCENE_1_OPENING.length - 1) {
+    if (lineIndex < TASK2_SCENE_1_OPENING.length - 1)
       setLineIndex((i) => i + 1);
-    } else {
-      onComplete();
-    }
+    else onComplete();
   };
 
   return (
@@ -647,11 +888,8 @@ function Task2Scene2({ result, onComplete }) {
   const [lineIndex, setLineIndex] = useState(0);
 
   const handleAdvance = () => {
-    if (lineIndex < allLines.length - 1) {
-      setLineIndex((i) => i + 1);
-    } else {
-      onComplete();
-    }
+    if (lineIndex < allLines.length - 1) setLineIndex((i) => i + 1);
+    else onComplete();
   };
 
   const isLectureSection = lineIndex >= resultLines.length;
@@ -692,20 +930,15 @@ function Task3Scene1({ onComplete }) {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleOpeningAdvance = () => {
-    if (lineIndex < TASK3_SCENE_1_OPENING.length - 1) {
+    if (lineIndex < TASK3_SCENE_1_OPENING.length - 1)
       setLineIndex((i) => i + 1);
-    } else {
-      setPhase("choice");
-    }
+    else setPhase("choice");
   };
 
   const handleChoice = (id) => {
     setSelectedOption(id);
-    if (TASK3_SCENE_1_RESPONSES[id]) {
-      setPhase("response");
-    } else {
-      onComplete();
-    }
+    if (TASK3_SCENE_1_RESPONSES[id]) setPhase("response");
+    else onComplete();
   };
 
   const handleResponseAdvance = () => onComplete();
@@ -828,7 +1061,7 @@ function Task3Scene2({ result, selectedUrl, onComplete }) {
     }
   };
 
-  const handleUserChoice = (id) => {
+  const handleUserChoice = () => {
     if (result === "PASS") {
       setPhase("explanation");
       setLineIndex(0);
@@ -870,7 +1103,6 @@ function Task3Scene2({ result, selectedUrl, onComplete }) {
           onAdvance={handleAdvance}
         />
       );
-
     const currentLines = flow[phase];
     if (!currentLines || !currentLines[lineIndex]) return null;
     return (
@@ -914,11 +1146,9 @@ function Task4Scene1({ onComplete }) {
   const [lineIndex, setLineIndex] = useState(0);
 
   const handleAdvance = () => {
-    if (lineIndex < TASK4_SCENE_1_OPENING.length - 1) {
+    if (lineIndex < TASK4_SCENE_1_OPENING.length - 1)
       setLineIndex((i) => i + 1);
-    } else {
-      onComplete();
-    }
+    else onComplete();
   };
 
   return (
@@ -936,11 +1166,9 @@ function Task4Scene1({ onComplete }) {
 }
 
 function Task4Scene2({ result, onComplete }) {
-  // Phase flow:
-  // PASS: userReturn → initial → userChoice → explanation → lecture → finalChoice → [done]
-  // FAIL: userReturn → initial → userChoice → explanation → lecture → finalChoice → [done]
   const [phase, setPhase] = useState("userReturn");
   const [lineIndex, setLineIndex] = useState(0);
+  const [finalResponseText, setFinalResponseText] = useState("");
 
   const initialLines =
     result === "PASS" ? TASK4_PASS_INITIAL : TASK4_FAIL_INITIAL;
@@ -986,16 +1214,13 @@ function Task4Scene2({ result, onComplete }) {
   const handleFinalChoice = (id) => {
     setPhase("finalResponse");
     setLineIndex(0);
-    // Store chosen response text for display
     setFinalResponseText(TASK4_FINAL_RESPONSES[id]);
   };
-
-  const [finalResponseText, setFinalResponseText] = useState("");
 
   const isLast = phase === "finalResponse";
 
   const renderContent = () => {
-    if (phase === "userReturn") {
+    if (phase === "userReturn")
       return (
         <DialogueBubble
           key="user-return"
@@ -1003,8 +1228,7 @@ function Task4Scene2({ result, onComplete }) {
           onAdvance={handleAdvance}
         />
       );
-    }
-    if (phase === "initial") {
+    if (phase === "initial")
       return (
         <DialogueBubble
           key={`initial-${lineIndex}`}
@@ -1012,13 +1236,11 @@ function Task4Scene2({ result, onComplete }) {
           onAdvance={handleAdvance}
         />
       );
-    }
-    if (phase === "userChoice") {
+    if (phase === "userChoice")
       return (
         <ChoiceMenu options={userChoiceOptions} onSelect={handleUserChoice} />
       );
-    }
-    if (phase === "explanation") {
+    if (phase === "explanation")
       return (
         <DialogueBubble
           key={`explanation-${lineIndex}`}
@@ -1026,8 +1248,7 @@ function Task4Scene2({ result, onComplete }) {
           onAdvance={handleAdvance}
         />
       );
-    }
-    if (phase === "lecture") {
+    if (phase === "lecture")
       return (
         <DialogueBubble
           key={`lecture-${lineIndex}`}
@@ -1035,16 +1256,14 @@ function Task4Scene2({ result, onComplete }) {
           onAdvance={handleAdvance}
         />
       );
-    }
-    if (phase === "finalChoice") {
+    if (phase === "finalChoice")
       return (
         <ChoiceMenu
           options={TASK4_FINAL_OPTIONS}
           onSelect={handleFinalChoice}
         />
       );
-    }
-    if (phase === "finalResponse") {
+    if (phase === "finalResponse")
       return (
         <DialogueBubble
           key="final-response"
@@ -1052,7 +1271,6 @@ function Task4Scene2({ result, onComplete }) {
           onAdvance={handleAdvance}
         />
       );
-    }
     return null;
   };
 
@@ -1083,6 +1301,475 @@ function Task4Scene2({ result, onComplete }) {
   );
 }
 
+// ─── TASK 5 SCENES ────────────────────────────────────────────────────────────
+
+function Task5Scene1({ onComplete }) {
+  const [lineIndex, setLineIndex] = useState(0);
+
+  const handleAdvance = () => {
+    if (lineIndex < TASK5_SCENE_1_OPENING.length - 1)
+      setLineIndex((i) => i + 1);
+    else onComplete();
+  };
+
+  return (
+    <div className="flex gap-4 items-start">
+      <Avatar label="🧑🏻‍💼" />
+      <div className="flex-1">
+        <DialogueBubble
+          key={lineIndex}
+          line={TASK5_SCENE_1_OPENING[lineIndex]}
+          onAdvance={handleAdvance}
+        />
+      </div>
+    </div>
+  );
+}
+
+function Task5Scene2({ onComplete }) {
+  const [lineIndex, setLineIndex] = useState(0);
+  const currentLine = TASK5_SCENE_2_LINES[lineIndex];
+
+  const handleAdvance = () => {
+    if (lineIndex < TASK5_SCENE_2_LINES.length - 1) setLineIndex((i) => i + 1);
+    else onComplete();
+  };
+
+  return (
+    <div className="flex gap-4 items-start">
+      <Avatar label={currentLine.speaker === "You" ? "🧑" : "🧑🏻‍💼"} />
+      <div className="flex-1">
+        <DialogueBubble
+          key={lineIndex}
+          line={currentLine}
+          onAdvance={handleAdvance}
+        />
+      </div>
+    </div>
+  );
+}
+
+function Task5Scene3({ result, onComplete }) {
+  const lines =
+    result === "PASS" ? TASK5_DEBRIEFING_PASS : TASK5_DEBRIEFING_FAIL;
+  const [lineIndex, setLineIndex] = useState(0);
+
+  const handleAdvance = () => {
+    if (lineIndex < lines.length - 1) setLineIndex((i) => i + 1);
+    else onComplete();
+  };
+
+  const isLast = lineIndex === lines.length - 1;
+  const currentLine = lines[lineIndex];
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-4 items-start">
+        <Avatar
+          label={currentLine.speaker === "You" ? "🧑" : "🧑🏻‍💼"}
+          pass={
+            currentLine.speaker === "Manager" && lineIndex > 0
+              ? result === "PASS"
+              : undefined
+          }
+        />
+        <div className="flex-1">
+          <DialogueBubble
+            key={lineIndex}
+            line={currentLine}
+            onAdvance={handleAdvance}
+          />
+          {isLast && (
+            <button
+              onClick={handleAdvance}
+              className="mt-4 w-full bg-yellow-400 hover:bg-yellow-500 text-indigo-900 py-3 rounded-2xl text-lg font-black border-b-8 border-yellow-600 active:border-b-0 active:translate-y-2 transition-all"
+            >
+              Finish Task
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── TASK 6 SCENES ────────────────────────────────────────────────────────────
+
+function Task6Scene1({ onComplete }) {
+  const [lineIndex, setLineIndex] = useState(0);
+
+  const handleAdvance = () => {
+    if (lineIndex < TASK6_SCENE_1_OPENING.length - 1)
+      setLineIndex((i) => i + 1);
+    else onComplete();
+  };
+
+  return (
+    <div className="flex gap-4 items-start">
+      <Avatar label="🧑🏻‍💼" />
+      <div className="flex-1">
+        <DialogueBubble
+          key={lineIndex}
+          line={TASK6_SCENE_1_OPENING[lineIndex]}
+          onAdvance={handleAdvance}
+        />
+      </div>
+    </div>
+  );
+}
+
+function Task6Scene2({ onComplete }) {
+  const [phase, setPhase] = useState("userReturn");
+  const [lineIndex, setLineIndex] = useState(0);
+  const [finalResponseText, setFinalResponseText] = useState("");
+
+  const handleAdvance = () => {
+    if (phase === "userReturn") {
+      setPhase("initial");
+      setLineIndex(0);
+    } else if (phase === "initial") {
+      if (lineIndex < TASK6_PASS_INITIAL.length - 1) setLineIndex((i) => i + 1);
+      else {
+        setPhase("userChoice");
+        setLineIndex(0);
+      }
+    } else if (phase === "explanation") {
+      if (lineIndex < TASK6_PASS_EXPLANATION.length - 1)
+        setLineIndex((i) => i + 1);
+      else {
+        setPhase("lecture");
+        setLineIndex(0);
+      }
+    } else if (phase === "lecture") {
+      if (lineIndex < TASK6_LECTURE_LINES.length - 1)
+        setLineIndex((i) => i + 1);
+      else {
+        setPhase("finalChoice");
+        setLineIndex(0);
+      }
+    } else if (phase === "finalResponse") {
+      onComplete();
+    }
+  };
+
+  const handleUserChoice = () => {
+    setPhase("explanation");
+    setLineIndex(0);
+  };
+
+  const handleFinalChoice = (id) => {
+    setPhase("finalResponse");
+    setLineIndex(0);
+    setFinalResponseText(TASK6_FINAL_RESPONSES[id]);
+  };
+
+  const isLast = phase === "finalResponse";
+
+  const renderContent = () => {
+    if (phase === "userReturn")
+      return (
+        <DialogueBubble
+          key="user-return"
+          line={TASK6_USER_RETURN}
+          onAdvance={handleAdvance}
+        />
+      );
+    if (phase === "initial")
+      return (
+        <DialogueBubble
+          key={`initial-${lineIndex}`}
+          line={TASK6_PASS_INITIAL[lineIndex]}
+          onAdvance={handleAdvance}
+        />
+      );
+    if (phase === "userChoice")
+      return (
+        <ChoiceMenu
+          options={TASK6_PASS_USER_OPTIONS}
+          onSelect={handleUserChoice}
+        />
+      );
+    if (phase === "explanation")
+      return (
+        <DialogueBubble
+          key={`explanation-${lineIndex}`}
+          line={TASK6_PASS_EXPLANATION[lineIndex]}
+          onAdvance={handleAdvance}
+        />
+      );
+    if (phase === "lecture")
+      return (
+        <DialogueBubble
+          key={`lecture-${lineIndex}`}
+          line={TASK6_LECTURE_LINES[lineIndex]}
+          onAdvance={handleAdvance}
+        />
+      );
+    if (phase === "finalChoice")
+      return (
+        <ChoiceMenu
+          options={TASK6_FINAL_OPTIONS}
+          onSelect={handleFinalChoice}
+        />
+      );
+    if (phase === "finalResponse")
+      return (
+        <DialogueBubble
+          key="final-response"
+          line={{ speaker: "Manager", text: finalResponseText }}
+          onAdvance={handleAdvance}
+        />
+      );
+    return null;
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-4 items-start">
+        <Avatar
+          label="🧑🏻‍💼"
+          pass={
+            phase === "initial" || phase === "userReturn" ? true : undefined
+          }
+        />
+        <div className="flex-1">
+          {renderContent()}
+          {isLast && (
+            <button
+              onClick={onComplete}
+              className="mt-4 w-full bg-yellow-400 hover:bg-yellow-500 text-indigo-900 py-3 rounded-2xl text-lg font-black border-b-8 border-yellow-600 active:border-b-0 active:translate-y-2 transition-all"
+            >
+              Finish Task
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── TASK 7 SCENES ────────────────────────────────────────────────────────────
+
+function Task7Scene1({ onComplete }) {
+  const [lineIndex, setLineIndex] = useState(0);
+
+  const handleAdvance = () => {
+    if (lineIndex < TASK7_SCENE_1_OPENING.length - 1)
+      setLineIndex((i) => i + 1);
+    else onComplete();
+  };
+
+  return (
+    <div className="flex gap-4 items-start">
+      <Avatar label="🧑🏻‍💼" />
+      <div className="flex-1">
+        <DialogueBubble
+          key={lineIndex}
+          line={TASK7_SCENE_1_OPENING[lineIndex]}
+          onAdvance={handleAdvance}
+        />
+      </div>
+    </div>
+  );
+}
+
+// FAIL: player submitted credentials → PC shutdown → NPC debriefing
+function Task7SceneFail({ onComplete }) {
+  const [phase, setPhase] = useState("lines"); // lines | userChoice | explanation | finalDone
+  const [lineIndex, setLineIndex] = useState(0);
+
+  const handleAdvance = () => {
+    if (phase === "lines") {
+      if (lineIndex < TASK7_FAIL_LINES.length - 1) setLineIndex((i) => i + 1);
+      else {
+        setPhase("userChoice");
+        setLineIndex(0);
+      }
+    } else if (phase === "explanation") {
+      if (lineIndex < TASK7_FAIL_EXPLANATION.length - 1)
+        setLineIndex((i) => i + 1);
+      else onComplete();
+    }
+  };
+
+  const handleUserChoice = () => {
+    setPhase("explanation");
+    setLineIndex(0);
+  };
+
+  const isLast =
+    phase === "explanation" && lineIndex === TASK7_FAIL_EXPLANATION.length - 1;
+  const currentLine =
+    phase === "lines"
+      ? TASK7_FAIL_LINES[lineIndex]
+      : phase === "explanation"
+        ? TASK7_FAIL_EXPLANATION[lineIndex]
+        : null;
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-4 items-start">
+        <Avatar
+          label={currentLine?.speaker === "You" ? "🧑" : "🧑🏻‍💼"}
+          pass={phase === "explanation" ? false : undefined}
+        />
+        <div className="flex-1">
+          {phase === "userChoice" ? (
+            <ChoiceMenu
+              options={TASK7_FAIL_USER_OPTIONS}
+              onSelect={handleUserChoice}
+            />
+          ) : currentLine ? (
+            <DialogueBubble
+              key={`${phase}-${lineIndex}`}
+              line={currentLine}
+              onAdvance={handleAdvance}
+            />
+          ) : null}
+          {isLast && (
+            <button
+              onClick={onComplete}
+              className="mt-4 w-full bg-yellow-400 hover:bg-yellow-500 text-indigo-900 py-3 rounded-2xl text-lg font-black border-b-8 border-yellow-600 active:border-b-0 active:translate-y-2 transition-all"
+            >
+              Finish Task
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// PASS: player questioned or reported → NPC debriefing
+function Task7ScenePass({ onComplete }) {
+  const [phase, setPhase] = useState("userReturn"); // userReturn | initial | userChoice | explanation | lecture | finalChoice | finalResponse
+  const [lineIndex, setLineIndex] = useState(0);
+  const [finalResponseText, setFinalResponseText] = useState("");
+
+  const handleAdvance = () => {
+    if (phase === "userReturn") {
+      setPhase("initial");
+      setLineIndex(0);
+    } else if (phase === "initial") {
+      if (lineIndex < TASK7_PASS_INITIAL.length - 1) setLineIndex((i) => i + 1);
+      else {
+        setPhase("userChoice");
+        setLineIndex(0);
+      }
+    } else if (phase === "explanation") {
+      if (lineIndex < TASK7_PASS_EXPLANATION.length - 1)
+        setLineIndex((i) => i + 1);
+      else {
+        setPhase("lecture");
+        setLineIndex(0);
+      }
+    } else if (phase === "lecture") {
+      if (lineIndex < TASK7_LECTURE_LINES.length - 1)
+        setLineIndex((i) => i + 1);
+      else {
+        setPhase("finalChoice");
+        setLineIndex(0);
+      }
+    } else if (phase === "finalResponse") {
+      onComplete();
+    }
+  };
+
+  const handleUserChoice = () => {
+    setPhase("explanation");
+    setLineIndex(0);
+  };
+  const handleFinalChoice = (id) => {
+    setFinalResponseText(TASK7_FINAL_RESPONSES[id]);
+    setPhase("finalResponse");
+    setLineIndex(0);
+  };
+
+  const isLast = phase === "finalResponse";
+
+  const renderContent = () => {
+    if (phase === "userReturn")
+      return (
+        <DialogueBubble
+          key="user-return"
+          line={TASK7_PASS_USER_RETURN}
+          onAdvance={handleAdvance}
+        />
+      );
+    if (phase === "initial")
+      return (
+        <DialogueBubble
+          key={`initial-${lineIndex}`}
+          line={TASK7_PASS_INITIAL[lineIndex]}
+          onAdvance={handleAdvance}
+        />
+      );
+    if (phase === "userChoice")
+      return (
+        <ChoiceMenu
+          options={TASK7_PASS_USER_OPTIONS}
+          onSelect={handleUserChoice}
+        />
+      );
+    if (phase === "explanation")
+      return (
+        <DialogueBubble
+          key={`explanation-${lineIndex}`}
+          line={TASK7_PASS_EXPLANATION[lineIndex]}
+          onAdvance={handleAdvance}
+        />
+      );
+    if (phase === "lecture")
+      return (
+        <DialogueBubble
+          key={`lecture-${lineIndex}`}
+          line={TASK7_LECTURE_LINES[lineIndex]}
+          onAdvance={handleAdvance}
+        />
+      );
+    if (phase === "finalChoice")
+      return (
+        <ChoiceMenu
+          options={TASK7_FINAL_OPTIONS}
+          onSelect={handleFinalChoice}
+        />
+      );
+    if (phase === "finalResponse")
+      return (
+        <DialogueBubble
+          key="final-response"
+          line={{ speaker: "Manager", text: finalResponseText }}
+          onAdvance={handleAdvance}
+        />
+      );
+    return null;
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-4 items-start">
+        <Avatar
+          label="🧑🏻‍💼"
+          pass={
+            phase === "initial" || phase === "userReturn" ? true : undefined
+          }
+        />
+        <div className="flex-1">
+          {renderContent()}
+          {isLast && (
+            <button
+              onClick={onComplete}
+              className="mt-4 w-full bg-yellow-400 hover:bg-yellow-500 text-indigo-900 py-3 rounded-2xl text-lg font-black border-b-8 border-yellow-600 active:border-b-0 active:translate-y-2 transition-all"
+            >
+              Finish Task
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Main DialogueScene ───────────────────────────────────────────────────────
 
 export default function DialogueScene() {
@@ -1091,18 +1778,28 @@ export default function DialogueScene() {
   // Task 1
   const isTask1Scene1 = mission.stage === "TALKING_TO_MANAGER";
   const isTask1Scene2 = mission.stage === "DEBRIEFING";
-
   // Task 2
   const isTask2Scene1 = mission.stage === "TASK2_TALKING_TO_MANAGER";
   const isTask2Scene2 = mission.stage === "TASK2_DEBRIEFING";
-
   // Task 3
   const isTask3Scene1 = mission.stage === "TASK3_TALKING_TO_MANAGER";
   const isTask3Scene2 = mission.stage === "TASK3_DEBRIEFING";
-
   // Task 4
   const isTask4Scene1 = mission.stage === "TASK4_TALKING_TO_MANAGER";
   const isTask4Scene2 = mission.stage === "TASK4_DEBRIEFING";
+  // Task 5
+  const isTask5Scene1 = mission.stage === "TASK5_TALKING_TO_MANAGER";
+  const isTask5Scene2 = mission.stage === "TASK5_ASKING_NPC_FOR_IT";
+  const isTask5Scene3 = mission.stage === "TASK5_DEBRIEFING";
+  // Task 6
+  const isTask6Scene1 = mission.stage === "TASK6_TALKING_TO_MANAGER";
+  const isTask6Scene2 = mission.stage === "TASK6_DEBRIEFING";
+  // Task 7
+  const isTask7Scene1 = mission.stage === "TASK7_TALKING_TO_MANAGER";
+  const isTask7SceneFail =
+    mission.stage === "TASK7_DEBRIEFING" && mission.result === "FAIL";
+  const isTask7ScenePass =
+    mission.stage === "TASK7_DEBRIEFING" && mission.result === "PASS";
 
   if (
     !isTask1Scene1 &&
@@ -1112,17 +1809,23 @@ export default function DialogueScene() {
     !isTask3Scene1 &&
     !isTask3Scene2 &&
     !isTask4Scene1 &&
-    !isTask4Scene2
+    !isTask4Scene2 &&
+    !isTask5Scene1 &&
+    !isTask5Scene2 &&
+    !isTask5Scene3 &&
+    !isTask6Scene1 &&
+    !isTask6Scene2 &&
+    !isTask7Scene1 &&
+    !isTask7SceneFail &&
+    !isTask7ScenePass
   ) {
     return null;
   }
 
   // ── Task 1 handlers ──
-  const handleTask1Scene1Complete = () => {
+  const handleTask1Scene1Complete = () =>
     setMission({ ...mission, stage: "GO_TO_WORKSPACE" });
-  };
-
-  const handleTask1Scene2Complete = () => {
+  const handleTask1Scene2Complete = () =>
     setMission({
       id: "TASK_2_PHONE_SECURITY",
       stage: "TASK2_TALK_TO_MANAGER",
@@ -1130,14 +1833,11 @@ export default function DialogueScene() {
       unsafeFields: [],
       selectedUrl: null,
     });
-  };
 
   // ── Task 2 handlers ──
-  const handleTask2Scene1Complete = () => {
+  const handleTask2Scene1Complete = () =>
     setMission({ ...mission, stage: "TASK2_WAITING_FOR_MESSAGE" });
-  };
-
-  const handleTask2Scene2Complete = () => {
+  const handleTask2Scene2Complete = () =>
     setMission({
       id: "TASK_3_URL_SECURITY",
       stage: "TASK3_TALK_TO_MANAGER",
@@ -1145,15 +1845,11 @@ export default function DialogueScene() {
       unsafeFields: [],
       selectedUrl: null,
     });
-  };
 
   // ── Task 3 handlers ──
-  const handleTask3Scene1Complete = () => {
+  const handleTask3Scene1Complete = () =>
     setMission({ ...mission, stage: "TASK3_GO_TO_LAPTOP" });
-  };
-
-  const handleTask3Scene2Complete = () => {
-    // After Task 3 completes, start Task 4 (Email Security)
+  const handleTask3Scene2Complete = () =>
     setMission({
       id: "TASK_4_EMAIL_SECURITY",
       stage: "TASK4_TALK_TO_MANAGER",
@@ -1163,21 +1859,61 @@ export default function DialogueScene() {
       emailActions: {},
       incorrectlyHandled: [],
     });
-  };
 
   // ── Task 4 handlers ──
-  const handleTask4Scene1Complete = () => {
+  const handleTask4Scene1Complete = () =>
     setMission({ ...mission, stage: "TASK4_GO_TO_LAPTOP" });
-  };
+  const handleTask4Scene2Complete = () =>
+    setMission({
+      id: "TASK_5_PASSWORD_SECURITY",
+      stage: "TASK5_TALK_TO_MANAGER",
+      result: null,
+      unsafeFields: [],
+      selectedUrl: null,
+      emailActions: {},
+      incorrectlyHandled: [],
+    });
 
-  const handleTask4Scene2Complete = () => {
-    setMission({ ...mission, stage: "TASK4_COMPLETED" });
-  };
+  // ── Task 5 handlers ──
+  const handleTask5Scene1Complete = () =>
+    setMission({ ...mission, stage: "TASK5_GO_TO_LAPTOP" });
+  const handleTask5Scene2Complete = () =>
+    setMission({ ...mission, stage: "TASK5_PHONE_CHAT" });
+  const handleTask5Scene3Complete = () =>
+    setMission({
+      id: "TASK_6_MALVERTISING",
+      stage: "TASK6_TALK_TO_MANAGER",
+      result: null,
+      unsafeFields: [],
+      selectedUrl: null,
+      emailActions: {},
+      incorrectlyHandled: [],
+    });
+
+  // ── Task 6 handlers ──
+  const handleTask6Scene1Complete = () =>
+    setMission({ ...mission, stage: "TASK6_GO_TO_LAPTOP" });
+  const handleTask6Scene2Complete = () =>
+    setMission({
+      id: "TASK_7_FAKE_MODERATOR",
+      stage: "TASK7_TALK_TO_MANAGER",
+      result: null,
+      unsafeFields: [],
+      selectedUrl: null,
+      emailActions: {},
+      incorrectlyHandled: [],
+    });
+
+  // ── Task 7 handlers ──
+  const handleTask7Scene1Complete = () =>
+    setMission({ ...mission, stage: "TASK7_GO_TO_DESK" });
+  const handleTask7DebriefComplete = () =>
+    setMission({ ...mission, stage: "TASK7_COMPLETED" });
 
   return (
     <div className="fixed inset-0 bg-opacity-0 z-[900] flex items-end justify-center p-4 font-sans">
       <div className="w-full max-w-3xl bg-yellow-400 p-6 rounded-[2rem] border-4 border-indigo-900 shadow-[10px_10px_0_0_#4338ca] mb-4">
-        {/* Task 1 Scenes */}
+        {/* Task 1 */}
         {isTask1Scene1 && (
           <Task1Scene1 onComplete={handleTask1Scene1Complete} />
         )}
@@ -1189,7 +1925,7 @@ export default function DialogueScene() {
           />
         )}
 
-        {/* Task 2 Scenes */}
+        {/* Task 2 */}
         {isTask2Scene1 && (
           <Task2Scene1 onComplete={handleTask2Scene1Complete} />
         )}
@@ -1200,7 +1936,7 @@ export default function DialogueScene() {
           />
         )}
 
-        {/* Task 3 Scenes */}
+        {/* Task 3 */}
         {isTask3Scene1 && (
           <Task3Scene1 onComplete={handleTask3Scene1Complete} />
         )}
@@ -1212,7 +1948,7 @@ export default function DialogueScene() {
           />
         )}
 
-        {/* Task 4 Scenes */}
+        {/* Task 4 */}
         {isTask4Scene1 && (
           <Task4Scene1 onComplete={handleTask4Scene1Complete} />
         )}
@@ -1221,6 +1957,39 @@ export default function DialogueScene() {
             result={mission.result}
             onComplete={handleTask4Scene2Complete}
           />
+        )}
+
+        {/* Task 5 */}
+        {isTask5Scene1 && (
+          <Task5Scene1 onComplete={handleTask5Scene1Complete} />
+        )}
+        {isTask5Scene2 && (
+          <Task5Scene2 onComplete={handleTask5Scene2Complete} />
+        )}
+        {isTask5Scene3 && (
+          <Task5Scene3
+            result={mission.result}
+            onComplete={handleTask5Scene3Complete}
+          />
+        )}
+
+        {/* Task 6 */}
+        {isTask6Scene1 && (
+          <Task6Scene1 onComplete={handleTask6Scene1Complete} />
+        )}
+        {isTask6Scene2 && (
+          <Task6Scene2 onComplete={handleTask6Scene2Complete} />
+        )}
+
+        {/* Task 7 */}
+        {isTask7Scene1 && (
+          <Task7Scene1 onComplete={handleTask7Scene1Complete} />
+        )}
+        {isTask7SceneFail && (
+          <Task7SceneFail onComplete={handleTask7DebriefComplete} />
+        )}
+        {isTask7ScenePass && (
+          <Task7ScenePass onComplete={handleTask7DebriefComplete} />
         )}
       </div>
     </div>

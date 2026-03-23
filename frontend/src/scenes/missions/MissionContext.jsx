@@ -1,50 +1,92 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 const MissionContext = createContext();
 
-/**
- * Mission Stage Flow:
- *
- * ── TASK 1 ──────────────────────────────────────────────────────────────────
- * TALK_TO_MANAGER         — player walks up to NPC
- *   ↓ (trigger)
- * TALKING_TO_MANAGER      — Scene 1 dialogue open (NPC convo + choice)
- *   ↓ (dialogue ends)
- * GO_TO_WORKSPACE         — mission marker visible, player goes to desk
- *   ↓ (workspace trigger)
- * FILL_FORM               — laptop camera + form popup active
- *   ↓ (form submit/cancel)
- * RETURN_TO_MANAGER       — player walks back to NPC
- *   ↓ (trigger)
- * DEBRIEFING              — Scene 2 dialogue (pass/fail + lecture)
- *   ↓ (dialogue ends)
- * COMPLETED               — task done
- *
- * ── TASK 2 ──────────────────────────────────────────────────────────────────
- * TASK2_TALK_TO_MANAGER → TASK2_TALKING_TO_MANAGER → TASK2_WAITING_FOR_MESSAGE
- *   → TASK2_PHONE_CHAT → TASK2_RETURN_TO_MANAGER → TASK2_DEBRIEFING → TASK2_COMPLETED
- *
- * ── TASK 3 ──────────────────────────────────────────────────────────────────
- * TASK3_TALK_TO_MANAGER → TASK3_TALKING_TO_MANAGER → TASK3_GO_TO_LAPTOP
- *   → TASK3_DESKTOP_SIMULATION → TASK3_RETURN_TO_MANAGER → TASK3_DEBRIEFING → TASK3_COMPLETED
- *
- * ── TASK 4 (Email Security) ──────────────────────────────────────────────────
- * TASK4_TALK_TO_MANAGER → TASK4_TALKING_TO_MANAGER → TASK4_GO_TO_LAPTOP
- *   → TASK4_DESKTOP_EMAIL → TASK4_RETURN_TO_MANAGER → TASK4_DEBRIEFING → TASK4_COMPLETED
- */
-export function MissionProvider({ children }) {
-  const [mission, setMission] = useState({
-    id: "TASK_1_PERSONAL_DATA", //
-    stage: "TALK_TO_MANAGER",
-    result: null, // "PASS" | "FAIL" | "CANCELLED"
-    unsafeFields: [], // fields that were filled with sensitive data (Task 1)
-    selectedUrl: null, // url the user clicked (Task 3)
-    emailActions: {}, // map of emailId → action taken (Task 4)
-    incorrectlyHandled: [], // dangerous emails not correctly blocked/reported (Task 4)
-  });
+const API_BASE = "http://localhost:3001";
 
-  // Phone modal state (for Task 2)
+export function getAuthToken() {
+  return localStorage.getItem("guardians_token");
+}
+
+export function MissionProvider({ children }) {
+  const [mission, setMission] = useState(null);
   const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Saved from DB — shared with Scene and CharacterSelection
+  const [savedCharacter, setSavedCharacter] = useState(null); // "timmy" | "girl" | null
+  const [savedPosition, setSavedPosition] = useState({ x: -2, y: 2.5, z: 3 });
+
+  // ── LOAD PROGRESS ON MOUNT ────────────────────────────────────────────────
+  useEffect(() => {
+    async function loadProgress() {
+      const token = getAuthToken();
+
+      if (!token) {
+        setMission(defaultMission());
+        setIsLoaded(true);
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/progress`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          setMission({
+            id: data.progress.currentMissionId,
+            stage: data.progress.currentStage,
+            result: null,
+            unsafeFields: [],
+            selectedUrl: null,
+            emailActions: {},
+            incorrectlyHandled: [],
+          });
+
+          // Store character and position so Scene / CharacterSelection can use them
+          setSavedCharacter(data.progress.characterType); // null if never chosen
+          setSavedPosition(
+            data.progress.playerPosition || { x: -2, y: 2.5, z: 3 },
+          );
+        } else {
+          setMission(defaultMission());
+        }
+      } catch (err) {
+        console.error("Failed to load progress:", err);
+        setMission(defaultMission());
+      }
+
+      setIsLoaded(true);
+    }
+
+    loadProgress();
+  }, []);
+
+  if (!isLoaded) {
+    return (
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          background: "#000",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "#fff",
+          gap: 12,
+          zIndex: 9999,
+        }}
+      >
+        <div style={{ fontSize: 36 }}>🛡️</div>
+        <div style={{ fontSize: 18, fontWeight: "bold" }}>
+          Loading your progress...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <MissionContext.Provider
@@ -53,6 +95,10 @@ export function MissionProvider({ children }) {
         setMission,
         isPhoneModalOpen,
         setIsPhoneModalOpen,
+        savedCharacter,
+        setSavedCharacter,
+        savedPosition,
+        setSavedPosition,
       }}
     >
       {children}
@@ -61,3 +107,15 @@ export function MissionProvider({ children }) {
 }
 
 export const useMission = () => useContext(MissionContext);
+
+function defaultMission() {
+  return {
+    id: "TASK_1_PERSONAL_DATA",
+    stage: "TALK_TO_MANAGER",
+    result: null,
+    unsafeFields: [],
+    selectedUrl: null,
+    emailActions: {},
+    incorrectlyHandled: [],
+  };
+}

@@ -14,11 +14,13 @@ import TriggerManager from "./triggers/TriggerManager";
 import MarkerManager from "./triggers/MarkerManager";
 import CameraManager from "./triggers/CameraManager";
 
+// Cyber Shooter
+import CyberShooterTrigger from "./gameUI/tasksUI/shooter/CyberShooterTrigger";
 /**
  * Main Scene Component
  * Clean orchestrator that delegates to specialized components
  */
-export default function Scene() {
+export default function Scene({ onOpenCyberShooter }) {
   const [selectedCharacter, setSelectedCharacter] = useState(null);
   const { mission, isPhoneModalOpen } = useMission();
 
@@ -74,6 +76,10 @@ export default function Scene() {
           <MarkerManager taskConfig={taskConfig} />
         </>
       )}
+
+      {/* ================= CYBER SHOOTER MINIGAME TRIGGER ================= */}
+      {/* Always present — triggers whenever player walks into the zone */}
+      <CyberShooterTrigger onTrigger={onOpenCyberShooter} />
     </>
   );
 }

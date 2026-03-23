@@ -5,7 +5,7 @@ import Home from "./Home";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { BrightnessProvider } from "./scenes/utils/BrightnessContext";
-import { VolumeProvider } from "./scenes/utils/VolumeContext"; // Add this
+import { VolumeProvider } from "./scenes/utils/VolumeContext";
 
 export default function App() {
   return (

@@ -38,7 +38,6 @@ export default function CharacterSelection() {
       {/* Main Container - Scaled down */}
       <div className="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-[10px_10px_0_0_#1e1b4b] border-4 border-indigo-950 w-full max-w-2xl relative z-10">
         <div className="text-center mb-6">
-          
           <h1 className="text-3xl font-black text-indigo-950 uppercase tracking-tighter">
             Identify Your Hero
           </h1>

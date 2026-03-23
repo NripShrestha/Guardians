@@ -12,16 +12,14 @@ export default function Login() {
   const validateForm = () => {
     const newErrors = {};
 
-    // Email validation
     if (!email.trim()) {
       newErrors.email = "Enter your email, hero!";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       newErrors.email = "Check your email spelling!";
     }
 
-    // Password validation
     if (!password) {
-      newErrors.password = "Enter your secret code!";
+      newErrors.password = "Enter your password";
     }
 
     setErrors(newErrors);
@@ -30,10 +28,7 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Clear previous errors
     setErrors({});
-
     if (!validateForm()) return;
 
     setIsSubmitting(true);
@@ -44,11 +39,12 @@ export default function Login() {
       });
 
       if (result.data.success) {
-        localStorage.setItem("token", result.data.token);
+        // ✅ FIXED: was "token", must match what MissionContext & HUD read
+        localStorage.setItem("guardians_token", result.data.token);
         navigate("/choose-character");
       } else {
         alert(
-          "⚠️ " + (result.data.message || "Wait! That's not right. Try again!")
+          "⚠️ " + (result.data.message || "Wait! That's not right. Try again!"),
         );
       }
     } catch (err) {
