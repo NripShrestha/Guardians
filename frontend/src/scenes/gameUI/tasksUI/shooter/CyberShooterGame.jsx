@@ -19,6 +19,7 @@ const DANGEROUS_TARGETS = [
   { label: "Stranger\nOnline", type: "danger", emoji: "👻" },
 ];
 
+// Reduced safe target weight — only 1 copy instead of 2 in spawn pool
 const SAFE_TARGETS = [
   { label: "HTTPS\nSite", type: "safe", emoji: "🔒" },
   { label: "2FA\nEnabled", type: "safe", emoji: "✅" },
@@ -26,65 +27,258 @@ const SAFE_TARGETS = [
   { label: "Trusted\nSender", type: "safe", emoji: "👍" },
   { label: "Security\nUpdate", type: "safe", emoji: "🛡️" },
   { label: "Antivirus\nOn", type: "safe", emoji: "🦺" },
+  { label: "Backup\nFiles", type: "safe", emoji: "💾" },
+  { label: "Safe\nBrowser", type: "safe", emoji: "🌐" },
+  { label: "VPN\nOn", type: "safe", emoji: "🔐" },
 ];
 
-const QUIZ_QUESTIONS = [
+const ALL_QUIZ_QUESTIONS = [
   {
-    q: "Which website is SAFE to visit?",
-    options: ["http://bank.com 😨", "https://bank.com 🔒"],
+    q: "Which website is safer to visit?",
+    options: ["http://bank.com", "https://bank.com"],
     correct: 1,
-    fun: "HTTPS keeps your info secret — like a magic shield! 🛡️",
+    fun: "HTTPS encrypts your data — always look for the padlock in the address bar!",
   },
   {
     q: "You get an email asking for your password. What do you do?",
-    options: ["Send it right away! 😬", "Never share passwords! 🚫"],
+    options: ["Send it quickly", "Never share your password"],
     correct: 1,
-    fun: "Real companies NEVER ask for your password by email!",
+    fun: "Real companies never ask for your password by email!",
   },
   {
     q: "What is phishing?",
-    options: ["Fishing in the ocean 🎣", "Tricking you to steal info 🦹"],
+    options: [
+      "A type of online fishing game",
+      "A scam to trick you into giving up your info",
+    ],
     correct: 1,
-    fun: "Phishing = fake messages trying to steal YOUR stuff!",
+    fun: "Phishing tricks you into giving away passwords or personal info!",
   },
   {
-    q: "Which is a STRONG password?",
-    options: ["password123 😅", "T!ger$un5h1n3 🔐"],
+    q: "Which is a stronger password?",
+    options: ["password123", "Xk9mP2qR!t"],
     correct: 1,
-    fun: "Mix letters, numbers and symbols for super strong passwords!",
+    fun: "Mix uppercase letters, numbers and symbols for a strong password!",
   },
   {
-    q: "You find a USB on the ground. What do you do?",
-    options: ["Plug it in! 🤔", "Give it to a grown-up 🧑‍🏫"],
+    q: "You find a USB drive in a parking lot. What do you do?",
+    options: [
+      "Plug it in to see what is on it",
+      "Give it to an adult or the IT team",
+    ],
     correct: 1,
-    fun: "Mystery USBs can have sneaky viruses inside!",
+    fun: "Mystery USB drives can carry viruses that infect your computer!",
   },
   {
-    q: "2FA means?",
-    options: ["Two-Factor Authentication 🔐", "Two Fast Apps 🏃"],
+    q: "What does 2FA stand for?",
+    options: ["Two-Factor Authentication", "Two Fast Applications"],
     correct: 0,
-    fun: "2FA adds an extra lock to keep bad guys out!",
+    fun: "2FA adds a second lock — even if someone steals your password, they cannot get in!",
   },
   {
-    q: "A stranger online wants to meet you. You should:",
-    options: ["Meet them! 😬", "Tell a parent right away! 👨‍👩‍👧"],
+    q: "A stranger online wants to meet you in person. You should:",
+    options: [
+      "Agree and go alone",
+      "Tell a parent or trusted adult immediately",
+    ],
     correct: 1,
-    fun: "Always tell a trusted adult about strangers online!",
+    fun: "Never meet an online stranger without a trusted adult present!",
+  },
+  {
+    q: "What does HTTPS mean?",
+    options: [
+      "HyperText Transfer Protocol Secure",
+      "High Tech Page Transfer System",
+    ],
+    correct: 0,
+    fun: "The S stands for Secure — it encrypts everything between you and the website!",
+  },
+  {
+    q: "Someone claims to be tech support and needs remote access. You:",
+    options: [
+      "Let them in right away",
+      "Hang up and call the company yourself",
+    ],
+    correct: 1,
+    fun: "Fake tech support scams are very common — always verify by calling the real number!",
+  },
+  {
+    q: "What is malware?",
+    options: [
+      "A helpful software update",
+      "Software designed to damage or spy on your device",
+    ],
+    correct: 1,
+    fun: "Malware means malicious software — it can steal data or destroy files!",
+  },
+  {
+    q: "Which is the safest thing to do on public Wi-Fi?",
+    options: [
+      "Log into your bank account",
+      "Use a VPN to protect your connection",
+    ],
+    correct: 1,
+    fun: "Public Wi-Fi is not private — a VPN keeps your data encrypted!",
+  },
+  {
+    q: "What is ransomware?",
+    options: [
+      "Software that locks your files and demands payment",
+      "An antivirus tool",
+    ],
+    correct: 0,
+    fun: "Ransomware encrypts your files and demands money — regular backups protect you!",
+  },
+  {
+    q: "How often should you update your passwords?",
+    options: [
+      "Never — once set is fine",
+      "Regularly, and use different ones for each account",
+    ],
+    correct: 1,
+    fun: "Unique passwords for every account mean one breach does not expose everything!",
+  },
+  {
+    q: "What is a firewall?",
+    options: [
+      "A security system that filters network traffic",
+      "A type of computer virus",
+    ],
+    correct: 0,
+    fun: "Firewalls block suspicious traffic before it can reach your device!",
+  },
+  {
+    q: "You receive an email saying you won a prize in a contest you never entered. This is:",
+    options: ["A real prize — claim it!", "A scam — ignore or report it"],
+    correct: 1,
+    fun: "If you did not enter, you did not win. It is a trick to steal your details!",
+  },
+  {
+    q: "Before downloading a file from the internet, you should:",
+    options: [
+      "Download it immediately",
+      "Make sure it comes from a trusted source",
+    ],
+    correct: 1,
+    fun: "Downloads from unknown sources can contain hidden malware!",
+  },
+  {
+    q: "What is social engineering?",
+    options: [
+      "Building apps for social media",
+      "Manipulating people into revealing private information",
+    ],
+    correct: 1,
+    fun: "Social engineers exploit trust, not technology — they target the person, not the machine!",
+  },
+  {
+    q: "Which email address looks suspicious?",
+    options: ["support@yourbank.com", "supp0rt@y0urbank-secure.net"],
+    correct: 1,
+    fun: "Scammers swap letters with numbers or add extra words to fake real domains!",
+  },
+  {
+    q: "What does a VPN do?",
+    options: [
+      "Makes your internet faster",
+      "Encrypts your connection and hides your IP address",
+    ],
+    correct: 1,
+    fun: "VPN stands for Virtual Private Network — it keeps your browsing private!",
+  },
+  {
+    q: "Is it safe to use the same password for every account?",
+    options: [
+      "Yes, it is easy to remember",
+      "No — one breach exposes all your accounts at once",
+    ],
+    correct: 1,
+    fun: "Use a password manager to create and store unique passwords safely!",
+  },
+  {
+    q: "A pop-up says your computer has a virus and tells you to call a number. You should:",
+    options: [
+      "Call the number right away",
+      "Close the browser tab — it is almost certainly a scam",
+    ],
+    correct: 1,
+    fun: "Real antivirus software never asks you to call a phone number!",
+  },
+  {
+    q: "What is an antivirus program?",
+    options: [
+      "Software that deletes your files",
+      "Software that detects and removes malware",
+    ],
+    correct: 1,
+    fun: "Keep your antivirus updated so it can protect you from the latest threats!",
+  },
+  {
+    q: "What should you do before installing an app?",
+    options: [
+      "Install it without reading anything",
+      "Review what permissions the app is requesting",
+    ],
+    correct: 1,
+    fun: "Apps only need permissions related to what they do — be suspicious of extras!",
+  },
+  {
+    q: "What is a data breach?",
+    options: [
+      "When your phone runs out of battery",
+      "When private data is accessed or stolen without permission",
+    ],
+    correct: 1,
+    fun: "Check haveibeenpwned.com to see if your email has appeared in a breach!",
+  },
+  {
+    q: "What is the safest way to share your location?",
+    options: [
+      "Post it publicly on social media",
+      "Share it only with people you trust in real life",
+    ],
+    correct: 1,
+    fun: "Sharing your location publicly tells strangers exactly where you are!",
+  },
+  {
+    q: "You receive a suspicious link in a chat message. You should:",
+    options: [
+      "Click it to see what it is",
+      "Do not click it — report or delete the message",
+    ],
+    correct: 1,
+    fun: "Hover over links first to preview where they really go before clicking!",
+  },
+  {
+    q: "What is two-factor authentication?",
+    options: [
+      "Signing in with two passwords",
+      "Using a password plus a second step like a code sent to your phone",
+    ],
+    correct: 1,
+    fun: "The second factor proves it is really you — even if your password is stolen!",
   },
 ];
+
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 let _id = 0;
 const uid = () => ++_id;
 
-// ─── TEXTURE FACTORY (Kid-friendly bright style) ──────────────────────────────
+// ─── TEXTURE FACTORIES ────────────────────────────────────────────────────────
 
 function makeTexture(label, emoji, isDanger) {
   const cv = document.createElement("canvas");
   cv.width = 512;
   cv.height = 280;
   const ctx = cv.getContext("2d");
-
-  // Bright bubble background
   const g = ctx.createRadialGradient(256, 140, 20, 256, 140, 200);
   if (isDanger) {
     g.addColorStop(0, "#FFE0E0");
@@ -97,39 +291,29 @@ function makeTexture(label, emoji, isDanger) {
   ctx.beginPath();
   ctx.roundRect(10, 10, 492, 260, 40);
   ctx.fill();
-
-  // Border
   ctx.strokeStyle = isDanger ? "#FF4444" : "#22CC66";
   ctx.lineWidth = 8;
   ctx.stroke();
-
-  // Wobbly dots decoration
   ctx.fillStyle = isDanger ? "rgba(255,80,80,0.15)" : "rgba(50,200,100,0.15)";
   for (let i = 0; i < 5; i++) {
     ctx.beginPath();
     ctx.arc(80 + i * 90, 40, 18, 0, Math.PI * 2);
     ctx.fill();
   }
-
-  // Big emoji
   ctx.font = "90px serif";
   ctx.textAlign = "center";
   ctx.fillText(emoji, 100, 175);
-
-  // Label text
   const lines = label.split("\n");
   ctx.fillStyle = isDanger ? "#CC0000" : "#006622";
   ctx.shadowColor = "rgba(0,0,0,0.15)";
   ctx.shadowBlur = 4;
   if (lines.length === 1) {
-    ctx.font = "bold 54px Arial Rounded MT Bold, Arial";
+    ctx.font = "bold 54px Arial Rounded MT Bold,Arial";
     ctx.fillText(label, 300, 160);
   } else {
-    ctx.font = "bold 46px Arial Rounded MT Bold, Arial";
+    ctx.font = "bold 46px Arial Rounded MT Bold,Arial";
     lines.forEach((l, i) => ctx.fillText(l, 300, 115 + i * 68));
   }
-
-  // Tag badge
   ctx.shadowBlur = 0;
   ctx.fillStyle = isDanger ? "#FF4444" : "#22CC66";
   ctx.beginPath();
@@ -137,8 +321,7 @@ function makeTexture(label, emoji, isDanger) {
   ctx.fill();
   ctx.fillStyle = "#fff";
   ctx.font = "bold 22px Arial";
-  ctx.fillText(isDanger ? "⚠️ DANGER!" : "✅ SAFE!", 256, 248);
-
+  ctx.fillText(isDanger ? "DANGER!" : "SAFE!", 256, 248);
   return new THREE.CanvasTexture(cv);
 }
 
@@ -147,7 +330,6 @@ function makeClockTexture() {
   cv.width = 256;
   cv.height = 256;
   const ctx = cv.getContext("2d");
-  // Gold circle face
   const g = ctx.createRadialGradient(128, 128, 10, 128, 128, 120);
   g.addColorStop(0, "#FFFDE7");
   g.addColorStop(1, "#FFD600");
@@ -158,7 +340,6 @@ function makeClockTexture() {
   ctx.strokeStyle = "#FF6F00";
   ctx.lineWidth = 8;
   ctx.stroke();
-  // Hour marks
   ctx.strokeStyle = "#BF360C";
   ctx.lineWidth = 5;
   for (let i = 0; i < 12; i++) {
@@ -168,7 +349,6 @@ function makeClockTexture() {
     ctx.lineTo(128 + Math.cos(a) * 108, 128 + Math.sin(a) * 108);
     ctx.stroke();
   }
-  // Clock hands
   ctx.strokeStyle = "#212121";
   ctx.lineWidth = 7;
   ctx.lineCap = "round";
@@ -185,11 +365,10 @@ function makeClockTexture() {
   ctx.beginPath();
   ctx.arc(128, 128, 8, 0, Math.PI * 2);
   ctx.fill();
-  // "+10s" label
   ctx.fillStyle = "#BF360C";
   ctx.font = "bold 28px Arial";
   ctx.textAlign = "center";
-  ctx.fillText("+10s ⏰", 128, 220);
+  ctx.fillText("+10s", 128, 220);
   return new THREE.CanvasTexture(cv);
 }
 
@@ -208,7 +387,6 @@ function makeBoosterTexture(name, emoji, color1, color2, tagColor) {
   ctx.strokeStyle = tagColor;
   ctx.lineWidth = 8;
   ctx.stroke();
-  // Sparkle dots
   ctx.fillStyle = `${tagColor}44`;
   for (let i = 0; i < 6; i++) {
     ctx.beginPath();
@@ -222,7 +400,7 @@ function makeBoosterTexture(name, emoji, color1, color2, tagColor) {
   ctx.fillStyle = tagColor;
   ctx.shadowColor = "rgba(0,0,0,0.2)";
   ctx.shadowBlur = 4;
-  ctx.font = "bold 42px Arial Rounded MT Bold, Arial";
+  ctx.font = "bold 42px Arial Rounded MT Bold,Arial";
   lines.forEach((l, i) =>
     ctx.fillText(l, 300, lines.length === 1 ? 155 : 110 + i * 62),
   );
@@ -233,9 +411,11 @@ function makeBoosterTexture(name, emoji, color1, color2, tagColor) {
   ctx.fill();
   ctx.fillStyle = "#fff";
   ctx.font = "bold 22px Arial";
-  ctx.fillText("⚡ BOOSTER!", 256, 248);
+  ctx.fillText("BOOSTER!", 256, 248);
   return new THREE.CanvasTexture(cv);
 }
+
+// ─── GUN ─────────────────────────────────────────────────────────────────────
 
 const GUN_BASE = new THREE.Vector3(0.55, -0.9, 5.8);
 
@@ -244,23 +424,16 @@ function CartoonGun({ firing, aimDirRef, barrelTipRef }) {
   const kickRef = useRef(0);
   const targetQuat = useRef(new THREE.Quaternion());
   const currentQuat = useRef(new THREE.Quaternion());
-  // Local-space barrel tip offset (tip of the barrel cylinder)
   const localTip = new THREE.Vector3(0, 0.15, -1.22);
 
   useFrame(() => {
     if (!groupRef.current) return;
-
-    // Build aim quaternion: rotate local -Z to match the ray direction
     if (aimDirRef.current) {
       const dir = aimDirRef.current.clone().normalize();
       targetQuat.current.setFromUnitVectors(new THREE.Vector3(0, 0, -1), dir);
     }
-
-    // Smooth slerp
     currentQuat.current.slerp(targetQuat.current, 0.2);
     groupRef.current.quaternion.copy(currentQuat.current);
-
-    // Recoil
     if (kickRef.current > 0)
       kickRef.current = Math.max(0, kickRef.current - 0.14);
     const kick = kickRef.current;
@@ -269,8 +442,6 @@ function CartoonGun({ firing, aimDirRef, barrelTipRef }) {
       GUN_BASE.y + kick * 0.08,
       GUN_BASE.z - kick * 0.35,
     );
-
-    // Compute world-space barrel tip so bullet spawns exactly there
     if (barrelTipRef) {
       const worldTip = localTip
         .clone()
@@ -286,32 +457,26 @@ function CartoonGun({ firing, aimDirRef, barrelTipRef }) {
 
   return (
     <group ref={groupRef} position={[GUN_BASE.x, GUN_BASE.y, GUN_BASE.z]}>
-      {/* Main barrel — cylinder oriented along local -Z (barrel points forward) */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0.15, -0.5]}>
         <cylinderGeometry args={[0.13, 0.17, 1.2, 16]} />
         <meshStandardMaterial color="#4488DD" metalness={0.6} roughness={0.3} />
       </mesh>
-      {/* Barrel tip ring */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0.15, -1.12]}>
         <cylinderGeometry args={[0.18, 0.18, 0.08, 16]} />
         <meshStandardMaterial color="#FF8800" metalness={0.4} roughness={0.4} />
       </mesh>
-      {/* Body block */}
       <mesh position={[0, 0, 0.15]}>
         <boxGeometry args={[0.34, 0.4, 0.65]} />
         <meshStandardMaterial color="#2266BB" metalness={0.5} roughness={0.4} />
       </mesh>
-      {/* Grip */}
       <mesh position={[0, -0.36, 0.28]} rotation={[0.3, 0, 0]}>
         <boxGeometry args={[0.27, 0.52, 0.21]} />
         <meshStandardMaterial color="#994422" metalness={0.2} roughness={0.8} />
       </mesh>
-      {/* Trigger guard */}
       <mesh position={[0, -0.2, 0.08]}>
         <torusGeometry args={[0.11, 0.03, 8, 16, Math.PI]} />
         <meshStandardMaterial color="#3355AA" metalness={0.5} roughness={0.5} />
       </mesh>
-      {/* Star decoration */}
       <mesh position={[0.17, 0.11, 0.18]}>
         <octahedronGeometry args={[0.06, 0]} />
         <meshStandardMaterial
@@ -320,7 +485,6 @@ function CartoonGun({ firing, aimDirRef, barrelTipRef }) {
           emissiveIntensity={2}
         />
       </mesh>
-      {/* Muzzle flash */}
       {firing && (
         <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0.15, -1.28]}>
           <cylinderGeometry args={[0.22, 0.0, 0.35, 8]} />
@@ -331,7 +495,7 @@ function CartoonGun({ firing, aimDirRef, barrelTipRef }) {
   );
 }
 
-// ─── BULLET ───────────────────────────────────────────────────────────────────
+// ─── BULLET ──────────────────────────────────────────────────────────────────
 
 function Bullet({ startPos, direction, onHit, registry }) {
   const ref = useRef();
@@ -344,12 +508,10 @@ function Bullet({ startPos, direction, onHit, registry }) {
     if (!ref.current || done.current) return;
     pos.current.addScaledVector(dir.current, speed * dt);
     ref.current.position.copy(pos.current);
-
     const meshes = [];
     registry.current.forEach((mesh) => {
       if (mesh?.parent) meshes.push(mesh);
     });
-
     for (const mesh of meshes) {
       if (pos.current.distanceTo(mesh.position) < 1.5) {
         done.current = true;
@@ -358,7 +520,6 @@ function Bullet({ startPos, direction, onHit, registry }) {
         return;
       }
     }
-
     if (
       pos.current.z < -16 ||
       Math.abs(pos.current.x) > 16 ||
@@ -383,7 +544,7 @@ function Bullet({ startPos, direction, onHit, registry }) {
   );
 }
 
-// ─── STAR BURST PARTICLES ─────────────────────────────────────────────────────
+// ─── STAR BURST ───────────────────────────────────────────────────────────────
 
 function StarBurst({ pos, color, onDone }) {
   const particles = useRef(
@@ -420,7 +581,7 @@ function StarBurst({ pos, color, onDone }) {
 
   return (
     <>
-      {particles.current.map((p, i) => (
+      {particles.current.map((_, i) => (
         <mesh key={i} ref={(el) => (refs.current[i] = el)} position={[...pos]}>
           <octahedronGeometry args={[0.15, 0]} />
           <meshBasicMaterial
@@ -435,7 +596,7 @@ function StarBurst({ pos, color, onDone }) {
   );
 }
 
-// ─── TARGET ───────────────────────────────────────────────────────────────────
+// ─── TARGET ──────────────────────────────────────────────────────────────────
 
 function Target({
   id,
@@ -475,7 +636,6 @@ function Target({
   useFrame((state, dt) => {
     const mesh = meshRef.current;
     if (!mesh) return;
-
     if (dying.current) {
       opacity.current = Math.max(0, opacity.current - dt * 4);
       mesh.material.opacity = opacity.current;
@@ -487,18 +647,14 @@ function Target({
       }
       return;
     }
-
     const spd = speed * (1 + difficulty * 0.08) * speedMult;
     wobbleT.current += dt * 1.2;
     pos.current.x += bounceDir.current.x * spd * dt;
     pos.current.y +=
       bounceDir.current.y * spd * dt + Math.sin(wobbleT.current) * 0.006;
-
     if (Math.abs(pos.current.x) > 7) bounceDir.current.x *= -1;
     if (pos.current.y > 3.5 || pos.current.y < -2.5) bounceDir.current.y *= -1;
-
     mesh.position.copy(pos.current);
-    // Gentle bob rotation
     mesh.rotation.z = Math.sin(wobbleT.current * 0.7) * 0.06;
     mesh.lookAt(state.camera.position);
     mesh.rotation.z = Math.sin(wobbleT.current * 0.7) * 0.06;
@@ -518,7 +674,7 @@ function Target({
   );
 }
 
-// ─── FLOATING CLOUDS (background deco) ────────────────────────────────────────
+// ─── FLOATING CLOUDS ─────────────────────────────────────────────────────────
 
 function FloatingCloud({ position, scale, speed }) {
   const ref = useRef();
@@ -537,6 +693,8 @@ function FloatingCloud({ position, scale, speed }) {
         [-0.6, 0.15, 0, 0.55],
         [1.1, -0.1, 0, 0.4],
         [-1.1, -0.05, 0, 0.45],
+        [0.3, 0.4, 0, 0.35],
+        [-0.3, 0.38, 0, 0.3],
       ].map(([x, y, z, r], i) => (
         <mesh key={i} position={[x, y, z]}>
           <sphereGeometry args={[r, 10, 10]} />
@@ -547,16 +705,15 @@ function FloatingCloud({ position, scale, speed }) {
   );
 }
 
-// ─── CLOCK TARGET (fast, +10 seconds) ────────────────────────────────────────
+// ─── CLOCK TARGET — 4s lifetime ───────────────────────────────────────────────
 
-function ClockTarget({ id, initPos, speedMult, registry, onDead, onHit }) {
+function ClockTarget({ id, initPos, speedMult, registry, onDead }) {
   const meshRef = useRef();
   const [tex] = useState(() => makeClockTexture());
   const dying = useRef(false);
   const opacity = useRef(1);
   const pos = useRef(new THREE.Vector3(...initPos));
   const wobbleT = useRef(Math.random() * Math.PI * 2);
-  // Fast erratic movement
   const dir = useRef(
     new THREE.Vector3(
       (Math.random() > 0.5 ? 1 : -1) * (1.5 + Math.random()),
@@ -565,6 +722,7 @@ function ClockTarget({ id, initPos, speedMult, registry, onDead, onHit }) {
     ),
   );
   const changeT = useRef(0);
+  const lifeT = useRef(0);
 
   useEffect(() => {
     const mesh = meshRef.current;
@@ -592,9 +750,17 @@ function ClockTarget({ id, initPos, speedMult, registry, onDead, onHit }) {
       }
       return;
     }
+    lifeT.current += dt;
+    if (lifeT.current > 3) {
+      mesh.material.opacity = 0.4 + Math.sin(lifeT.current * 14) * 0.4;
+    }
+    if (lifeT.current >= 4) {
+      dying.current = true;
+      return;
+    }
+
     const spd = 3.5 * speedMult;
     wobbleT.current += dt * 2.5;
-    // Randomly change direction every ~1.2s for erratic feel
     changeT.current += dt;
     if (changeT.current > 1.2) {
       changeT.current = 0;
@@ -609,7 +775,7 @@ function ClockTarget({ id, initPos, speedMult, registry, onDead, onHit }) {
     if (Math.abs(pos.current.x) > 6.5) dir.current.x *= -1;
     if (pos.current.y > 3.5 || pos.current.y < -2.5) dir.current.y *= -1;
     mesh.position.copy(pos.current);
-    mesh.rotation.z += dt * 1.8; // spinning clock face
+    mesh.rotation.z += dt * 1.8;
     mesh.lookAt(state.camera.position);
     mesh.rotation.z += dt * 1.8;
   });
@@ -628,7 +794,7 @@ function ClockTarget({ id, initPos, speedMult, registry, onDead, onHit }) {
   );
 }
 
-// ─── BOOSTER TARGET ───────────────────────────────────────────────────────────
+// ─── BOOSTER TARGET — 4s lifetime ────────────────────────────────────────────
 
 function BoosterTarget({ id, boosterType, initPos, registry, onDead }) {
   const meshRef = useRef();
@@ -660,7 +826,6 @@ function BoosterTarget({ id, boosterType, initPos, registry, onDead }) {
       0,
     ),
   );
-  // Boosters vanish after 8 seconds if not shot
   const lifeT = useRef(0);
 
   useEffect(() => {
@@ -689,17 +854,16 @@ function BoosterTarget({ id, boosterType, initPos, registry, onDead }) {
       return;
     }
     lifeT.current += dt;
-    // Pulse opacity to signal it's expiring
-    if (lifeT.current > 6) {
-      opacity.current = 0.4 + Math.sin(lifeT.current * 12) * 0.4;
+    if (lifeT.current > 3) {
+      opacity.current = 0.4 + Math.sin(lifeT.current * 14) * 0.4;
       mesh.material.opacity = opacity.current;
     }
-    if (lifeT.current > 8) {
+    if (lifeT.current >= 4) {
       dying.current = true;
       return;
     }
 
-    wobbleT.current += dt * 1.0;
+    wobbleT.current += dt;
     pos.current.x += dir.current.x * dt;
     pos.current.y += dir.current.y * dt + Math.sin(wobbleT.current) * 0.008;
     if (Math.abs(pos.current.x) > 6.5) dir.current.x *= -1;
@@ -746,7 +910,8 @@ function GameScene({
   const [firing, setFiring] = useState(false);
   const spawnT = useRef(0);
   const clockT = useRef(0);
-  const boosterT = useRef(8); // first booster after 8s
+  const freezeT = useRef(10);
+  const payloadT = useRef(16);
   const aimDirRef = useRef(new THREE.Vector3(0, 0, -1));
   const barrelTipRef = useRef(
     new THREE.Vector3(GUN_BASE.x, GUN_BASE.y, GUN_BASE.z - 1.22),
@@ -762,13 +927,13 @@ function GameScene({
       raycaster.current.setFromCamera(new THREE.Vector2(ndcX, ndcY), camera);
       aimDirRef.current.copy(raycaster.current.ray.direction);
     }
-
     if (paused) return;
 
-    // Normal targets
+    // Safe appears ~30% (1 copy vs 2 danger-heavy pool)
     spawnT.current += dt;
     if (spawnT.current >= spawnInterval) {
       spawnT.current = 0;
+      // 2 danger copies : 1 safe copy → ~33% safe rate (down from ~50%)
       const pool = [
         ...DANGEROUS_TARGETS,
         ...DANGEROUS_TARGETS,
@@ -785,41 +950,55 @@ function GameScene({
       ]);
     }
 
-    // Clock — spawns every ~14s, one at a time
     clockT.current += dt;
     if (clockT.current >= 14) {
       clockT.current = 0;
-      const x = (Math.random() - 0.5) * 10;
-      const y = (Math.random() - 0.5) * 3.5;
       setClocks((prev) => [
         ...prev.slice(-2),
-        { id: uid(), initPos: [x, y, -3.5] },
+        {
+          id: uid(),
+          initPos: [
+            (Math.random() - 0.5) * 10,
+            (Math.random() - 0.5) * 3.5,
+            -3.5,
+          ],
+        },
       ]);
     }
 
-    // Boosters — alternate freeze / payload every ~18s
-    boosterT.current += dt;
-    if (boosterT.current >= 18) {
-      boosterT.current = 0;
-      const x = (Math.random() - 0.5) * 10;
-      const y = (Math.random() - 0.5) * 3;
-      const type = Math.random() < 0.5 ? "freeze" : "payload";
+    freezeT.current += dt;
+    if (freezeT.current >= 18) {
+      freezeT.current = 0;
       setBoosters((prev) => [
-        ...prev.slice(-2),
-        { id: uid(), boosterType: type, initPos: [x, y, -3] },
+        ...prev.slice(-4),
+        {
+          id: uid(),
+          boosterType: "freeze",
+          initPos: [(Math.random() - 0.5) * 10, (Math.random() - 0.5) * 3, -3],
+        },
+      ]);
+    }
+
+    payloadT.current += dt;
+    if (payloadT.current >= 22) {
+      payloadT.current = 0;
+      setBoosters((prev) => [
+        ...prev.slice(-4),
+        {
+          id: uid(),
+          boosterType: "payload",
+          initPos: [(Math.random() - 0.5) * 10, (Math.random() - 0.5) * 3, -3],
+        },
       ]);
     }
   });
 
-  // Fire exactly ONE bullet per unique shootEvent
   useEffect(() => {
     if (!shootEvent || paused) return;
     if (shootEvent.id === lastShootId.current) return;
     lastShootId.current = shootEvent.id;
-
     const bulletStart = barrelTipRef.current.toArray();
     const dir = aimDirRef.current.clone().normalize().toArray();
-
     setBullets((b) => [
       ...b.slice(-14),
       { id: uid(), startPos: bulletStart, direction: dir },
@@ -833,7 +1012,6 @@ function GameScene({
       if (!mesh || !mesh.userData.kill || !hitPos) return;
       const ttype = mesh.userData.targetType;
       mesh.userData.kill();
-
       if (ttype === "clock") {
         setBursts((b) => [
           ...b.slice(-20),
@@ -858,7 +1036,7 @@ function GameScene({
       setBursts((b) => [...b.slice(-20), { id: uid(), pos: hitPos, color }]);
       onScoreUpdate(
         ttype === "danger" ? 10 : -10,
-        ttype === "safe" ? -3 : 0,
+        ttype === "safe" ? -10 : 0,
         ttype === "danger",
       );
     },
@@ -886,7 +1064,6 @@ function GameScene({
     [],
   );
 
-  // Payload drop: spawn 8 danger targets at once
   const payloadDrop = useCallback(() => {
     const newTargets = Array.from({ length: 8 }, () => {
       const tmpl =
@@ -905,11 +1082,26 @@ function GameScene({
     setTargets((prev) => [...prev.slice(-20), ...newTargets]);
   }, []);
 
-  // Expose payloadDrop via ref so root can call it
   useEffect(() => {
     if (onSpecialHit._payloadRef)
       onSpecialHit._payloadRef.current = payloadDrop;
   }, [payloadDrop, onSpecialHit]);
+
+  // Extended cloud layout — more clouds across the sky
+  const clouds = [
+    [[-5, 3, -10], [1.2, 0.7, 1], 0.3],
+    [[4, 3.5, -11], [0.9, 0.6, 1], 0.25],
+    [[-8, 2.5, -9], [1.0, 0.7, 1], 0.35],
+    [[7, 2, -10], [1.3, 0.7, 1], 0.28],
+    [[0, 4, -11], [1.1, 0.65, 1], 0.22],
+    [[-3, 3.8, -12], [0.75, 0.5, 1], 0.18],
+    [[6, 4, -12], [0.8, 0.55, 1], 0.2],
+    [[-10, 3.2, -11], [0.85, 0.6, 1], 0.32],
+    [[10, 3, -10], [1.0, 0.6, 1], 0.27],
+    [[2, 4.5, -13], [1.4, 0.75, 1], 0.15],
+    [[-6, 4.2, -13], [0.65, 0.5, 1], 0.24],
+    [[8, 3.5, -13], [0.9, 0.6, 1], 0.19],
+  ];
 
   return (
     <>
@@ -921,41 +1113,31 @@ function GameScene({
         castShadow
       />
       <pointLight position={[-5, 5, 3]} intensity={0.8} color="#AADDFF" />
-
-      {/* Sky */}
       <mesh position={[0, 0, -12]}>
         <planeGeometry args={[80, 50]} />
         <meshBasicMaterial color="#87CEEB" />
       </mesh>
-      {/* Ground */}
       <mesh position={[0, -5, -8]} rotation={[-0.2, 0, 0]}>
         <planeGeometry args={[80, 20]} />
         <meshStandardMaterial color="#5DC76E" roughness={1} />
       </mesh>
-      {[
-        [[-5, 3, -10], [1.2, 0.7, 1], 0.3],
-        [[4, 3.5, -11], [0.9, 0.6, 1], 0.25],
-        [[-8, 2.5, -9], [1.0, 0.7, 1], 0.35],
-        [[7, 2, -10], [1.3, 0.7, 1], 0.28],
-      ].map(([pos, scale, speed], i) => (
+      {clouds.map(([pos, scale, speed], i) => (
         <FloatingCloud key={i} position={pos} scale={scale} speed={speed} />
       ))}
       {Array.from({ length: 12 }, (_, i) => (
         <mesh
-          key={`star${i}`}
+          key={`s${i}`}
           position={[Math.sin(i * 1.7) * 9, Math.cos(i * 2.3) * 2 + 2.5, -11.5]}
         >
           <octahedronGeometry args={[0.06, 0]} />
           <meshBasicMaterial color="#FFDD44" />
         </mesh>
       ))}
-
       <CartoonGun
         firing={firing}
         aimDirRef={aimDirRef}
         barrelTipRef={barrelTipRef}
       />
-
       {targets.map((t) => (
         <Target
           key={t.id}
@@ -966,7 +1148,6 @@ function GameScene({
           onDead={rmTarget}
         />
       ))}
-
       {clocks.map((c) => (
         <ClockTarget
           key={c.id}
@@ -976,7 +1157,6 @@ function GameScene({
           onDead={rmClock}
         />
       ))}
-
       {boosters.map((b) => (
         <BoosterTarget
           key={b.id}
@@ -985,7 +1165,6 @@ function GameScene({
           onDead={rmBooster}
         />
       ))}
-
       {bullets.map((b) => (
         <Bullet
           key={b.id}
@@ -998,7 +1177,6 @@ function GameScene({
           }}
         />
       ))}
-
       {bursts.map((b) => (
         <StarBurst
           key={b.id}
@@ -1068,9 +1246,9 @@ function Crosshair({ mousePos, firing }) {
   );
 }
 
-// ─── SCORE POP (floating +/- text) ────────────────────────────────────────────
+// ─── SCORE POP ────────────────────────────────────────────────────────────────
 
-function ScorePop({ msg, color, id }) {
+function ScorePop({ msg, color }) {
   const [visible, setVisible] = useState(true);
   useEffect(() => {
     const t = setTimeout(() => setVisible(false), 1200);
@@ -1081,21 +1259,264 @@ function ScorePop({ msg, color, id }) {
     <div
       style={{
         position: "absolute",
-        bottom: "25%",
+        bottom: "22%",
         left: "50%",
         transform: "translateX(-50%)",
         color,
-        fontSize: 26,
+        fontSize: 22,
         fontWeight: 900,
-        fontFamily: "'Fredoka One', 'Comic Sans MS', cursive",
-        textShadow: "2px 2px 0 rgba(0,0,0,0.3)",
+        fontFamily: "'Fredoka One','Comic Sans MS',cursive",
+        textShadow: "0 0 12px rgba(0,0,0,0.5), 2px 2px 0 rgba(0,0,0,0.4)",
         animation: "floatUp 1.2s ease forwards",
         pointerEvents: "none",
         zIndex: 25,
         whiteSpace: "nowrap",
+        letterSpacing: 1,
       }}
     >
       {msg}
+    </div>
+  );
+}
+
+// ─── FREEZE OVERLAY — icy visual with no blur ─────────────────────────────────
+
+function FreezeOverlay({ freezeTimeLeft }) {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        pointerEvents: "none",
+        zIndex: 6,
+        overflow: "hidden",
+      }}
+    >
+      {/* Tinted border vignette */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          boxShadow: "inset 0 0 80px 30px rgba(80,210,255,0.45)",
+          animation: "icePulse 1s ease-in-out infinite alternate",
+        }}
+      />
+
+      {/* Scanline frost stripes */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundImage:
+            "repeating-linear-gradient(0deg, transparent, transparent 6px, rgba(120,230,255,0.06) 6px, rgba(120,230,255,0.06) 7px)",
+        }}
+      />
+
+      {/* Corner ice crystal — top left */}
+      <svg
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: 220,
+          height: 220,
+          opacity: 0.7,
+        }}
+        viewBox="0 0 220 220"
+      >
+        <g stroke="#A8EEFF" strokeWidth="1.5" fill="none" opacity="0.9">
+          {[0, 30, 60, 90, 120, 150].map((a) => {
+            const r = (a * Math.PI) / 180;
+            return (
+              <line
+                key={a}
+                x1="0"
+                y1="0"
+                x2={Math.cos(r) * 160}
+                y2={Math.sin(r) * 160}
+                strokeWidth="1"
+                opacity="0.6"
+              />
+            );
+          })}
+          {[40, 70, 100, 130].map((r, i) => (
+            <circle
+              key={i}
+              cx="0"
+              cy="0"
+              r={r}
+              strokeWidth="0.8"
+              opacity="0.4"
+            />
+          ))}
+          {[0, 30, 60, 90, 120, 150].map((a) => {
+            const r = (a * Math.PI) / 180;
+            const mx = Math.cos(r) * 90,
+              my = Math.sin(r) * 90;
+            const px = Math.cos(r + 0.5) * 20,
+              py = Math.sin(r + 0.5) * 20;
+            const qx = Math.cos(r - 0.5) * 20,
+              qy = Math.sin(r - 0.5) * 20;
+            return (
+              <g key={a}>
+                <line
+                  x1={mx}
+                  y1={my}
+                  x2={mx + px}
+                  y2={my + py}
+                  strokeWidth="1.2"
+                />
+                <line
+                  x1={mx}
+                  y1={my}
+                  x2={mx + qx}
+                  y2={my + qy}
+                  strokeWidth="1.2"
+                />
+              </g>
+            );
+          })}
+        </g>
+      </svg>
+
+      {/* Corner ice crystal — bottom right */}
+      <svg
+        style={{
+          position: "absolute",
+          bottom: 0,
+          right: 0,
+          width: 220,
+          height: 220,
+          opacity: 0.7,
+          transform: "rotate(180deg)",
+        }}
+        viewBox="0 0 220 220"
+      >
+        <g stroke="#A8EEFF" strokeWidth="1.5" fill="none" opacity="0.9">
+          {[0, 30, 60, 90, 120, 150].map((a) => {
+            const r = (a * Math.PI) / 180;
+            return (
+              <line
+                key={a}
+                x1="0"
+                y1="0"
+                x2={Math.cos(r) * 160}
+                y2={Math.sin(r) * 160}
+                strokeWidth="1"
+                opacity="0.6"
+              />
+            );
+          })}
+          {[40, 70, 100, 130].map((r, i) => (
+            <circle
+              key={i}
+              cx="0"
+              cy="0"
+              r={r}
+              strokeWidth="0.8"
+              opacity="0.4"
+            />
+          ))}
+        </g>
+      </svg>
+
+      {/* Top-right crystal */}
+      <svg
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          width: 160,
+          height: 160,
+          opacity: 0.55,
+          transform: "rotate(90deg)",
+        }}
+        viewBox="0 0 220 220"
+      >
+        <g stroke="#C8F4FF" strokeWidth="1.2" fill="none">
+          {[0, 45, 90, 135].map((a) => {
+            const r = (a * Math.PI) / 180;
+            return (
+              <line
+                key={a}
+                x1="0"
+                y1="0"
+                x2={Math.cos(r) * 130}
+                y2={Math.sin(r) * 130}
+                opacity="0.5"
+              />
+            );
+          })}
+          {[35, 65, 95].map((r, i) => (
+            <circle
+              key={i}
+              cx="0"
+              cy="0"
+              r={r}
+              strokeWidth="0.7"
+              opacity="0.35"
+            />
+          ))}
+        </g>
+      </svg>
+
+      {/* Bottom-left crystal */}
+      <svg
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          width: 160,
+          height: 160,
+          opacity: 0.55,
+          transform: "rotate(270deg)",
+        }}
+        viewBox="0 0 220 220"
+      >
+        <g stroke="#C8F4FF" strokeWidth="1.2" fill="none">
+          {[0, 45, 90, 135].map((a) => {
+            const r = (a * Math.PI) / 180;
+            return (
+              <line
+                key={a}
+                x1="0"
+                y1="0"
+                x2={Math.cos(r) * 130}
+                y2={Math.sin(r) * 130}
+                opacity="0.5"
+              />
+            );
+          })}
+          {[35, 65, 95].map((r, i) => (
+            <circle
+              key={i}
+              cx="0"
+              cy="0"
+              r={r}
+              strokeWidth="0.7"
+              opacity="0.35"
+            />
+          ))}
+        </g>
+      </svg>
+
+      {/* Floating ice particles */}
+      {[...Array(12)].map((_, i) => (
+        <div
+          key={i}
+          style={{
+            position: "absolute",
+            left: `${8 + ((i * 7.8) % 85)}%`,
+            top: `${5 + ((i * 13) % 90)}%`,
+            width: 6 + (i % 4) * 3,
+            height: 6 + (i % 4) * 3,
+            background: "rgba(160,230,255,0.5)",
+            borderRadius: "50% 20% 50% 20%",
+            transform: `rotate(${i * 30}deg)`,
+            animation: `iceDrift ${2 + (i % 3)}s ease-in-out ${i * 0.3}s infinite alternate`,
+          }}
+        />
+      ))}
     </div>
   );
 }
@@ -1107,9 +1528,13 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [combo, setCombo] = useState(0);
+  const [highScore, setHighScore] = useState(0);
   const [difficulty, setDifficulty] = useState(0);
   const [firing, setFiring] = useState(false);
   const [pops, setPops] = useState([]);
+  const [quizQueue, setQuizQueue] = useState(() =>
+    shuffleArray(ALL_QUIZ_QUESTIONS),
+  );
   const [quizIdx, setQuizIdx] = useState(0);
   const [quiz, setQuiz] = useState(null);
   const [quizFb, setQuizFb] = useState(null);
@@ -1122,11 +1547,39 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
     y: window.innerHeight / 2,
   });
   const [shootEvent, setShootEvent] = useState(null);
-  // Booster state
   const [speedMult, setSpeedMult] = useState(1);
   const [freezeActive, setFreezeActive] = useState(false);
   const [freezeTimeLeft, setFreezeTimeLeft] = useState(0);
-  const payloadRef = useRef(null); // set by GameScene, called on payload hit
+  const payloadRef = useRef(null);
+
+  const bgMusicRef = useRef(null);
+  const gunSoundRef = useRef(null);
+
+  useEffect(() => {
+    const bg = new Audio("./audios/TriggerBackground.mp3");
+    bg.loop = true;
+    bg.volume = 0.45;
+    bgMusicRef.current = bg;
+    const gun = new Audio("./audios/TriggerGun.wav");
+    gun.volume = 0.7;
+    gunSoundRef.current = gun;
+    return () => {
+      bg.pause();
+      bg.src = "";
+      gun.src = "";
+    };
+  }, []);
+
+  useEffect(() => {
+    const bg = bgMusicRef.current;
+    if (!bg) return;
+    if (gameState === "playing" || gameState === "quiz") {
+      bg.play().catch(() => {});
+    } else {
+      bg.pause();
+      bg.currentTime = 0;
+    }
+  }, [gameState]);
 
   const addPop = useCallback((msg, color) => {
     setPops((p) => [...p.slice(-4), { id: uid(), msg, color }]);
@@ -1136,13 +1589,12 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
     (type) => {
       if (type === "clock") {
         setTimeLeft((t) => t + 10);
-        addPop("⏰ +10 seconds!", "#FFD600");
+        addPop("+10 seconds! ⏰", "#FFD600");
       } else if (type === "freeze") {
         setSpeedMult(0.22);
         setFreezeActive(true);
         setFreezeTimeLeft(6);
-        addPop("🧊 FIREWALL FREEZE! Slowed!", "#40C4FF");
-        // Tick down freeze timer
+        addPop("🧊 FIREWALL FREEZE!", "#40C4FF");
         let remaining = 6;
         const tick = setInterval(() => {
           remaining -= 1;
@@ -1154,14 +1606,13 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
           }
         }, 1000);
       } else if (type === "payload") {
-        addPop("💣 PAYLOAD DROP! Threats incoming!", "#CE93D8");
+        addPop("💣 PAYLOAD DROP — threats incoming!", "#CE93D8");
         if (payloadRef.current) payloadRef.current();
       }
     },
     [addPop],
   );
 
-  // Attach payloadRef bridge to handleSpecialHit so GameScene can set it
   handleSpecialHit._payloadRef = payloadRef;
 
   useEffect(() => {
@@ -1200,12 +1651,12 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
   useEffect(() => {
     if (gameState !== "playing") return;
     const t = setInterval(() => {
-      setQuiz(QUIZ_QUESTIONS[quizIdx % QUIZ_QUESTIONS.length]);
+      setQuiz(quizQueue[quizIdx % quizQueue.length]);
       setQuizFb(null);
       setGameState("quiz");
     }, 22000);
     return () => clearInterval(t);
-  }, [gameState, quizIdx]);
+  }, [gameState, quizIdx, quizQueue]);
 
   useEffect(() => {
     if (gameState !== "playing") return;
@@ -1222,17 +1673,26 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
       });
       setFiring(true);
       setTimeout(() => setFiring(false), 100);
+      if (gunSoundRef.current) {
+        const shot = gunSoundRef.current.cloneNode();
+        shot.volume = 0.7;
+        shot.play().catch(() => {});
+      }
     };
     window.addEventListener("mousedown", fn);
     return () => window.removeEventListener("mousedown", fn);
   }, [gameState]);
+
+  useEffect(() => {
+    if (gameState === "gameover") setHighScore((h) => Math.max(h, score));
+  }, [gameState, score]);
 
   const handleScoreUpdate = useCallback(
     (pts, timeDelta, isGood) => {
       setScore((s) => Math.max(0, s + pts));
       if (timeDelta < 0) {
         setTimeLeft((t) => Math.max(0, t + timeDelta));
-        addPop("Oops! Safe target 😬 -10pts", "#FF6600");
+        addPop("⚠️ Wrong target! -10 pts, -10 sec", "#FF3333");
       } else if (isGood) {
         setCombo((c) => {
           const next = c + 1;
@@ -1240,7 +1700,7 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
             setScore((s) => s + 20);
             addPop(`🔥 Combo x${next}! +20 pts`, "#FF8800");
           } else {
-            addPop(`💥 Threat stopped! +10`, "#22CC66");
+            addPop("✅ Threat stopped! +10 pts", "#22CC66");
           }
           return next;
         });
@@ -1257,14 +1717,14 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
     setQuizFb({ correct, fun: q.fun });
     if (correct) {
       setTimeLeft((t) => t + 10);
-      addPop("+10 seconds! ⏰", "#22AAFF");
-    } else addPop("Wrong answer! Try again 🙈", "#FF4444");
+      addPop("+10 seconds! 🎉", "#22AAFF");
+    } else addPop("Wrong answer! Try again", "#FF4444");
     setTimeout(() => {
       setQuizIdx((qi) => qi + 1);
       setQuiz(null);
       setQuizFb(null);
       setGameState("playing");
-    }, 2000);
+    }, 2200);
   };
 
   const startGame = () => {
@@ -1277,6 +1737,8 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
     setSpeedMult(1);
     setFreezeActive(false);
     setFreezeTimeLeft(0);
+    setQuizQueue(shuffleArray(ALL_QUIZ_QUESTIONS));
+    setQuizIdx(0);
     setGameState("playing");
   };
 
@@ -1292,7 +1754,7 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
         inset: 0,
         zIndex: 1000,
         background: "#87CEEB",
-        fontFamily: "'Fredoka One', 'Comic Sans MS', 'Segoe UI', cursive",
+        fontFamily: "'Fredoka One','Comic Sans MS','Segoe UI',cursive",
         cursor: gameState === "playing" ? "none" : "default",
         userSelect: "none",
         overflow: "hidden",
@@ -1300,56 +1762,79 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
     >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
         @keyframes floatUp {
-          0% { opacity:1; transform:translateX(-50%) translateY(0); }
-          100% { opacity:0; transform:translateX(-50%) translateY(-80px); }
+          0%  { opacity:1; transform:translateX(-50%) translateY(0) scale(1.1) }
+          100%{ opacity:0; transform:translateX(-50%) translateY(-90px) scale(0.9) }
         }
         @keyframes bounce {
-          0%,100% { transform: translateY(0); }
-          50% { transform: translateY(-12px); }
-        }
-        @keyframes wiggle {
-          0%,100% { transform: rotate(-3deg); }
-          50% { transform: rotate(3deg); }
+          0%,100%{ transform:translateY(0) }
+          50%    { transform:translateY(-14px) }
         }
         @keyframes cloudDrift {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(40px); }
-        }
-        @keyframes starSpin {
-          to { transform: rotate(360deg); }
+          0%  { transform:translateX(0) }
+          100%{ transform:translateX(40px) }
         }
         @keyframes pop {
-          0% { transform: scale(0.5); opacity:0; }
-          70% { transform: scale(1.1); }
-          100% { transform: scale(1); opacity:1; }
+          0%  { transform:scale(0.5); opacity:0 }
+          70% { transform:scale(1.08) }
+          100%{ transform:scale(1); opacity:1 }
         }
         @keyframes pulse {
-          0%,100% { transform: scale(1); }
-          50% { transform: scale(1.05); }
+          0%,100%{ transform:scale(1) }
+          50%    { transform:scale(1.06) }
         }
-        @keyframes freezePulse {
-          0% { background: rgba(100,210,255,0.15); }
-          100% { background: rgba(100,210,255,0.30); }
+        @keyframes icePulse {
+          0%  { box-shadow: inset 0 0 80px 30px rgba(80,210,255,0.35) }
+          100%{ box-shadow: inset 0 0 100px 50px rgba(80,210,255,0.6) }
         }
-        @keyframes boosterSlide {
-          0% { transform: translateX(120%); opacity:0; }
-          100% { transform: translateX(0); opacity:1; }
+        @keyframes iceDrift {
+          0%  { transform:translateY(0) rotate(0deg); opacity:0.4 }
+          100%{ transform:translateY(-12px) rotate(20deg); opacity:0.8 }
         }
+        @keyframes hudSlideDown {
+          0%  { transform:translateY(-30px); opacity:0 }
+          100%{ transform:translateY(0); opacity:1 }
+        }
+        @keyframes hudSlideRight {
+          0%  { transform:translateX(30px); opacity:0 }
+          100%{ transform:translateX(0); opacity:1 }
+        }
+        @keyframes comboFlash {
+          0%,100%{ box-shadow: 0 4px 20px rgba(255,140,0,0.5) }
+          50%    { box-shadow: 0 4px 30px rgba(255,220,0,0.9) }
+        }
+        @keyframes timerWarn {
+          0%,100%{ text-shadow: 0 0 10px rgba(255,50,50,0.5) }
+          50%    { text-shadow: 0 0 25px rgba(255,50,50,1) }
+        }
+        @keyframes badgeIn {
+          0%  { transform:scale(0.4) rotate(-10deg); opacity:0 }
+          80% { transform:scale(1.1) rotate(2deg) }
+          100%{ transform:scale(1) rotate(0deg); opacity:1 }
+        }
+        @keyframes legendFloat {
+          0%,100%{ transform:translateX(-50%) translateY(0) }
+          50%    { transform:translateX(-50%) translateY(-4px) }
+        }
+
         .btn-fun {
-          border: none;
-          border-radius: 20px;
-          cursor: pointer;
-          font-family: inherit;
-          font-weight: 900;
-          letter-spacing: 1px;
-          transition: transform 0.1s, box-shadow 0.1s;
+          border:none; border-radius:20px; cursor:pointer;
+          font-family:inherit; font-weight:900; letter-spacing:1px;
+          transition:transform 0.12s, box-shadow 0.12s;
         }
-        .btn-fun:hover { transform: translateY(-3px); }
-        .btn-fun:active { transform: translateY(1px); }
+        .btn-fun:hover  { transform:translateY(-4px) scale(1.03) }
+        .btn-fun:active { transform:translateY(2px) scale(0.97) }
+
+        .hud-glass {
+          background: rgba(10, 20, 40, 0.62);
+          border: 1.5px solid rgba(255,255,255,0.18);
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
+        }
       `}</style>
 
-      {/* 3D Canvas */}
+      {/* ── 3D CANVAS ── */}
       {playing && (
         <Canvas
           style={{ position: "absolute", inset: 0 }}
@@ -1375,61 +1860,64 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(180deg, #87CEEB 0%, #B0E8FF 40%, #90EE90 70%, #5DC76E 100%)",
+              "linear-gradient(180deg,#87CEEB 0%,#B0E8FF 40%,#90EE90 70%,#5DC76E 100%)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            gap: 20,
+            gap: 18,
           }}
         >
-          {/* Decorative clouds */}
           {[
             [-35, -18],
             [30, -16],
             [55, -10],
             [-55, -8],
+            [-15, -22],
+            [10, -20],
+            [42, -14],
           ].map(([x, y], i) => (
             <div
               key={i}
               style={{
                 position: "absolute",
-                top: `${28 + i * 8}%`,
+                top: `${28 + i * 5}%`,
                 left: `${50 + x}%`,
-                width: 120,
-                height: 60,
+                width: 80 + (i % 3) * 40,
+                height: 40 + (i % 2) * 20,
                 borderRadius: 50,
-                background: "rgba(255,255,255,0.85)",
+                background: "rgba(255,255,255,0.82)",
                 animation: `cloudDrift ${4 + i}s ease-in-out infinite alternate`,
               }}
             />
           ))}
 
-          {/* Title card */}
           <div
             style={{
-              background: "white",
+              background: "rgba(255,255,255,0.96)",
               borderRadius: 32,
-              padding: "30px 48px",
+              padding: "26px 40px",
               textAlign: "center",
-              boxShadow: "0 8px 0 #CCC, 0 12px 30px rgba(0,0,0,0.15)",
+              boxShadow: "0 10px 0 #CCC, 0 16px 40px rgba(0,0,0,0.18)",
               animation: "pop 0.5s ease",
-              maxWidth: 520,
+              maxWidth: 540,
               zIndex: 2,
+              maxHeight: "90vh",
+              overflowY: "auto",
+              border: "3px solid rgba(255,215,0,0.4)",
             }}
           >
-            <div style={{ fontSize: 72, animation: "bounce 1.5s infinite" }}>
+            <div style={{ fontSize: 64, animation: "bounce 1.5s infinite" }}>
               🛡️
             </div>
             <h1
               style={{
-                fontSize: 42,
-                margin: "8px 0 4px",
+                fontSize: 36,
+                margin: "6px 0 4px",
                 background:
-                  "linear-gradient(135deg, #FF6B6B, #FF8E53, #FFD93D, #6BCB77)",
+                  "linear-gradient(135deg,#FF6B6B,#FF8E53,#FFD93D,#6BCB77)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
-                textShadow: "none",
                 letterSpacing: 2,
               }}
             >
@@ -1437,80 +1925,99 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
             </h1>
             <div
               style={{
-                fontSize: 16,
-                color: "#666",
-                marginBottom: 20,
+                fontSize: 14,
+                color: "#888",
+                marginBottom: 16,
                 letterSpacing: 1,
               }}
             >
-              Learn to spot internet dangers! 🌐
+              Learn to spot internet dangers!
             </div>
 
-            {/* Rules */}
             <div
               style={{
                 background: "#FFF9E6",
                 borderRadius: 16,
-                padding: "16px 22px",
+                padding: "13px 18px",
                 textAlign: "left",
                 border: "3px dashed #FFD700",
-                marginBottom: 20,
+                marginBottom: 16,
               }}
             >
               <div
                 style={{
                   fontWeight: 900,
-                  fontSize: 16,
+                  fontSize: 13,
                   color: "#FF6B00",
-                  marginBottom: 10,
+                  marginBottom: 8,
                 }}
               >
-                🎮 HOW TO PLAY
+                HOW TO PLAY
               </div>
               {[
-                ["🔴 Shoot RED targets!", "They're internet dangers (+10 pts)"],
-                ["🟢 Don't shoot GREEN!", "Those are safe things (-10 pts)"],
-                ["⏰ Shoot the CLOCK!", "Hard to hit but gives +10 seconds!"],
-                ["🧊 FIREWALL FREEZE", "Shoot it to slow all targets for 6s!"],
-                ["💣 PAYLOAD DROP", "Shoot it to spawn 8 bonus targets!"],
-                ["🔥 Hit 3 in a row!", "Get a combo bonus +20 pts"],
-                ["❓ Answer quiz questions!", "Get +10 bonus seconds"],
+                ["🔴 Shoot RED targets", "Cyber threats — +10 pts"],
+                ["🟢 Do NOT shoot GREEN", "Safe things — -10 pts and -10 sec!"],
+                ["⏰ Shoot the CLOCK", "Gives +10 seconds (only lasts 4s)"],
+                [
+                  "🧊 FIREWALL FREEZE",
+                  "Shoot to slow targets for 6s (lasts 4s)",
+                ],
+                [
+                  "💣 PAYLOAD DROP",
+                  "Shoot to spawn 8 bonus threats (lasts 4s)",
+                ],
+                ["🔥 Hit 3 in a row", "Combo bonus +20 pts"],
+                ["❓ Answer quiz questions", "Correct = +10 bonus seconds"],
               ].map(([t, d], i) => (
                 <div
                   key={i}
                   style={{
                     display: "flex",
                     gap: 10,
-                    marginBottom: 7,
-                    alignItems: "center",
+                    marginBottom: 5,
+                    alignItems: "flex-start",
                   }}
                 >
                   <span
-                    style={{ fontSize: 14, fontWeight: 900, color: "#333" }}
+                    style={{
+                      fontSize: 12,
+                      fontWeight: 900,
+                      color: "#333",
+                      minWidth: 165,
+                    }}
                   >
                     {t}
                   </span>
-                  <span style={{ fontSize: 12, color: "#888" }}>{d}</span>
+                  <span style={{ fontSize: 11, color: "#888" }}>{d}</span>
                 </div>
               ))}
             </div>
+
+            {highScore > 0 && (
+              <div style={{ fontSize: 13, color: "#888", marginBottom: 12 }}>
+                Best score:{" "}
+                <span style={{ color: "#FF6B00", fontWeight: 900 }}>
+                  {highScore}
+                </span>
+              </div>
+            )}
 
             <button
               data-ui
               className="btn-fun"
               onClick={startGame}
               style={{
-                background: "linear-gradient(135deg, #FF6B6B, #FF8E53)",
+                background: "linear-gradient(135deg,#FF6B6B,#FF8E53)",
                 color: "#fff",
-                fontSize: 24,
-                padding: "16px 50px",
-                boxShadow: "0 6px 0 #CC4400, 0 8px 20px rgba(255,100,0,0.4)",
+                fontSize: 22,
+                padding: "13px 50px",
+                boxShadow: "0 6px 0 #CC4400",
                 display: "block",
                 width: "100%",
-                marginBottom: 12,
+                marginBottom: 10,
               }}
             >
-              🚀 START MISSION!
+              START MISSION! 🚀
             </button>
             {onClose && (
               <button
@@ -1520,8 +2027,8 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
                 style={{
                   background: "#EEE",
                   color: "#888",
-                  fontSize: 15,
-                  padding: "10px 30px",
+                  fontSize: 13,
+                  padding: "8px 26px",
                   boxShadow: "0 4px 0 #CCC",
                 }}
               >
@@ -1537,205 +2044,302 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
         <>
           <Crosshair mousePos={mousePos} firing={firing} />
 
-          {/* FIREWALL FREEZE full-screen tint */}
-          {freezeActive && (
+          {/* Freeze overlay — no blur, icy crystal effect */}
+          {freezeActive && <FreezeOverlay freezeTimeLeft={freezeTimeLeft} />}
+
+          {/* ── TOP-LEFT: SCORE ── */}
+          <div
+            data-ui
+            className="hud-glass"
+            style={{
+              position: "absolute",
+              top: 16,
+              left: 16,
+              borderRadius: 20,
+              padding: "10px 20px 10px 16px",
+              pointerEvents: "none",
+              animation: "hudSlideDown 0.4s ease",
+              minWidth: 130,
+            }}
+          >
             <div
               style={{
-                position: "absolute",
-                inset: 0,
-                pointerEvents: "none",
-                zIndex: 5,
-                background: "rgba(100,210,255,0.22)",
-                backdropFilter: "blur(1px)",
-                animation: "freezePulse 0.8s ease-in-out infinite alternate",
+                fontSize: 9,
+                color: "rgba(255,220,100,0.8)",
+                letterSpacing: 3,
+                textTransform: "uppercase",
+                marginBottom: 2,
               }}
-            />
-          )}
+            >
+              ⚡ Score
+            </div>
+            <div
+              style={{
+                fontSize: 38,
+                fontWeight: 900,
+                color: "#FFE566",
+                lineHeight: 1,
+                textShadow: "0 0 16px rgba(255,220,50,0.6)",
+                letterSpacing: 1,
+              }}
+            >
+              {score.toString().padStart(5, "0")}
+            </div>
+            {highScore > 0 && (
+              <div
+                style={{
+                  fontSize: 9,
+                  color: "rgba(200,180,255,0.7)",
+                  marginTop: 3,
+                  letterSpacing: 1,
+                }}
+              >
+                BEST&nbsp;
+                <span style={{ color: "#C893FF", fontWeight: 900 }}>
+                  {highScore}
+                </span>
+              </div>
+            )}
+          </div>
 
-          {/* Top HUD bar */}
+          {/* ── TOP-CENTER: TIMER ── */}
           <div
             data-ui
             style={{
               position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: "12px 20px",
-              background: "rgba(255,255,255,0.88)",
-              backdropFilter: "blur(8px)",
-              borderBottom: "4px solid #FFD700",
+              top: 12,
+              left: "50%",
+              transform: "translateX(-50%)",
               pointerEvents: "none",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              animation: "hudSlideDown 0.4s ease",
             }}
           >
-            {/* Score */}
-            <div
-              style={{
-                background: "linear-gradient(135deg, #FF6B6B, #FF8E53)",
-                borderRadius: 16,
-                padding: "8px 22px",
-                boxShadow: "0 4px 0 #CC4400",
-              }}
-            >
-              <div
+            {/* Timer arc ring */}
+            <div style={{ position: "relative", width: 88, height: 88 }}>
+              <svg
+                width="88"
+                height="88"
+                viewBox="0 0 88 88"
                 style={{
-                  fontSize: 11,
-                  color: "rgba(255,255,255,0.8)",
-                  letterSpacing: 2,
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  transform: "rotate(-90deg)",
                 }}
               >
-                SCORE
-              </div>
+                {/* Track */}
+                <circle
+                  cx="44"
+                  cy="44"
+                  r="36"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.12)"
+                  strokeWidth="6"
+                />
+                {/* Progress */}
+                <circle
+                  cx="44"
+                  cy="44"
+                  r="36"
+                  fill="none"
+                  stroke={timerColor}
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                  strokeDasharray={`${2 * Math.PI * 36}`}
+                  strokeDashoffset={`${2 * Math.PI * 36 * (1 - timerPct / 100)}`}
+                  style={{
+                    transition: "stroke-dashoffset 1s linear, stroke 0.5s",
+                    filter: `drop-shadow(0 0 6px ${timerColor})`,
+                  }}
+                />
+              </svg>
+              {/* Center number */}
               <div
+                className="hud-glass"
                 style={{
-                  fontSize: 32,
-                  fontWeight: 900,
-                  color: "#FFF",
-                  lineHeight: 1,
-                }}
-              >
-                {score.toString().padStart(5, "0")}
-              </div>
-            </div>
-
-            {/* Timer */}
-            <div style={{ textAlign: "center" }}>
-              <div
-                style={{
-                  fontSize: 54,
-                  fontWeight: 900,
-                  color: timerColor,
-                  textShadow: `0 3px 0 rgba(0,0,0,0.2)`,
-                  lineHeight: 1,
-                  animation: timeLeft <= 10 ? "pulse 0.5s infinite" : "none",
-                }}
-              >
-                {timeLeft}
-              </div>
-              <div
-                style={{
-                  width: 140,
-                  height: 12,
-                  background: "#E0E0E0",
-                  borderRadius: 6,
-                  marginTop: 4,
-                  overflow: "hidden",
-                  border: "2px solid #CCC",
+                  position: "absolute",
+                  inset: 8,
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "column",
                 }}
               >
                 <div
                   style={{
-                    width: `${timerPct}%`,
-                    height: "100%",
-                    background: `linear-gradient(90deg, ${timerColor}, ${timerColor}AA)`,
-                    borderRadius: 4,
-                    transition: "width 1s linear, background 0.5s",
+                    fontSize: 28,
+                    fontWeight: 900,
+                    color: timerColor,
+                    lineHeight: 1,
+                    textShadow: `0 0 12px ${timerColor}88`,
+                    animation:
+                      timeLeft <= 10 ? "timerWarn 0.5s infinite" : "none",
                   }}
-                />
-              </div>
-            </div>
-
-            {/* Combo + Level */}
-            <div
-              style={{
-                background:
-                  combo >= 3
-                    ? "linear-gradient(135deg,#FF8C00,#FFD700)"
-                    : "linear-gradient(135deg,#6BCB77,#4D9E52)",
-                borderRadius: 16,
-                padding: "8px 18px",
-                textAlign: "right",
-                boxShadow: `0 4px 0 ${combo >= 3 ? "#CC6600" : "#2D7A38"}`,
-              }}
-            >
-              <div
-                style={{
-                  fontSize: 11,
-                  color: "rgba(255,255,255,0.8)",
-                  letterSpacing: 2,
-                }}
-              >
-                COMBO
-              </div>
-              <div
-                style={{
-                  fontSize: 28,
-                  fontWeight: 900,
-                  color: "#FFF",
-                  lineHeight: 1,
-                }}
-              >
-                x{combo}
-              </div>
-              <div style={{ fontSize: 11, color: "rgba(255,255,255,0.8)" }}>
-                LVL {difficulty + 1}
+                >
+                  {timeLeft}
+                </div>
+                <div
+                  style={{
+                    fontSize: 7,
+                    color: "rgba(255,255,255,0.45)",
+                    letterSpacing: 1,
+                  }}
+                >
+                  SEC
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Active booster badges — slide in from right */}
-          {freezeActive && (
+          {/* ── TOP-RIGHT: COMBO + LEVEL ── */}
+          <div
+            data-ui
+            className="hud-glass"
+            style={{
+              position: "absolute",
+              top: 16,
+              right: 16,
+              borderRadius: 20,
+              padding: "10px 18px",
+              pointerEvents: "none",
+              animation: "hudSlideRight 0.4s ease",
+              textAlign: "right",
+              minWidth: 110,
+              ...(combo >= 3 ? { animation: "comboFlash 0.8s infinite" } : {}),
+            }}
+          >
             <div
               style={{
-                position: "absolute",
-                top: 90,
-                right: 20,
-                background: "linear-gradient(135deg,#0288D1,#40C4FF)",
-                borderRadius: 16,
-                padding: "10px 20px",
-                boxShadow: "0 4px 0 #01579B, 0 6px 20px rgba(0,150,255,0.4)",
-                color: "#fff",
-                fontWeight: 900,
-                fontSize: 16,
-                border: "3px solid #B3E5FC",
-                animation: "boosterSlide 0.3s ease",
-                pointerEvents: "none",
-                textAlign: "center",
+                fontSize: 9,
+                color: "rgba(255,200,80,0.75)",
+                letterSpacing: 3,
+                textTransform: "uppercase",
+                marginBottom: 2,
               }}
             >
-              <div style={{ fontSize: 28 }}>🧊</div>
-              <div>FIREWALL FREEZE</div>
-              <div style={{ fontSize: 22, marginTop: 2 }}>
-                {freezeTimeLeft}s
+              🔥 Combo
+            </div>
+            <div
+              style={{
+                fontSize: 36,
+                fontWeight: 900,
+                color: combo >= 3 ? "#FFD700" : "#FFFFFF",
+                lineHeight: 1,
+                textShadow:
+                  combo >= 3 ? "0 0 20px rgba(255,200,0,0.8)" : "none",
+              }}
+            >
+              ×{combo}
+            </div>
+            <div
+              style={{
+                fontSize: 9,
+                color: "rgba(160,220,255,0.7)",
+                letterSpacing: 2,
+                marginTop: 3,
+                borderTop: "1px solid rgba(255,255,255,0.1)",
+                paddingTop: 4,
+              }}
+            >
+              LVL{" "}
+              <span style={{ color: "#80CCFF", fontWeight: 900 }}>
+                {difficulty + 1}
+              </span>
+            </div>
+          </div>
+
+          {/* ── FREEZE ACTIVE BADGE — bottom-right, never overlaps top HUD ── */}
+          {freezeActive && (
+            <div
+              data-ui
+              style={{
+                position: "absolute",
+                bottom: 80,
+                right: 16,
+                pointerEvents: "none",
+                animation: "badgeIn 0.4s ease",
+                zIndex: 15,
+              }}
+            >
+              <div
+                className="hud-glass"
+                style={{
+                  borderRadius: 18,
+                  padding: "10px 16px",
+                  border: "2px solid rgba(100,220,255,0.5)",
+                  textAlign: "center",
+                  background: "rgba(0,60,100,0.75)",
+                }}
+              >
+                <div style={{ fontSize: 28 }}>🧊</div>
+                <div
+                  style={{
+                    fontSize: 11,
+                    color: "#80E8FF",
+                    fontWeight: 900,
+                    letterSpacing: 1,
+                  }}
+                >
+                  FREEZE
+                </div>
+                <div
+                  style={{
+                    fontSize: 26,
+                    fontWeight: 900,
+                    color: "#40C4FF",
+                    textShadow: "0 0 14px #40C4FF",
+                    lineHeight: 1.1,
+                  }}
+                >
+                  {freezeTimeLeft}s
+                </div>
               </div>
             </div>
           )}
 
-          {/* Bottom legend */}
+          {/* ── BOTTOM LEGEND — compact floating pills ── */}
           <div
             data-ui
             style={{
               position: "absolute",
-              bottom: 16,
+              bottom: 14,
               left: "50%",
               transform: "translateX(-50%)",
               display: "flex",
-              gap: 10,
+              gap: 6,
               pointerEvents: "none",
-              flexWrap: "wrap",
+              flexWrap: "nowrap",
               justifyContent: "center",
+              animation: "legendFloat 3s ease-in-out infinite",
+              zIndex: 10,
             }}
           >
             {[
-              ["🔴 RED = SHOOT!", "#FF4444"],
-              ["🟢 GREEN = SAFE!", "#22CC66"],
-              ["⏰ CLOCK = +10s!", "#FFD600"],
-              ["🧊 FIREWALL FREEZE", "#0288D1"],
-              ["💣 PAYLOAD DROP", "#7B1FA2"],
-            ].map(([t, c]) => (
+              ["🔴 SHOOT", "#FF4444", "rgba(255,68,68,0.15)"],
+              ["🟢 AVOID", "#22CC66", "rgba(34,204,102,0.15)"],
+              ["⏰ +10s", "#FFD600", "rgba(255,214,0,0.15)"],
+              ["🧊 FREEZE", "#29B6F6", "rgba(41,182,246,0.15)"],
+              ["💣 DROP", "#AB47BC", "rgba(171,71,188,0.15)"],
+            ].map(([t, c, bg]) => (
               <div
                 key={t}
                 style={{
-                  background: "rgba(255,255,255,0.9)",
-                  borderRadius: 16,
-                  padding: "6px 14px",
-                  border: `2px solid ${c}`,
+                  background: bg,
+                  borderRadius: 30,
+                  padding: "5px 12px",
+                  border: `1.5px solid ${c}`,
                   color: c,
-                  fontSize: 12,
+                  fontSize: 10,
                   fontWeight: 900,
-                  boxShadow: "0 3px 0 rgba(0,0,0,0.1)",
+                  letterSpacing: 0.5,
+                  backdropFilter: "blur(4px)",
+                  WebkitBackdropFilter: "blur(4px)",
+                  textShadow: `0 0 8px ${c}66`,
+                  whiteSpace: "nowrap",
                 }}
               >
                 {t}
@@ -1743,14 +2347,13 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
             ))}
           </div>
 
-          {/* Score pops */}
           {pops.map((p) => (
-            <ScorePop key={p.id} {...p} />
+            <ScorePop key={p.id} msg={p.msg} color={p.color} />
           ))}
         </>
       )}
 
-      {/* ── QUIZ OVERLAY ── */}
+      {/* ── QUIZ ── */}
       {gameState === "quiz" && quiz && (
         <div
           data-ui
@@ -1761,63 +2364,64 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            background: "rgba(135,206,235,0.7)",
-            backdropFilter: "blur(8px)",
+            background: "rgba(5,20,50,0.6)",
+            backdropFilter: "blur(10px)",
           }}
         >
           <div
             style={{
-              background: "#FFF",
+              background: "rgba(10,25,60,0.96)",
               borderRadius: 32,
-              padding: "36px 44px",
+              padding: "30px 40px",
               maxWidth: 520,
               width: "90%",
-              boxShadow: "0 8px 0 #FFD700, 0 12px 40px rgba(0,0,0,0.2)",
-              border: "4px solid #FFD700",
+              boxShadow:
+                "0 0 0 2px rgba(255,215,0,0.4), 0 20px 60px rgba(0,0,0,0.5)",
+              border: "2px solid rgba(255,215,0,0.3)",
               animation: "pop 0.3s ease",
             }}
           >
-            <div style={{ textAlign: "center", fontSize: 44, marginBottom: 8 }}>
-              ❓
+            <div style={{ textAlign: "center", fontSize: 40, marginBottom: 4 }}>
+              🧠
             </div>
             <div
               style={{
-                fontSize: 11,
-                color: "#888",
+                fontSize: 10,
+                color: "rgba(180,200,255,0.7)",
                 letterSpacing: 3,
                 textAlign: "center",
                 marginBottom: 12,
                 textTransform: "uppercase",
               }}
             >
-              Quiz Time! Correct = +10 seconds ⏰
+              Quiz Time — Correct = +10 seconds
             </div>
             <div
               style={{
-                fontSize: 22,
+                fontSize: 20,
                 fontWeight: 900,
-                color: "#333",
-                marginBottom: 24,
+                color: "#F0F4FF",
+                marginBottom: 20,
                 textAlign: "center",
                 lineHeight: 1.4,
               }}
             >
               {quiz.q}
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {quiz.options.map((opt, i) => {
-                let bg = "#F5F5F5",
-                  border = "3px solid #DDD",
-                  color = "#444";
+                let bg = "rgba(255,255,255,0.06)",
+                  border = "2px solid rgba(255,255,255,0.12)",
+                  color = "#C8D8FF";
                 if (quizFb) {
                   if (i === quiz.correct) {
-                    bg = "#E8FFE8";
-                    border = "3px solid #22CC66";
-                    color = "#006622";
+                    bg = "rgba(50,200,100,0.2)";
+                    border = "2px solid #22CC66";
+                    color = "#88FFB8";
                   } else {
-                    bg = "#FFE8E8";
-                    border = "3px solid #FF4444";
-                    color = "#880000";
+                    bg = "rgba(255,80,80,0.15)";
+                    border = "2px solid #FF4444";
+                    color = "#FF9999";
                   }
                 }
                 return (
@@ -1831,14 +2435,16 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
                       border,
                       color,
                       borderRadius: 14,
-                      padding: "14px 20px",
-                      fontSize: 17,
+                      padding: "13px 18px",
+                      fontSize: 15,
                       textAlign: "left",
                       cursor: quizFb ? "default" : "pointer",
-                      boxShadow: quizFb ? "none" : "0 4px 0 rgba(0,0,0,0.1)",
+                      boxShadow: quizFb ? "none" : "0 4px 0 rgba(0,0,0,0.2)",
                     }}
                   >
-                    <span style={{ fontWeight: 900 }}>{["🅰️", "🅱️"][i]} </span>{" "}
+                    <span style={{ fontWeight: 900, marginRight: 8 }}>
+                      {["A", "B"][i]}.
+                    </span>
                     {opt}
                   </button>
                 );
@@ -1847,18 +2453,21 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
             {quizFb && (
               <div
                 style={{
-                  marginTop: 20,
-                  padding: "14px 20px",
-                  background: quizFb.correct ? "#E8FFE8" : "#FFF0E0",
-                  borderRadius: 16,
-                  fontSize: 15,
-                  color: "#444",
-                  border: `3px solid ${quizFb.correct ? "#22CC66" : "#FFAA00"}`,
+                  marginTop: 16,
+                  padding: "12px 18px",
+                  background: quizFb.correct
+                    ? "rgba(50,200,100,0.15)"
+                    : "rgba(255,160,50,0.15)",
+                  borderRadius: 14,
+                  fontSize: 13,
+                  color: quizFb.correct ? "#88FFB8" : "#FFD080",
+                  border: `2px solid ${quizFb.correct ? "#22CC66" : "#FFAA00"}`,
                   textAlign: "center",
                   fontWeight: 700,
+                  lineHeight: 1.5,
                 }}
               >
-                {quizFb.correct ? "🎉 " : "💡 "}
+                {quizFb.correct ? "✅ Correct! " : "💡 Tip: "}
                 {quizFb.fun}
               </div>
             )}
@@ -1873,7 +2482,7 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(180deg, #87CEEB 0%, #B0E8FF 40%, #90EE90 70%, #5DC76E 100%)",
+              "linear-gradient(180deg,#87CEEB 0%,#B0E8FF 40%,#90EE90 70%,#5DC76E 100%)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -1881,25 +2490,50 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
             gap: 20,
           }}
         >
+          {[
+            [-35, -18],
+            [30, -16],
+            [55, -10],
+            [-55, -8],
+            [10, -22],
+            [-10, -20],
+            [42, -14],
+          ].map(([x, y], i) => (
+            <div
+              key={i}
+              style={{
+                position: "absolute",
+                top: `${28 + i * 5}%`,
+                left: `${50 + x}%`,
+                width: 80 + (i % 3) * 40,
+                height: 40 + (i % 2) * 20,
+                borderRadius: 50,
+                background: "rgba(255,255,255,0.82)",
+                animation: `cloudDrift ${4 + i}s ease-in-out infinite alternate`,
+              }}
+            />
+          ))}
+
           <div
             style={{
-              background: "#FFF",
+              background: "rgba(255,255,255,0.97)",
               borderRadius: 32,
-              padding: "36px 52px",
+              padding: "32px 48px",
               textAlign: "center",
-              boxShadow: "0 8px 0 #FFD700, 0 12px 40px rgba(0,0,0,0.15)",
-              border: "4px solid #FFD700",
+              boxShadow: "0 10px 0 #FFD700, 0 16px 50px rgba(0,0,0,0.18)",
+              border: "3px solid rgba(255,215,0,0.5)",
               animation: "pop 0.4s ease",
               maxWidth: 440,
+              zIndex: 2,
             }}
           >
-            <div style={{ fontSize: 80, animation: "bounce 1s infinite" }}>
+            <div style={{ fontSize: 72, animation: "bounce 1s infinite" }}>
               {score >= 200 ? "🏆" : score >= 100 ? "🎖️" : "🌟"}
             </div>
             <h2
               style={{
-                fontSize: 32,
-                margin: "10px 0 6px",
+                fontSize: 28,
+                margin: "8px 0 4px",
                 background:
                   score >= 100
                     ? "linear-gradient(135deg,#22CC66,#00AA44)"
@@ -1909,23 +2543,23 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
               }}
             >
               {score >= 200
-                ? "CYBER HERO! 🦸"
+                ? "CYBER HERO!"
                 : score >= 100
-                  ? "GREAT JOB! 🎉"
-                  : "KEEP TRYING! 💪"}
+                  ? "GREAT JOB!"
+                  : "KEEP TRYING!"}
             </h2>
             <div
               style={{
                 background: "#FFF9E6",
                 borderRadius: 20,
-                padding: "20px 30px",
-                margin: "16px 0",
+                padding: "16px 26px",
+                margin: "12px 0",
                 border: "3px dashed #FFD700",
               }}
             >
               <div
                 style={{
-                  fontSize: 13,
+                  fontSize: 12,
                   color: "#AAA",
                   letterSpacing: 2,
                   marginBottom: 4,
@@ -1935,7 +2569,7 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
               </div>
               <div
                 style={{
-                  fontSize: 72,
+                  fontSize: 64,
                   fontWeight: 900,
                   color: "#333",
                   lineHeight: 1,
@@ -1943,12 +2577,29 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
               >
                 {score}
               </div>
-              <div style={{ fontSize: 14, color: "#888", marginTop: 8 }}>
+              {highScore > 0 && score >= highScore && score > 0 && (
+                <div
+                  style={{
+                    fontSize: 13,
+                    color: "#FF8800",
+                    fontWeight: 900,
+                    marginTop: 4,
+                  }}
+                >
+                  🎉 New Best Score!
+                </div>
+              )}
+              {highScore > 0 && score < highScore && (
+                <div style={{ fontSize: 12, color: "#888", marginTop: 4 }}>
+                  Best: {highScore}
+                </div>
+              )}
+              <div style={{ fontSize: 13, color: "#888", marginTop: 6 }}>
                 {score >= 200
-                  ? "Amazing! You're a real cyber guardian! 🛡️"
+                  ? "Amazing! You are a real cyber guardian!"
                   : score >= 100
                     ? "You stopped lots of cyber threats! Keep it up!"
-                    : "Practice makes perfect! You'll get better! 🌱"}
+                    : "Practice makes perfect! You will get better!"}
               </div>
             </div>
             <div
@@ -1966,12 +2617,12 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
                 style={{
                   background: "linear-gradient(135deg,#6BCB77,#4D9E52)",
                   color: "#fff",
-                  fontSize: 20,
-                  padding: "14px 32px",
+                  fontSize: 18,
+                  padding: "12px 28px",
                   boxShadow: "0 5px 0 #2D7A38",
                 }}
               >
-                🔄 Play Again!
+                Play Again! 🎮
               </button>
               <button
                 data-ui
@@ -1983,12 +2634,12 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
                 style={{
                   background: "linear-gradient(135deg,#FF6B6B,#FF8E53)",
                   color: "#fff",
-                  fontSize: 20,
-                  padding: "14px 32px",
+                  fontSize: 18,
+                  padding: "12px 28px",
                   boxShadow: "0 5px 0 #CC4400",
                 }}
               >
-                ✅ Save & Exit
+                Save & Exit 🏠
               </button>
             </div>
           </div>
