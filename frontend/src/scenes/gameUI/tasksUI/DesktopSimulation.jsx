@@ -9,12 +9,13 @@ export default function DesktopSimulation() {
   const [cardNumber, setCardNumber] = useState("");
   const [cardExpiry, setCardExpiry] = useState("");
   const [cardCVV, setCardCVV] = useState("");
+  const [systemAlert, setSystemAlert] = useState(null);
 
   if (mission.stage !== "TASK3_DESKTOP_SIMULATION") return null;
 
   const handleAppClick = (appName) => {
     if (appName === "chrome") setDesktopState("chrome");
-    else alert("This app is not needed for this task.");
+    else setSystemAlert("This app is not needed for this task.");
   };
 
   const handleSearch = (e) => {
@@ -22,7 +23,7 @@ export default function DesktopSimulation() {
     if (searchQuery.trim().toLowerCase() === "blue toy car") {
       setDesktopState("search_results");
     } else {
-      alert("Please search for 'blue toy car' as instructed.");
+      setSystemAlert("Please search for 'blue toy car' as instructed.");
     }
   };
 
@@ -41,11 +42,11 @@ export default function DesktopSimulation() {
   const handlePurchase = (e) => {
     e.preventDefault();
     if (!cardNumber || !cardExpiry || !cardCVV) {
-      alert("Please fill in all card details.");
+      setSystemAlert("Please fill in all card details.");
       return;
     }
     const result = selectedLink === "https" ? "PASS" : "FAIL";
-    alert("Purchase Successful!");
+    // alert("Purchase Successful!");
     setMission({
       ...mission,
       stage: "TASK3_RETURN_TO_MANAGER",
@@ -278,6 +279,25 @@ export default function DesktopSimulation() {
             )}
           </div>
 
+          {/* Custom System Alert */}
+          {systemAlert && (
+            <div className="absolute inset-0 z-[200] bg-black/40 flex items-center justify-center">
+              <div className="bg-[#f0f0f0] border border-gray-400 shadow-2xl p-0 w-80 text-sm font-sans flex flex-col">
+                <div className="bg-white px-3 py-2 flex justify-between items-center border-b">
+                  <span className="font-semibold text-xs text-gray-700">System Alert</span>
+                  <button onClick={() => setSystemAlert(null)} className="hover:bg-red-500 hover:text-white px-2 py-0.5 text-xs transition-colors">✕</button>
+                </div>
+                <div className="p-6 flex gap-4 items-center bg-white">
+                  <span className="text-3xl text-blue-500">ℹ️</span>
+                  <p className="text-gray-800">{systemAlert}</p>
+                </div>
+                <div className="bg-[#f0f0f0] px-4 py-3 flex justify-end border-t border-gray-300">
+                  <button onClick={() => setSystemAlert(null)} className="px-6 py-1 bg-white hover:bg-gray-50 border border-gray-400 rounded text-xs shadow-sm">OK</button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Windows Taskbar */}
           <div className="h-10 bg-[#000000cc] backdrop-blur-md border-t border-white/10 flex items-center px-1 gap-1 z-50">
             <div className="w-10 h-10 flex items-center justify-center hover:bg-white/10 text-xl cursor-default text-blue-400">
@@ -301,6 +321,11 @@ export default function DesktopSimulation() {
         </div>
 
         {/* Monitor Branding/Stand Decoration */}
+        <div className="absolute top-full left-1/2 -translate-x-1/2 w-32 md:w-48 h-[50vh] bg-gradient-to-b from-[#111] to-[#050505] border-x-[12px] border-[#222] -z-10 shadow-[inset_0_30px_30px_rgba(0,0,0,0.8)]">
+          <div className="w-full h-full flex justify-center">
+            <div className="w-12 border-x border-[#1a1a1a] h-full"></div>
+          </div>
+        </div>
       </div>
     </div>
   );

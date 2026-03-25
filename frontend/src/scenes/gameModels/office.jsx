@@ -1371,36 +1371,36 @@ export default function Office(props) {
             geometry={nodes.Mesh144.geometry}
             material={materials.Monitor_01}
           />
-          <mesh
+          {/* <mesh
             castShadow
             receiveShadow
             geometry={nodes.Mesh144_1.geometry}
             material={materials["Black plastic"]}
-          />
-          <mesh
+          /> */}
+          {/* <mesh
             castShadow
             receiveShadow
             geometry={nodes.Mesh145.geometry}
             material={materials.Monitor_01}
-          />
-          <mesh
+          /> */}
+          {/* <mesh
             castShadow
             receiveShadow
             geometry={nodes.Mesh145_1.geometry}
             material={materials["Monitor screen"]}
-          />
-          <mesh
+          /> */}
+          {/* <mesh
             castShadow
             receiveShadow
             geometry={nodes.Mesh145_2.geometry}
             material={materials.Monitor_01_Decals}
-          />
-          <mesh
+          /> */}
+          {/* <mesh
             castShadow
             receiveShadow
             geometry={nodes.Mesh145_3.geometry}
             material={materials["Monitor.002"]}
-          />
+          /> */}
           <mesh
             castShadow
             receiveShadow

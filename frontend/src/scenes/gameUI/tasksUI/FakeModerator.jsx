@@ -1202,6 +1202,12 @@ export default function FakeModeratorClient() {
             <ShutdownScreen onComplete={handleShutdownComplete} />
           )}
         </div>
+        {/* Monitor Neck (No Stand) */}
+        <div className="absolute top-full left-1/2 -translate-x-1/2 w-32 md:w-48 h-[50vh] bg-gradient-to-b from-[#111] to-[#050505] border-x-[12px] border-[#222] -z-10 shadow-[inset_0_30px_30px_rgba(0,0,0,0.8)]">
+          <div className="w-full h-full flex justify-center">
+            <div className="w-12 border-x border-[#1a1a1a] h-full"></div>
+          </div>
+        </div>
       </div>
 
       {blockedApp && (
