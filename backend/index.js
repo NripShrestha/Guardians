@@ -74,9 +74,41 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// ── FORGOT PASSWORD ──────────────────────────────────────────────────────────
+app.post("/forgot-password", async (req, res) => {
+  const { email, schoolName, newPassword } = req.body;
+
+  if (!email || !schoolName || !newPassword) {
+    return res.json({ success: false, message: "All fields are required" });
+  }
+
+  try {
+    const user = await SignupModel.findOne({ email });
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    if (user.schoolName.toLowerCase() !== schoolName.toLowerCase()) {
+      return res.json({ success: false, message: "Incorrect school name" });
+    }
+
+    if (!validatePassword(newPassword)) {
+      return res.json({ success: false, message: "Password must be at least 6 characters with 1 uppercase, 1 lowercase, and 1 number" });
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    res.json({ success: true, message: "Password reset successful!" });
+  } catch (err) {
+    console.error(err);
+    res.json({ success: false, message: "Server error" });
+  }
+});
+
 // ── REGISTER ─────────────────────────────────────────────────────────────────
 app.post("/register", async (req, res) => {
-  const { username, email, age, gender, password } = req.body;
+  const { username, email, age, gender, password, schoolName } = req.body;
   const errors = {};
 
   if (!username || username.trim() === "") {
@@ -100,6 +132,12 @@ app.post("/register", async (req, res) => {
 
   if (!gender) {
     errors.gender = "Gender is required";
+  }
+
+  if (!schoolName || schoolName.trim() === "") {
+    errors.schoolName = "School name is required";
+  } else if (schoolName.length < 2) {
+    errors.schoolName = "School name must be at least 2 characters";
   }
 
   if (!password || password.trim() === "") {
@@ -197,7 +235,7 @@ app.post("/progress", authenticateToken, async (req, res) => {
         shooterHighscore: shooterHighscore || 0,
         characterType: characterType || null,
         playerPosition: playerPosition || { x: -2, y: 2.5, z: 3 },
-        taskResults: taskResult ? [taskResult] : [],
+        taskResults: req.body.taskResults || (taskResult ? [taskResult] : []),
       });
     } else {
       // Update the current position
@@ -210,16 +248,16 @@ app.post("/progress", authenticateToken, async (req, res) => {
         progressDoc.shooterHighscore = Math.max(progressDoc.shooterHighscore || 0, shooterHighscore);
       }
 
-      // If this save includes a task result, upsert it
-      if (taskResult) {
+      // Overwrite the existing logic and use the new array behavior
+      if (Array.isArray(req.body.taskResults)) {
+        progressDoc.taskResults = req.body.taskResults;
+      } else if (taskResult) {
         const existingIndex = progressDoc.taskResults.findIndex(
           (r) => r.taskId === taskResult.taskId,
         );
         if (existingIndex >= 0) {
-          // Replace the old result for this task
           progressDoc.taskResults[existingIndex] = taskResult;
         } else {
-          // New task result
           progressDoc.taskResults.push(taskResult);
         }
       }

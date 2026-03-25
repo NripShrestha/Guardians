@@ -133,6 +133,13 @@ export default function Login() {
           >
             Create Hero 🚀
           </Link>
+          <br />
+          <Link
+            to="/forgot-password"
+            className="text-indigo-600 hover:text-indigo-800 mt-2 inline-block"
+          >
+            Forgot Password? 🤔
+          </Link>
         </p>
       </div>
     </div>

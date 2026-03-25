@@ -29,6 +29,12 @@ const SignupSchema = new mongoose.Schema(
       required: [true, "Gender is required"],
       enum: ["boy", "girl"],
     },
+    schoolName: {
+      type: String,
+      required: [true, "School name is required"],
+      trim: true,
+      minlength: [2, "School name must be at least 2 characters"],
+    },
     password: {
       type: String,
       required: [true, "Password is required"],

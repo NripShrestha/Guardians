@@ -4,6 +4,17 @@ const MissionContext = createContext();
 
 const API_BASE = "http://localhost:3001";
 
+// Stages that signal a task has been evaluated and feedback is being shown
+const DEBRIEFING_STAGES = new Set([
+  "DEBRIEFING",
+  "TASK2_DEBRIEFING",
+  "TASK3_DEBRIEFING",
+  "TASK4_DEBRIEFING",
+  "TASK5_DEBRIEFING",
+  "TASK6_DEBRIEFING",
+  "TASK7_DEBRIEFING",
+]);
+
 export function getAuthToken() {
   return localStorage.getItem("guardians_token");
 }
@@ -17,6 +28,7 @@ export function MissionProvider({ children }) {
   const [savedCharacter, setSavedCharacter] = useState(null); // "timmy" | "girl" | null
   const [savedPosition, setSavedPosition] = useState({ x: -2, y: 2.5, z: 3 });
   const [savedHighScore, setSavedHighScore] = useState(0);
+  const [taskResults, setTaskResults] = useState([]);
 
   // ── LOAD PROGRESS ON MOUNT ────────────────────────────────────────────────
   useEffect(() => {
@@ -52,6 +64,7 @@ export function MissionProvider({ children }) {
             data.progress.playerPosition || { x: -2, y: 2.5, z: 3 },
           );
           setSavedHighScore(data.progress.shooterHighscore || 0);
+          setTaskResults(data.progress.taskResults || []);
         } else {
           setMission(defaultMission());
         }
@@ -65,6 +78,39 @@ export function MissionProvider({ children }) {
 
     loadProgress();
   }, []);
+
+  // ── RECORD TASK RESULT WHEN DEBRIEFING STAGE IS REACHED ──────────────────
+  // This fires whenever any task reaches its debriefing stage with a valid result.
+  // Each task component only needs to set mission.result — recording is handled here.
+  useEffect(() => {
+    if (!mission) return;
+    if (!DEBRIEFING_STAGES.has(mission.stage)) return;
+    if (!mission.result || mission.result === "CANCELLED") return;
+
+    setTaskResults((prev) => {
+      const existing = prev.findIndex((r) => r.taskId === mission.id);
+
+      const entry = {
+        taskId: mission.id,
+        result: mission.result,
+        completedAt: new Date().toISOString(),
+        // Task-specific detail fields (safe to include regardless of task type)
+        unsafeFields: mission.unsafeFields ?? [],
+        selectedUrl: mission.selectedUrl ?? null,
+        emailActions: mission.emailActions ?? {},
+        incorrectlyHandled: mission.incorrectlyHandled ?? [],
+      };
+
+      if (existing >= 0) {
+        // Overwrite if the task was already recorded (e.g. player replayed)
+        const updated = [...prev];
+        updated[existing] = entry;
+        return updated;
+      }
+
+      return [...prev, entry];
+    });
+  }, [mission?.stage, mission?.result]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!isLoaded) {
     return (
@@ -103,6 +149,8 @@ export function MissionProvider({ children }) {
         setSavedPosition,
         savedHighScore,
         setSavedHighScore,
+        taskResults,
+        setTaskResults,
       }}
     >
       {children}

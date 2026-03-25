@@ -7,6 +7,7 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
+  const [schoolName, setSchoolName] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,7 +41,14 @@ export default function Signup() {
 
     // Gender validation
     if (!gender) {
-      newErrors.gender = "Pick your avatar type!";
+      newErrors.gender = "Pick your gender";
+    }
+
+    // School name validation
+    if (!schoolName.trim()) {
+      newErrors.schoolName = "What is your school's name?";
+    } else if (schoolName.length < 2) {
+      newErrors.schoolName = "School name needs to be at least 2 characters!";
     }
 
     // Password validation
@@ -71,6 +79,7 @@ export default function Signup() {
         email,
         age: Number(age),
         gender,
+        schoolName,
         password,
       });
 
@@ -167,7 +176,7 @@ export default function Signup() {
             </div>
             <div>
               <label className="text-sm font-black text-indigo-900 ml-2 uppercase">
-                Avatar
+                Gender
               </label>
               <select
                 className={`w-full mt-1 px-4 py-3 rounded-2xl border-4 bg-indigo-50 font-bold outline-none ${
@@ -186,6 +195,26 @@ export default function Signup() {
                 </p>
               )}
             </div>
+          </div>
+
+          <div>
+            <label className="text-sm font-black text-indigo-900 ml-2 uppercase">
+              School Name (Security Question)
+            </label>
+            <input
+              type="text"
+              placeholder="School Name"
+              className={`w-full mt-1 px-4 py-3 rounded-2xl border-4 bg-indigo-50 font-bold transition-all focus:ring-4 focus:ring-yellow-300 outline-none ${
+                errors.schoolName ? "border-red-400" : "border-indigo-100"
+              }`}
+              value={schoolName}
+              onChange={(e) => setSchoolName(e.target.value)}
+            />
+            {errors.schoolName && (
+              <p className="text-red-500 text-xs font-bold mt-1 ml-2">
+                ⚠️ {errors.schoolName}
+              </p>
+            )}
           </div>
 
           <div>
