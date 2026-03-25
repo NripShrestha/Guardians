@@ -687,6 +687,11 @@ function Avatar({ label, pass }) {
 
 function DialogueBubble({ line, onAdvance }) {
   const { displayed, done, skip } = useTypewriter(line.text);
+
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("npc_dialogue_line_changed"));
+  }, [line]);
+
   return (
     <div
       onClick={done ? onAdvance : skip}

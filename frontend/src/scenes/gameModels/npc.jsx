@@ -5,7 +5,18 @@ const EXPLAINING_STAGES = new Set([
   "TALKING_TO_MANAGER",
   "DEBRIEFING",
   "TASK2_TALKING_TO_MANAGER",
-  "TASK2_DEBRIEFING"
+  "TASK2_DEBRIEFING",
+  "TASK3_TALKING_TO_MANAGER",
+  "TASK3_DEBRIEFING",
+  "TASK4_TALKING_TO_MANAGER",
+  "TASK4_DEBRIEFING",
+  "TASK5_TALKING_TO_MANAGER",
+  "TASK5_ASKING_NPC_FOR_IT",
+  "TASK5_DEBRIEFING",
+  "TASK6_TALKING_TO_MANAGER",
+  "TASK6_DEBRIEFING",
+  "TASK7_TALKING_TO_MANAGER",
+  "TASK7_DEBRIEFING"
 ]);
 
 export default function Npc({ missionStage, ...props }) {
@@ -31,7 +42,18 @@ export default function Npc({ missionStage, ...props }) {
       idleAction.reset().fadeIn(0.3).play();
     }
 
+    const handleDialogueChange = () => {
+      if (isExplaining && explainAction) {
+        // Restart the Action from the beginning.
+        // We omit fadeIn() because fading it in from 0 weight causes a T-pose pop.
+        explainAction.reset().play();
+      }
+    };
+    
+    window.addEventListener("npc_dialogue_line_changed", handleDialogueChange);
+
     return () => {
+      window.removeEventListener("npc_dialogue_line_changed", handleDialogueChange);
       explainAction?.fadeOut(0.1);
       idleAction?.fadeOut(0.1);
     };
