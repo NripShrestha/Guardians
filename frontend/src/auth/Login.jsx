@@ -41,7 +41,19 @@ export default function Login() {
       if (result.data.success) {
         // ✅ FIXED: was "token", must match what MissionContext & HUD read
         localStorage.setItem("guardians_token", result.data.token);
-        navigate("/choose-character");
+        
+        try {
+          const progressRes = await axios.get("http://localhost:3001/progress", {
+            headers: { Authorization: `Bearer ${result.data.token}` }
+          });
+          if (progressRes.data.success && progressRes.data.progress.characterType) {
+            navigate("/home");
+          } else {
+            navigate("/choose-character");
+          }
+        } catch (err) {
+          navigate("/choose-character");
+        }
       } else {
         alert(
           "⚠️ " + (result.data.message || "Wait! That's not right. Try again!"),

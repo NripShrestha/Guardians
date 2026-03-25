@@ -18,88 +18,54 @@ const MARKER_POSITION = [-14.123, 0.5, 6.871];
 const TRIGGER_SIZE = [2.5, 3, 2.5];
 
 function PulsingMarker({ active }) {
-  const ringRef = useRef();
-  const pillarRef = useRef();
-  const glowRef = useRef();
+  const cylinderRef = useRef();
   const t = useRef(0);
 
   useFrame((_, delta) => {
     t.current += delta;
-
-    if (ringRef.current) {
-      const s = 1 + Math.sin(t.current * 2) * 0.12;
-      ringRef.current.scale.set(s, 1, s);
-    }
-
-    if (pillarRef.current) {
-      pillarRef.current.material.opacity = 0.4 + Math.sin(t.current * 3) * 0.25;
-    }
-
-    if (glowRef.current) {
-      glowRef.current.rotation.y += delta * 1.5;
+    if (cylinderRef.current) {
+      // Spinning marker
+      cylinderRef.current.rotation.y += delta * 2;
+      // Slight vertical bobbing
+      cylinderRef.current.position.y = Math.sin(t.current * 3) * 0.1;
     }
   });
 
-  // Kid-friendly bright orange/yellow instead of old dark red
-  const color = active ? "#FFD700" : "#FF8C00";
-  const emissive = active ? "#FFAA00" : "#FF6600";
+  // GTA V style bright yellow mission marker
+  const color = active ? "#FFFFFF" : "#FFD700";
+  const emissive = active ? "#FFFFFF" : "#FFB300";
 
   return (
     <group position={MARKER_POSITION}>
-      {/* Vertical light beam */}
-      <mesh ref={pillarRef} position={[0, 1.5, 0]}>
-        <cylinderGeometry args={[0.08, 0.08, 5, 8]} />
-        <meshBasicMaterial
-          color={color}
-          transparent
-          opacity={0.5}
-          depthWrite={false}
-        />
-      </mesh>
-
-      {/* Main cylinder marker */}
-      <mesh position={[0, 0.5, 0]}>
-        <cylinderGeometry args={[0.18, 0.18, 1.2, 12]} />
+      {/* Spinning open cylinder (The core GTA marker shape) */}
+      <mesh ref={cylinderRef}>
+        <cylinderGeometry args={[0.6, 0.6, 1.2, 32, 1, true]} />
         <meshStandardMaterial
           color={color}
           emissive={emissive}
           emissiveIntensity={2}
-        />
-      </mesh>
-
-      {/* Pulsing ring on ground */}
-      <mesh
-        ref={ringRef}
-        rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, 0.02, 0]}
-      >
-        <ringGeometry args={[0.6, 0.85, 32]} />
-        <meshBasicMaterial
-          color={color}
           transparent
           opacity={0.6}
           side={THREE.DoubleSide}
           depthWrite={false}
+          blending={THREE.AdditiveBlending}
         />
       </mesh>
 
-      {/* Rotating diamond icon */}
-      <mesh ref={glowRef} position={[0, 1.4, 0]}>
-        <octahedronGeometry args={[0.25, 0]} />
-        <meshStandardMaterial
+      {/* Inner subtle glow cylinder for that hazy neon look */}
+      {/* <mesh position={[0, 0, 0]} scale={0.95}>
+        <cylinderGeometry args={[0.6, 0.6, 0.6, 32, 1, true]} />
+        <meshBasicMaterial
           color={color}
-          emissive={emissive}
-          emissiveIntensity={3}
+          transparent
+          opacity={0.2}
+          side={THREE.DoubleSide}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
         />
-      </mesh>
+      </mesh> */}
 
-      {/* Point light for glow effect */}
-      <pointLight
-        position={[0, 1, 0]}
-        color={color}
-        intensity={active ? 4 : 1.5}
-        distance={5}
-      />
+     
     </group>
   );
 }

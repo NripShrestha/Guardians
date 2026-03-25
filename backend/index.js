@@ -163,6 +163,8 @@ app.get("/progress", authenticateToken, async (req, res) => {
         currentMissionId: progress.currentMissionId,
         currentStage: progress.currentStage,
         shooterHighscore: progress.shooterHighscore || 0,
+        characterType: progress.characterType,
+        playerPosition: progress.playerPosition,
         taskResults: progress.taskResults,
       },
     });
@@ -175,7 +177,7 @@ app.get("/progress", authenticateToken, async (req, res) => {
 // ── SAVE PROGRESS ─────────────────────────────────────────────────────────────
 // Called when player clicks the Save button in HUD
 app.post("/progress", authenticateToken, async (req, res) => {
-  const { currentMissionId, currentStage, taskResult, shooterHighscore } = req.body;
+  const { currentMissionId, currentStage, taskResult, shooterHighscore, characterType, playerPosition } = req.body;
 
   if (!currentMissionId || !currentStage) {
     return res
@@ -193,12 +195,16 @@ app.post("/progress", authenticateToken, async (req, res) => {
         currentMissionId,
         currentStage,
         shooterHighscore: shooterHighscore || 0,
+        characterType: characterType || null,
+        playerPosition: playerPosition || { x: -2, y: 2.5, z: 3 },
         taskResults: taskResult ? [taskResult] : [],
       });
     } else {
       // Update the current position
       progressDoc.currentMissionId = currentMissionId;
       progressDoc.currentStage = currentStage;
+      if (characterType) progressDoc.characterType = characterType;
+      if (playerPosition) progressDoc.playerPosition = playerPosition;
 
       if (shooterHighscore !== undefined) {
         progressDoc.shooterHighscore = Math.max(progressDoc.shooterHighscore || 0, shooterHighscore);

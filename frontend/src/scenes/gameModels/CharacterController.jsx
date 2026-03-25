@@ -319,11 +319,7 @@ export default function CharacterController({
       group.current.rotation.y = currentRotation.current;
     }
 
-    // Report physics position to parent every frame (if a callback was provided)
-    if (rigidBodyRef.current && typeof onPositionUpdate === "function") {
-      const t = rigidBodyRef.current.translation();
-      onPositionUpdate(t);
-    }
+    // Physics position reporting removed for performance
   });
 
   return (

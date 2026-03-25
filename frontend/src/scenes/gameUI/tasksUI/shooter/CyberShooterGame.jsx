@@ -1523,7 +1523,11 @@ function FreezeOverlay({ freezeTimeLeft }) {
 
 // ─── ROOT COMPONENT ───────────────────────────────────────────────────────────
 
-export default function CyberShooterGame({ onClose, onScoreSubmit, initialHighScore = 0 }) {
+export default function CyberShooterGame({
+  onClose,
+  onScoreSubmit,
+  initialHighScore = 0,
+}) {
   const [gameState, setGameState] = useState("intro");
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
@@ -1764,7 +1768,8 @@ export default function CyberShooterGame({ onClose, onScoreSubmit, initialHighSc
   const timerPct = (timeLeft / 60) * 100;
   const timerColor =
     timeLeft > 30 ? "#22CC66" : timeLeft > 10 ? "#FFAA00" : "#FF3333";
-  const playing = gameState === "playing" || gameState === "quiz" || gameState === "paused";
+  const playing =
+    gameState === "playing" || gameState === "quiz" || gameState === "paused";
 
   return (
     <div
@@ -2048,6 +2053,8 @@ export default function CyberShooterGame({ onClose, onScoreSubmit, initialHighSc
                   color: "#888",
                   fontSize: 13,
                   padding: "8px 26px",
+                  paddingTop: 8,
+                  paddingBottom: 8,
                   boxShadow: "0 4px 0 #CCC",
                 }}
               >
@@ -2421,23 +2428,84 @@ export default function CyberShooterGame({ onClose, onScoreSubmit, initialHighSc
           }}
         >
           <div style={{ fontSize: 80, marginBottom: 15 }}>⏸️</div>
-          <h2 style={{ fontSize: 50, margin: 0, letterSpacing: 4, fontWeight: 900 }}>PAUSED</h2>
-          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.7)", marginTop: 10 }}>Press ESC or click to resume</p>
-          <button
-            className="btn-fun"
-            onClick={() => setGameState("playing")}
+          <h2
             style={{
-              marginTop: 40,
-              padding: "15px 50px",
-              fontSize: 26,
-              background: "linear-gradient(135deg,#6BCB77,#4CAF50)",
-              color: "white",
-              boxShadow: "0 8px 0 #2E7D32",
-              textTransform: "uppercase",
+              fontSize: 50,
+              margin: 0,
+              letterSpacing: 4,
+              fontWeight: 900,
             }}
           >
-            RESUME
-          </button>
+            PAUSED
+          </h2>
+          <p
+            style={{
+              fontSize: 18,
+              color: "rgba(255,255,255,0.7)",
+              marginTop: 10,
+            }}
+          >
+            Press ESC or click to resume
+          </p>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 15,
+              marginTop: 40,
+            }}
+          >
+            <div style={{ display: "flex", gap: 20 }}>
+              <button
+                className="btn-fun"
+                onClick={() => setGameState("playing")}
+                style={{
+                  padding: "15px 50px",
+                  fontSize: 26,
+                  background: "linear-gradient(135deg,#6BCB77,#4CAF50)",
+                  color: "white",
+                  boxShadow: "0 8px 0 #2E7D32",
+                  textTransform: "uppercase",
+                }}
+              >
+                RESUME
+              </button>
+              {onClose && (
+                <button
+                  className="btn-fun"
+                  onClick={onClose}
+                  style={{
+                    padding: "15px 50px",
+                    fontSize: 26,
+                    background: "linear-gradient(135deg,#FF6B6B,#FF4444)",
+                    color: "white",
+                    boxShadow: "0 8px 0 #CC0000",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  EXIT GAME
+                </button>
+              )}
+            </div>
+            {onClose && (
+              <div
+                style={{
+                  color: "#FF8888",
+                  fontSize: 14,
+                  fontWeight: 900,
+                  backgroundColor: "rgba(0,0,0,0.4)",
+                  padding: "8px 16px",
+                  borderRadius: 8,
+                  marginTop: 10,
+                  border: "1px solid rgba(255,68,68,0.5)",
+                  letterSpacing: 1,
+                }}
+              >
+                ⚠️ WARNING: Exiting will clear your current game progress!
+              </div>
+            )}
+          </div>
         </div>
       )}
 

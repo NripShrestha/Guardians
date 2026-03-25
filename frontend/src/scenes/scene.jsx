@@ -21,8 +21,14 @@ import CyberShooterTrigger from "./gameUI/tasksUI/shooter/CyberShooterTrigger";
  * Clean orchestrator that delegates to specialized components
  */
 export default function Scene({ onOpenCyberShooter }) {
-  const [selectedCharacter, setSelectedCharacter] = useState(null);
-  const { mission, isPhoneModalOpen } = useMission();
+  const { 
+    mission, 
+    isPhoneModalOpen,
+    savedCharacter,
+    setSavedCharacter
+  } = useMission();
+
+  const [activeCharacter, setActiveCharacter] = useState(null);
 
   // Get current task configuration
   const taskConfig = getCurrentTaskConfig(mission.id);
@@ -31,13 +37,23 @@ export default function Scene({ onOpenCyberShooter }) {
   const playerLocked =
     isPlayerLocked(mission.id, mission.stage) || isPhoneModalOpen;
 
-  // Load selected character from session
+  // Sync character between DB, Context, and Session
   useEffect(() => {
-    const character = sessionStorage.getItem("selectedCharacter");
-    setSelectedCharacter(character || "timmy");
-  }, []);
+    if (savedCharacter) {
+      setActiveCharacter(savedCharacter);
+      sessionStorage.setItem("selectedCharacter", savedCharacter);
+    } else {
+      const sessionChar = sessionStorage.getItem("selectedCharacter");
+      if (sessionChar) {
+        setActiveCharacter(sessionChar);
+        setSavedCharacter(sessionChar); // Sync back to MissionContext for HUD saving
+      } else {
+        setActiveCharacter("timmy"); // ultimate fallback
+      }
+    }
+  }, [savedCharacter, setSavedCharacter]);
 
-  const handlePositionUpdate = useCallback(() => {}, []);
+  // Position saving has been removed to improve performance
 
   return (
     <>
@@ -48,12 +64,11 @@ export default function Scene({ onOpenCyberShooter }) {
       <SceneEnvironment />
 
       {/* ================= PLAYER CHARACTER ================= */}
-      {selectedCharacter && (
+      {activeCharacter && (
         <CharacterController
-          characterType={selectedCharacter}
+          characterType={activeCharacter}
           scale={1}
-          position={[-2, 2.5, 3]}
-          onPositionUpdate={handlePositionUpdate}
+          position={[-2, 2.5, 3]} // Fixed spawn position
           disabled={playerLocked}
         />
       )}
