@@ -1,11 +1,12 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { Settings, Save, List, Award } from "lucide-react";
 import SettingsModal from "./SettingsModal";
 import MissionPopup from "./MissionPopup";
 import PhoneMessenger from "../tasksUI/PhoneMessenger";
 import TaskHistoryOverlay from "./TaskHistoryOverlay";
+import BadgeUpgradeAnimation from "./BadgeUpgradeAnimation";
 import { useMission, getAuthToken } from "../../missions/MissionContext";
-import { shouldShowPhone } from "../../missions/tasks/TaskRegistry";
+import { shouldShowPhone, isPlayerLocked } from "../../missions/tasks/TaskRegistry";
 
 const API_BASE = "http://localhost:3001";
 
@@ -59,18 +60,53 @@ export default function HUD() {
   const [showMission, setShowMission] = useState(false);
   const [showTaskHistory, setShowTaskHistory] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null);
+  const [upgradedBadge, setUpgradedBadge] = useState(null);
+  const prevBadgeRef = useRef(null);
+  const pendingBadgeRef = useRef(null); // queued badge to show once player is free
 
   // --- XP & Badge Logic ---
   const passedCount = taskResults.filter((r) => r.result === "PASS").length;
   const xp = passedCount * 100;
   
-  const { badgeName, badgeColor } = useMemo(() => {
-    if (xp >= 800) return { badgeName: "Diamond", badgeColor: "text-cyan-400 border-cyan-400 bg-cyan-50" };
-    if (xp >= 600) return { badgeName: "Platinum", badgeColor: "text-slate-400 border-slate-400 bg-slate-50" };
-    if (xp >= 400) return { badgeName: "Gold", badgeColor: "text-yellow-500 border-yellow-500 bg-yellow-50" };
-    if (xp >= 200) return { badgeName: "Silver", badgeColor: "text-gray-400 border-gray-400 bg-gray-50" };
-    return { badgeName: "Bronze", badgeColor: "text-amber-700 border-amber-700 bg-amber-50" };
+  const { badgeName, badgeColor, tierMin, tierMax } = useMemo(() => {
+    if (xp >= 800) return { badgeName: "Diamond", badgeColor: "text-cyan-400 border-cyan-400 bg-cyan-50", tierMin: 800, tierMax: 900 };
+    if (xp >= 600) return { badgeName: "Platinum", badgeColor: "text-slate-400 border-slate-400 bg-slate-50", tierMin: 600, tierMax: 800 };
+    if (xp >= 400) return { badgeName: "Gold", badgeColor: "text-yellow-500 border-yellow-500 bg-yellow-50", tierMin: 400, tierMax: 600 };
+    if (xp >= 200) return { badgeName: "Silver", badgeColor: "text-gray-400 border-gray-400 bg-gray-50", tierMin: 200, tierMax: 400 };
+    return { badgeName: "Bronze", badgeColor: "text-amber-700 border-amber-700 bg-amber-50", tierMin: 0, tierMax: 200 };
   }, [xp]);
+
+  // Detect badge upgrades — queue if player is mid-dialogue
+  const BADGE_ORDER = ["Bronze", "Silver", "Gold", "Platinum", "Diamond"];
+  useEffect(() => {
+    const prev = prevBadgeRef.current;
+    if (prev !== null && prev !== badgeName) {
+      const prevRank = BADGE_ORDER.indexOf(prev);
+      const newRank  = BADGE_ORDER.indexOf(badgeName);
+      if (newRank > prevRank) {
+        if (isPlayerLocked(mission.id, mission.stage)) {
+          // Player is in dialogue — hold the animation until they're free
+          pendingBadgeRef.current = badgeName;
+        } else {
+          setUpgradedBadge(badgeName);
+        }
+      }
+    }
+    prevBadgeRef.current = badgeName;
+  }, [badgeName]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Flush queued badge animation when player regains control
+  useEffect(() => {
+    if (!mission) return;
+    if (isPlayerLocked(mission.id, mission.stage)) return;
+    if (!pendingBadgeRef.current) return;
+    setUpgradedBadge(pendingBadgeRef.current);
+    pendingBadgeRef.current = null;
+  }, [mission?.stage]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const tierXP = xp - tierMin;
+  const tierRange = tierMax - tierMin;
+  const tierProgress = Math.min((tierXP / tierRange) * 100, 100);
 
 
   const handleSave = async () => {
@@ -156,13 +192,20 @@ export default function HUD() {
             <div className="w-48 h-4 bg-gray-200 rounded-full border-2 border-indigo-900 mt-1 relative overflow-hidden">
               <div 
                 className="h-full bg-yellow-400 absolute left-0 top-0 transition-all duration-1000 ease-out" 
-                style={{ width: `${Math.min((xp / 900) * 100, 100)}%` }}
+                style={{ width: `${tierProgress}%` }}
               ></div>
             </div>
-            <span className="text-xs text-indigo-700 font-bold mt-1 tracking-wide">{xp} / 900 XP</span>
+            <span className="text-xs text-indigo-700 font-bold mt-1 tracking-wide">{tierXP} / {tierRange} XP</span>
           </div>
         </div>
       </div>
+
+      {upgradedBadge && (
+        <BadgeUpgradeAnimation
+          badgeName={upgradedBadge}
+          onDone={() => setUpgradedBadge(null)}
+        />
+      )}
 
       {showTaskHistory && (
         <TaskHistoryOverlay 

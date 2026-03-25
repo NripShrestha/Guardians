@@ -3,10 +3,8 @@ import { X, CheckCircle, XCircle, Clock } from "lucide-react";
 import { TASK_REGISTRY } from "../../missions/tasks/TaskRegistry";
 
 export default function TaskHistoryOverlay({ onClose, taskResults }) {
-  // Get all currently configured tasks
   const allTasks = Object.values(TASK_REGISTRY);
 
-  // Fill up to 9 tasks as per the requirement
   const displayTasks = [...allTasks];
   while (displayTasks.length < 9) {
     displayTasks.push({

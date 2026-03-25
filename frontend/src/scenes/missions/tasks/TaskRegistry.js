@@ -1,9 +1,3 @@
-/**
- * Task Registry with Stage Instructions
- *
- * Enhanced version that includes user-friendly instructions for each stage
- */
-
 export const TASK_REGISTRY = {
   TASK_1_PERSONAL_DATA: {
     id: "TASK_1_PERSONAL_DATA",

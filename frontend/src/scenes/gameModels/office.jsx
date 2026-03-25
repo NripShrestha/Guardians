@@ -3274,42 +3274,6 @@ export default function Office(props) {
             material={materials["Material.001"]}
           />
         </group>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Mesh003.geometry}
-          material={materials.Fronds}
-        />
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Mesh003_1.geometry}
-          material={materials.Stalks}
-        />
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Mesh003_2.geometry}
-          material={materials.Flowers}
-        />
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Mesh005.geometry}
-          material={materials.Fronds}
-        />
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Mesh005_1.geometry}
-          material={materials.Stalks}
-        />
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Mesh005_2.geometry}
-          material={materials.Flowers}
-        />
       </group>
     </RigidBody>
   );
