@@ -151,6 +151,7 @@ app.get("/progress", authenticateToken, async (req, res) => {
         progress: {
           currentMissionId: "TASK_1_PERSONAL_DATA",
           currentStage: "TALK_TO_MANAGER",
+          shooterHighscore: 0,
           taskResults: [],
         },
       });
@@ -161,6 +162,7 @@ app.get("/progress", authenticateToken, async (req, res) => {
       progress: {
         currentMissionId: progress.currentMissionId,
         currentStage: progress.currentStage,
+        shooterHighscore: progress.shooterHighscore || 0,
         taskResults: progress.taskResults,
       },
     });
@@ -173,7 +175,7 @@ app.get("/progress", authenticateToken, async (req, res) => {
 // ── SAVE PROGRESS ─────────────────────────────────────────────────────────────
 // Called when player clicks the Save button in HUD
 app.post("/progress", authenticateToken, async (req, res) => {
-  const { currentMissionId, currentStage, taskResult } = req.body;
+  const { currentMissionId, currentStage, taskResult, shooterHighscore } = req.body;
 
   if (!currentMissionId || !currentStage) {
     return res
@@ -190,12 +192,17 @@ app.post("/progress", authenticateToken, async (req, res) => {
         userId: req.user.id,
         currentMissionId,
         currentStage,
+        shooterHighscore: shooterHighscore || 0,
         taskResults: taskResult ? [taskResult] : [],
       });
     } else {
       // Update the current position
       progressDoc.currentMissionId = currentMissionId;
       progressDoc.currentStage = currentStage;
+
+      if (shooterHighscore !== undefined) {
+        progressDoc.shooterHighscore = Math.max(progressDoc.shooterHighscore || 0, shooterHighscore);
+      }
 
       // If this save includes a task result, upsert it
       if (taskResult) {

@@ -50,6 +50,7 @@ export default function HUD() {
     mission,
     savedCharacter,
     savedPosition, // live position kept in sync by Scene.jsx
+    savedHighScore,
   } = useMission();
 
   const [showSettings, setShowSettings] = useState(false);
@@ -92,6 +93,7 @@ export default function HUD() {
           currentStage: mission.stage,
           characterType: savedCharacter, // "timmy" | "girl"
           playerPosition: savedPosition, // { x, y, z } — updated live by Scene
+          shooterHighscore: savedHighScore,
           taskResult,
         }),
       });

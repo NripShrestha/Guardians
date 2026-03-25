@@ -16,6 +16,7 @@ export function MissionProvider({ children }) {
   // Saved from DB — shared with Scene and CharacterSelection
   const [savedCharacter, setSavedCharacter] = useState(null); // "timmy" | "girl" | null
   const [savedPosition, setSavedPosition] = useState({ x: -2, y: 2.5, z: 3 });
+  const [savedHighScore, setSavedHighScore] = useState(0);
 
   // ── LOAD PROGRESS ON MOUNT ────────────────────────────────────────────────
   useEffect(() => {
@@ -50,6 +51,7 @@ export function MissionProvider({ children }) {
           setSavedPosition(
             data.progress.playerPosition || { x: -2, y: 2.5, z: 3 },
           );
+          setSavedHighScore(data.progress.shooterHighscore || 0);
         } else {
           setMission(defaultMission());
         }
@@ -99,6 +101,8 @@ export function MissionProvider({ children }) {
         setSavedCharacter,
         savedPosition,
         setSavedPosition,
+        savedHighScore,
+        setSavedHighScore,
       }}
     >
       {children}

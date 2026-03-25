@@ -531,8 +531,6 @@ export const TASK_REGISTRY = {
   },
 };
 
-
-
 // Helper to get current task config
 export function getCurrentTaskConfig(missionId) {
   return TASK_REGISTRY[missionId];
@@ -562,7 +560,6 @@ export function shouldShowPhone(missionId, stage) {
   return config?.showPhoneInStages?.includes(stage) ?? false;
 }
 
-
 // Helper to check if email client should be visible
 export function shouldShowEmailClient(missionId, stage) {
   return (
@@ -579,4 +576,3 @@ export function shouldShowFakeModeratorClient(missionId, stage) {
     missionId === "TASK_7_FAKE_MODERATOR" && stage === "TASK7_DESKTOP_EMAIL"
   );
 }
-

@@ -1523,12 +1523,12 @@ function FreezeOverlay({ freezeTimeLeft }) {
 
 // ─── ROOT COMPONENT ───────────────────────────────────────────────────────────
 
-export default function CyberShooterGame({ onClose, onScoreSubmit }) {
+export default function CyberShooterGame({ onClose, onScoreSubmit, initialHighScore = 0 }) {
   const [gameState, setGameState] = useState("intro");
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [combo, setCombo] = useState(0);
-  const [highScore, setHighScore] = useState(0);
+  const [highScore, setHighScore] = useState(initialHighScore);
   const [difficulty, setDifficulty] = useState(0);
   const [firing, setFiring] = useState(false);
   const [pops, setPops] = useState([]);
@@ -1575,11 +1575,27 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
     if (!bg) return;
     if (gameState === "playing" || gameState === "quiz") {
       bg.play().catch(() => {});
+    } else if (gameState === "paused") {
+      bg.pause();
     } else {
       bg.pause();
       bg.currentTime = 0;
     }
   }, [gameState]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setGameState((prev) => {
+          if (prev === "playing") return "paused";
+          if (prev === "paused") return "playing";
+          return prev;
+        });
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const addPop = useCallback((msg, color) => {
     setPops((p) => [...p.slice(-4), { id: uid(), msg, color }]);
@@ -1684,8 +1700,11 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
   }, [gameState]);
 
   useEffect(() => {
-    if (gameState === "gameover") setHighScore((h) => Math.max(h, score));
-  }, [gameState, score]);
+    if (gameState === "gameover") {
+      setHighScore((h) => Math.max(h, score));
+      if (onScoreSubmit) onScoreSubmit(score);
+    }
+  }, [gameState, score, onScoreSubmit]);
 
   const handleScoreUpdate = useCallback(
     (pts, timeDelta, isGood) => {
@@ -1745,7 +1764,7 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
   const timerPct = (timeLeft / 60) * 100;
   const timerColor =
     timeLeft > 30 ? "#22CC66" : timeLeft > 10 ? "#FFAA00" : "#FF3333";
-  const playing = gameState === "playing" || gameState === "quiz";
+  const playing = gameState === "playing" || gameState === "quiz" || gameState === "paused";
 
   return (
     <div
@@ -1842,7 +1861,7 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
           gl={{ antialias: true }}
         >
           <GameScene
-            paused={gameState === "quiz"}
+            paused={gameState === "quiz" || gameState === "paused"}
             difficulty={difficulty}
             shootEvent={shootEvent}
             mousePosRef={mousePosRef}
@@ -2047,18 +2066,19 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
           {/* Freeze overlay — no blur, icy crystal effect */}
           {freezeActive && <FreezeOverlay freezeTimeLeft={freezeTimeLeft} />}
 
-          {/* ── TOP-LEFT: SCORE ── */}
+          {/* ── TOP-RIGHT: SCORE ── */}
           <div
             data-ui
             className="hud-glass"
             style={{
               position: "absolute",
               top: 16,
-              left: 16,
+              right: 16,
+              textAlign: "right",
               borderRadius: 20,
-              padding: "10px 20px 10px 16px",
+              padding: "10px 16px 10px 20px",
               pointerEvents: "none",
-              animation: "hudSlideDown 0.4s ease",
+              animation: "hudSlideRight 0.4s ease",
               minWidth: 130,
             }}
           >
@@ -2101,6 +2121,33 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
               </div>
             )}
           </div>
+
+          {/* ── PAUSE BUTTON ── */}
+          {gameState === "playing" && (
+            <button
+              data-ui
+              className="btn-fun hud-glass"
+              onClick={() => setGameState("paused")}
+              style={{
+                position: "absolute",
+                top: 16,
+                left: 16,
+                width: 50,
+                height: 50,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 22,
+                color: "#FFF",
+                pointerEvents: "auto",
+                animation: "hudSlideDown 0.4s ease",
+                padding: 0,
+              }}
+              title="Pause Game (Esc)"
+            >
+              ⏸️
+            </button>
+          )}
 
           {/* ── TOP-CENTER: TIMER ── */}
           <div
@@ -2201,7 +2248,7 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
             className="hud-glass"
             style={{
               position: "absolute",
-              top: 16,
+              top: 110,
               right: 16,
               borderRadius: 20,
               padding: "10px 18px",
@@ -2351,6 +2398,47 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
             <ScorePop key={p.id} msg={p.msg} color={p.color} />
           ))}
         </>
+      )}
+
+      {/* ── PAUSE OVERLAY ── */}
+      {gameState === "paused" && (
+        <div
+          data-ui
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 1001,
+            background: "rgba(0,0,0,0.6)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "white",
+            textShadow: "0 2px 10px rgba(0,0,0,0.5)",
+            animation: "pop 0.3s ease",
+          }}
+        >
+          <div style={{ fontSize: 80, marginBottom: 15 }}>⏸️</div>
+          <h2 style={{ fontSize: 50, margin: 0, letterSpacing: 4, fontWeight: 900 }}>PAUSED</h2>
+          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.7)", marginTop: 10 }}>Press ESC or click to resume</p>
+          <button
+            className="btn-fun"
+            onClick={() => setGameState("playing")}
+            style={{
+              marginTop: 40,
+              padding: "15px 50px",
+              fontSize: 26,
+              background: "linear-gradient(135deg,#6BCB77,#4CAF50)",
+              color: "white",
+              boxShadow: "0 8px 0 #2E7D32",
+              textTransform: "uppercase",
+            }}
+          >
+            RESUME
+          </button>
+        </div>
       )}
 
       {/* ── QUIZ ── */}
@@ -2639,7 +2727,7 @@ export default function CyberShooterGame({ onClose, onScoreSubmit }) {
                   boxShadow: "0 5px 0 #CC4400",
                 }}
               >
-                Save & Exit 🏠
+                Exit
               </button>
             </div>
           </div>
