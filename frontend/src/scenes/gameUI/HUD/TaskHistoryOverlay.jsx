@@ -15,13 +15,13 @@ export default function TaskHistoryOverlay({ onClose, taskResults }) {
 
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 pointer-events-auto backdrop-blur-[2px]">
-      <div className="bg-white p-6 rounded-3xl border-4 border-indigo-900 shadow-[8px_8px_0_0_#4338ca] w-[600px] max-h-[85vh] flex flex-col translate-y-[-20px]">
+      <div className="bg-white p-5 rounded-3xl border-4 border-indigo-900 shadow-[6px_6px_0_0_#4338ca] w-[480px] max-h-[80vh] flex flex-col translate-y-[-20px]">
         <div className="flex items-center justify-between mb-6 pb-4 border-b-4 border-indigo-100">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center font-black text-xl text-indigo-900">
+            <div className="w-8 h-8 bg-indigo-100 rounded-xl flex items-center justify-center font-black text-base text-indigo-900">
               📊
             </div>
-            <h2 className="text-2xl font-black text-indigo-900 uppercase">
+            <h2 className="text-xl font-black text-indigo-900 uppercase">
               Mission History
             </h2>
           </div>
@@ -29,11 +29,14 @@ export default function TaskHistoryOverlay({ onClose, taskResults }) {
             onClick={onClose}
             className="p-2 hover:bg-red-100 hover:text-red-600 rounded-xl transition-colors text-indigo-900"
           >
-            <X className="w-8 h-8" />
+            <X className="w-6 h-6" />
           </button>
         </div>
 
-        <div className="overflow-y-auto pr-2 space-y-3 flex-1" style={{ scrollbarWidth: "thin" }}>
+        <div
+          className="overflow-y-auto pr-2 space-y-3 flex-1"
+          style={{ scrollbarWidth: "thin" }}
+        >
           {displayTasks.map((task, idx) => {
             const resultObj = taskResults.find((r) => r.taskId === task.id);
             const status = resultObj?.result || "PENDING";
@@ -45,7 +48,8 @@ export default function TaskHistoryOverlay({ onClose, taskResults }) {
             if (status === "PASS") {
               StatusIcon = CheckCircle;
               statusColor = "text-green-500";
-              bgColor = "bg-green-50 border-green-200 shadow-[2px_2px_0_0_#bbf7d0]";
+              bgColor =
+                "bg-green-50 border-green-200 shadow-[2px_2px_0_0_#bbf7d0]";
             } else if (status === "FAIL") {
               StatusIcon = XCircle;
               statusColor = "text-red-500";
@@ -57,9 +61,9 @@ export default function TaskHistoryOverlay({ onClose, taskResults }) {
             return (
               <div
                 key={task.id}
-                className={`flex items-center gap-4 p-4 rounded-xl border-2 transition-all ${bgColor}`}
+                className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${bgColor}`}
               >
-                <div className="text-lg font-black text-indigo-900 w-10 h-10 flex items-center justify-center bg-white rounded-xl border-2 border-indigo-100 shadow-sm shrink-0">
+                <div className="text-sm font-black text-indigo-900 w-8 h-8 flex items-center justify-center bg-white rounded-xl border-2 border-indigo-100 shadow-sm shrink-0">
                   {idx + 1}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -70,7 +74,7 @@ export default function TaskHistoryOverlay({ onClose, taskResults }) {
                     {status}
                   </p>
                 </div>
-                <StatusIcon className={`w-8 h-8 shrink-0 ${statusColor}`} />
+                <StatusIcon className={`w-6 h-6 shrink-0 ${statusColor}`} />
               </div>
             );
           })}

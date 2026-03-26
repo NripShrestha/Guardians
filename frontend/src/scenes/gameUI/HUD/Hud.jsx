@@ -6,7 +6,10 @@ import PhoneMessenger from "../tasksUI/PhoneMessenger";
 import TaskHistoryOverlay from "./TaskHistoryOverlay";
 import BadgeUpgradeAnimation from "./BadgeUpgradeAnimation";
 import { useMission, getAuthToken } from "../../missions/MissionContext";
-import { shouldShowPhone, isPlayerLocked } from "../../missions/tasks/TaskRegistry";
+import {
+  shouldShowPhone,
+  isPlayerLocked,
+} from "../../missions/tasks/TaskRegistry";
 
 const API_BASE = "http://localhost:3001";
 
@@ -14,11 +17,11 @@ const API_BASE = "http://localhost:3001";
 const IconButton = ({ onClick, icon: Icon, color = "bg-white" }) => (
   <button
     onClick={onClick}
-    className={`pointer-events-auto p-4 ${color} border-4 border-indigo-900 rounded-2xl 
-    shadow-[4px_4px_0_0_#4338ca] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] 
+    className={`pointer-events-auto p-3 ${color} border-4 border-indigo-900 rounded-xl 
+    shadow-[3px_3px_0_0_#4338ca] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] 
     transition-all group active:shadow-none`}
   >
-    <Icon className="w-8 h-8 text-indigo-900 group-hover:scale-110 transition-transform" />
+    <Icon className="w-6 h-6 text-indigo-900 group-hover:scale-110 transition-transform" />
   </button>
 );
 
@@ -53,7 +56,7 @@ export default function HUD() {
     savedCharacter,
     savedHighScore,
     taskResults,
-    setTaskResults
+    setTaskResults,
   } = useMission();
 
   const [showSettings, setShowSettings] = useState(false);
@@ -67,13 +70,42 @@ export default function HUD() {
   // --- XP & Badge Logic ---
   const passedCount = taskResults.filter((r) => r.result === "PASS").length;
   const xp = passedCount * 100;
-  
+
   const { badgeName, badgeColor, tierMin, tierMax } = useMemo(() => {
-    if (xp >= 800) return { badgeName: "Diamond", badgeColor: "text-cyan-400 border-cyan-400 bg-cyan-50", tierMin: 800, tierMax: 900 };
-    if (xp >= 600) return { badgeName: "Platinum", badgeColor: "text-slate-400 border-slate-400 bg-slate-50", tierMin: 600, tierMax: 800 };
-    if (xp >= 400) return { badgeName: "Gold", badgeColor: "text-yellow-500 border-yellow-500 bg-yellow-50", tierMin: 400, tierMax: 600 };
-    if (xp >= 200) return { badgeName: "Silver", badgeColor: "text-gray-400 border-gray-400 bg-gray-50", tierMin: 200, tierMax: 400 };
-    return { badgeName: "Bronze", badgeColor: "text-amber-700 border-amber-700 bg-amber-50", tierMin: 0, tierMax: 200 };
+    if (xp >= 800)
+      return {
+        badgeName: "Diamond",
+        badgeColor: "text-cyan-400 border-cyan-400 bg-cyan-50",
+        tierMin: 800,
+        tierMax: 900,
+      };
+    if (xp >= 600)
+      return {
+        badgeName: "Platinum",
+        badgeColor: "text-slate-400 border-slate-400 bg-slate-50",
+        tierMin: 600,
+        tierMax: 800,
+      };
+    if (xp >= 400)
+      return {
+        badgeName: "Gold",
+        badgeColor: "text-yellow-500 border-yellow-500 bg-yellow-50",
+        tierMin: 400,
+        tierMax: 600,
+      };
+    if (xp >= 200)
+      return {
+        badgeName: "Silver",
+        badgeColor: "text-gray-400 border-gray-400 bg-gray-50",
+        tierMin: 200,
+        tierMax: 400,
+      };
+    return {
+      badgeName: "Bronze",
+      badgeColor: "text-amber-700 border-amber-700 bg-amber-50",
+      tierMin: 0,
+      tierMax: 200,
+    };
   }, [xp]);
 
   // Detect badge upgrades — queue if player is mid-dialogue
@@ -82,7 +114,7 @@ export default function HUD() {
     const prev = prevBadgeRef.current;
     if (prev !== null && prev !== badgeName) {
       const prevRank = BADGE_ORDER.indexOf(prev);
-      const newRank  = BADGE_ORDER.indexOf(badgeName);
+      const newRank = BADGE_ORDER.indexOf(badgeName);
       if (newRank > prevRank) {
         if (isPlayerLocked(mission.id, mission.stage)) {
           // Player is in dialogue — hold the animation until they're free
@@ -108,7 +140,6 @@ export default function HUD() {
   const tierRange = tierMax - tierMin;
   const tierProgress = Math.min((tierXP / tierRange) * 100, 100);
 
-
   const handleSave = async () => {
     const token = getAuthToken();
     if (!token) {
@@ -129,7 +160,7 @@ export default function HUD() {
         body: JSON.stringify({
           currentMissionId: mission.id,
           currentStage: mission.stage,
-          characterType: savedCharacter, 
+          characterType: savedCharacter,
           shooterHighscore: savedHighScore,
           taskResults: taskResults, // Save entire task history
         }),
@@ -159,7 +190,7 @@ export default function HUD() {
           <img
             src="/images/Logo.png"
             alt="Logo"
-            className="h-36 w-auto drop-shadow-[4px_4px_0_#4338ca]"
+            className="h-28 w-auto drop-shadow-[4px_4px_0_#4338ca]"
           />
         </div>
 
@@ -167,7 +198,7 @@ export default function HUD() {
         <SaveToast status={saveStatus} />
 
         {/* Top Right - Icon Menu */}
-        <div className="absolute top-8 right-8 flex flex-col gap-4">
+        <div className="absolute top-6 right-6 flex flex-col gap-3">
           <IconButton
             icon={List}
             onClick={() => setShowMission(!showMission)}
@@ -180,22 +211,28 @@ export default function HUD() {
         {showMission && <MissionPopup />}
 
         {/* Bottom Left - Badge and XP */}
-        <div 
+        <div
           onClick={() => setShowTaskHistory(true)}
-          className="absolute bottom-8 left-8 flex items-center gap-4 bg-white p-4 border-4 border-indigo-900 rounded-2xl shadow-[4px_4px_0_0_#4338ca] pointer-events-auto cursor-pointer hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:shadow-none"
+          className="absolute bottom-6 left-6 flex items-center gap-3 bg-white p-3 border-4 border-indigo-900 rounded-xl shadow-[3px_3px_0_0_#4338ca] pointer-events-auto cursor-pointer hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:shadow-none"
         >
-          <div className={`w-16 h-16 flex items-center justify-center rounded-full border-4 ${badgeColor.split(' ')[1]} ${badgeColor.split(' ')[2]}`}>
-            <Award className={`w-10 h-10 ${badgeColor.split(' ')[0]}`} />
+          <div
+            className={`w-12 h-12 flex items-center justify-center rounded-full border-4 ${badgeColor.split(" ")[1]} ${badgeColor.split(" ")[2]}`}
+          >
+            <Award className={`w-7 h-7 ${badgeColor.split(" ")[0]}`} />
           </div>
           <div className="flex flex-col">
-            <span className="font-black text-lg text-indigo-900 uppercase">{badgeName} Defender</span>
-            <div className="w-48 h-4 bg-gray-200 rounded-full border-2 border-indigo-900 mt-1 relative overflow-hidden">
-              <div 
-                className="h-full bg-yellow-400 absolute left-0 top-0 transition-all duration-1000 ease-out" 
+            <span className="font-black text-sm text-indigo-900 uppercase">
+              {badgeName} Defender
+            </span>
+            <div className="w-36 h-3 bg-gray-200 rounded-full border-2 border-indigo-900 mt-1 relative overflow-hidden">
+              <div
+                className="h-full bg-yellow-400 absolute left-0 top-0 transition-all duration-1000 ease-out"
                 style={{ width: `${tierProgress}%` }}
               ></div>
             </div>
-            <span className="text-xs text-indigo-700 font-bold mt-1 tracking-wide">{tierXP} / {tierRange} XP</span>
+            <span className="text-xs text-indigo-700 font-bold mt-1 tracking-wide">
+              {tierXP} / {tierRange} XP
+            </span>
           </div>
         </div>
       </div>
@@ -208,8 +245,8 @@ export default function HUD() {
       )}
 
       {showTaskHistory && (
-        <TaskHistoryOverlay 
-          onClose={() => setShowTaskHistory(false)} 
+        <TaskHistoryOverlay
+          onClose={() => setShowTaskHistory(false)}
           taskResults={taskResults}
         />
       )}

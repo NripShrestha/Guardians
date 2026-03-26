@@ -24,11 +24,11 @@ export default function LoadingScreen({ onFinish }) {
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-yellow-400 font-sans"
     >
       {/* Main Container - Matches your Login/Signup Card Style */}
-      <div className="bg-white p-12 rounded-[3rem] shadow-[10px_10px_0_0_#4338ca] border-4 border-indigo-900 w-full max-w-md text-center">
+      <div className="bg-white p-8 rounded-[2rem] shadow-[8px_8px_0_0_#4338ca] border-4 border-indigo-900 w-full max-w-sm text-center">
         {/* Modernized Flying File Animation */}
-        <div className="relative h-24 w-full flex items-center justify-between px-8 mb-6 overflow-hidden">
+        <div className="relative h-20 w-full flex items-center justify-between px-6 mb-4 overflow-hidden">
           {/* Source Icon (Computer/Cloud) */}
-          <div className="text-4xl z-10">🌐</div>
+          <div className="text-3xl z-10">🌐</div>
 
           {/* Flying File Piece */}
           <motion.div
@@ -43,7 +43,7 @@ export default function LoadingScreen({ onFinish }) {
               repeat: Infinity,
               ease: "linear",
             }}
-            className="absolute left-1/2 text-3xl"
+            className="absolute left-1/2 text-2xl"
           >
             📄
           </motion.div>
@@ -52,21 +52,21 @@ export default function LoadingScreen({ onFinish }) {
           <motion.div
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 1.5, repeat: Infinity }}
-            className="text-4xl z-10"
+            className="text-3xl z-10"
           >
             📂
           </motion.div>
         </div>
 
-        <h1 className="text-3xl font-black text-indigo-900 uppercase tracking-tighter mb-2">
+        <h1 className="text-2xl font-black text-indigo-900 uppercase tracking-tighter mb-2">
           Downloading Data...
         </h1>
-        <p className="text-indigo-600 font-bold mb-8 uppercase text-sm tracking-widest">
+        <p className="text-indigo-600 font-bold mb-5 uppercase text-sm tracking-widest">
           Securing your Hero Cape
         </p>
 
         {/* Chunky Progress Bar */}
-        <div className="relative h-8 w-full bg-indigo-50 rounded-2xl border-4 border-indigo-900 overflow-hidden">
+        <div className="relative h-6 w-full bg-indigo-50 rounded-2xl border-4 border-indigo-900 overflow-hidden">
           <motion.div
             className="h-full bg-pink-500 border-r-4 border-indigo-900"
             initial={{ width: 0 }}
@@ -80,7 +80,7 @@ export default function LoadingScreen({ onFinish }) {
           <span className="bg-indigo-900 text-white px-3 py-1 rounded-full text-xs font-black">
             {progress === 100 ? "READY!" : "LOADING..."}
           </span>
-          <span className="text-2xl font-black text-indigo-900 italic">
+          <span className="text-xl font-black text-indigo-900 italic">
             {Math.floor(progress)}%
           </span>
         </div>

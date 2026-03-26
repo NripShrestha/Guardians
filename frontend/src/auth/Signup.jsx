@@ -105,15 +105,15 @@ export default function Signup() {
       <div className="absolute top-10 left-10 w-20 h-20 bg-yellow-400 rounded-full blur-xl opacity-50 animate-bounce"></div>
       <div className="absolute bottom-10 right-10 w-32 h-32 bg-pink-400 rounded-full blur-xl opacity-50"></div>
 
-      <div className="relative bg-white p-8 rounded-[2rem] shadow-[0_20px_0_0_rgba(0,0,0,0.1)] border-4 border-indigo-900 w-full max-w-md transform transition-all hover:scale-[1.01]">
-        <h1 className="text-4xl font-black text-center text-indigo-900 mb-2 tracking-tight">
+      <div className="relative bg-white p-6 rounded-[1.5rem] shadow-[0_16px_0_0_rgba(0,0,0,0.1)] border-4 border-indigo-900 w-full max-w-sm transform transition-all hover:scale-[1.01]">
+        <h1 className="text-3xl font-black text-center text-indigo-900 mb-2 tracking-tight">
           HERO SIGNUP
         </h1>
         <p className="text-center text-indigo-600 font-bold mb-6">
           Start your digital safety quest!
         </p>
 
-        <form className="space-y-5" onSubmit={handleSubmit}>
+        <form className="space-y-3" onSubmit={handleSubmit}>
           <div className="relative">
             <label className="text-sm font-black text-indigo-900 ml-2 uppercase">
               Hero Name
@@ -121,7 +121,7 @@ export default function Signup() {
             <input
               type="text"
               placeholder="Hero123"
-              className={`w-full mt-1 px-4 py-3 rounded-2xl border-4 bg-indigo-50 font-bold transition-all focus:ring-4 focus:ring-yellow-300 outline-none ${
+              className={`w-full mt-1 px-3 py-2 rounded-2xl border-4 bg-indigo-50 font-bold transition-all focus:ring-4 focus:ring-yellow-300 outline-none ${
                 errors.username ? "border-red-400" : "border-indigo-100"
               }`}
               value={username}
@@ -141,7 +141,7 @@ export default function Signup() {
             <input
               type="email"
               placeholder="hero@gmail.com"
-              className={`w-full mt-1 px-4 py-3 rounded-2xl border-4 bg-indigo-50 font-bold transition-all focus:ring-4 focus:ring-yellow-300 outline-none ${
+              className={`w-full mt-1 px-3 py-2 rounded-2xl border-4 bg-indigo-50 font-bold transition-all focus:ring-4 focus:ring-yellow-300 outline-none ${
                 errors.email ? "border-red-400" : "border-indigo-100"
               }`}
               value={email}
@@ -162,7 +162,7 @@ export default function Signup() {
               <input
                 type="number"
                 placeholder="10"
-                className={`w-full mt-1 px-4 py-3 rounded-2xl border-4 bg-indigo-50 font-bold focus:ring-4 focus:ring-yellow-300 outline-none ${
+                className={`w-full mt-1 px-3 py-2 rounded-2xl border-4 bg-indigo-50 font-bold focus:ring-4 focus:ring-yellow-300 outline-none ${
                   errors.age ? "border-red-400" : "border-indigo-100"
                 }`}
                 value={age}
@@ -179,7 +179,7 @@ export default function Signup() {
                 Gender
               </label>
               <select
-                className={`w-full mt-1 px-4 py-3 rounded-2xl border-4 bg-indigo-50 font-bold outline-none ${
+                className={`w-full mt-1 px-3 py-2 rounded-2xl border-4 bg-indigo-50 font-bold outline-none ${
                   errors.gender ? "border-red-400" : "border-indigo-100"
                 }`}
                 value={gender}
@@ -204,7 +204,7 @@ export default function Signup() {
             <input
               type="text"
               placeholder="School Name"
-              className={`w-full mt-1 px-4 py-3 rounded-2xl border-4 bg-indigo-50 font-bold transition-all focus:ring-4 focus:ring-yellow-300 outline-none ${
+              className={`w-full mt-1 px-3 py-2 rounded-2xl border-4 bg-indigo-50 font-bold transition-all focus:ring-4 focus:ring-yellow-300 outline-none ${
                 errors.schoolName ? "border-red-400" : "border-indigo-100"
               }`}
               value={schoolName}
@@ -224,7 +224,7 @@ export default function Signup() {
             <input
               type="password"
               placeholder="••••••••"
-              className={`w-full mt-1 px-4 py-3 rounded-2xl border-4 bg-indigo-50 font-bold focus:ring-4 focus:ring-yellow-300 outline-none ${
+              className={`w-full mt-1 px-3 py-2 rounded-2xl border-4 bg-indigo-50 font-bold focus:ring-4 focus:ring-yellow-300 outline-none ${
                 errors.password ? "border-red-400" : "border-indigo-100"
               }`}
               value={password}
@@ -243,7 +243,7 @@ export default function Signup() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full bg-yellow-400 hover:bg-yellow-500 text-indigo-900 py-4 rounded-2xl text-xl font-black border-b-8 border-yellow-600 active:border-b-0 active:translate-y-2 transition-all ${
+            className={`w-full bg-yellow-400 hover:bg-yellow-500 text-indigo-900 py-3 rounded-2xl text-base font-black border-b-4 border-yellow-600 active:border-b-0 active:translate-y-1 transition-all ${
               isSubmitting ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
@@ -251,7 +251,7 @@ export default function Signup() {
           </button>
         </form>
 
-        <p className="text-center mt-6 font-bold text-indigo-400">
+        <p className="text-center mt-4 font-bold text-indigo-400">
           Already a Hero?{" "}
           <Link to="/login" className="text-pink-500 hover:underline">
             Log In Here 🔐

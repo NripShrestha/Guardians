@@ -60,8 +60,80 @@ const CHARACTER_CONFIGS = {
   },
 };
 
+// ─────────────────────────────────────────────────────────────────
+// Mouse / Touchpad drag state (module-level so it persists across renders)
+// Left-button drag on the canvas → virtual joystick axis
+// ─────────────────────────────────────────────────────────────────
+const dragState = {
+  active: false,
+  startX: 0,
+  startY: 0,
+  deltaX: 0,
+  deltaY: 0,
+};
+
+// Dead-zone radius in px before drag registers as movement
+const DRAG_DEAD_ZONE = 8;
+// Max drag distance mapped to full-speed (px)
+const DRAG_MAX_DISTANCE = 80;
+
+function setupDragListeners() {
+  const onPointerDown = (e) => {
+    // Only left button (mouse) or first touch
+    if (e.button !== undefined && e.button !== 0) return;
+    dragState.active = true;
+    dragState.startX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
+    dragState.startY = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
+    dragState.deltaX = 0;
+    dragState.deltaY = 0;
+  };
+
+  const onPointerMove = (e) => {
+    if (!dragState.active) return;
+    const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? dragState.startX;
+    const clientY = e.clientY ?? e.touches?.[0]?.clientY ?? dragState.startY;
+    dragState.deltaX = clientX - dragState.startX;
+    dragState.deltaY = clientY - dragState.startY;
+  };
+
+  const onPointerUp = () => {
+    dragState.active = false;
+    dragState.deltaX = 0;
+    dragState.deltaY = 0;
+  };
+
+  window.addEventListener("mousedown", onPointerDown);
+  window.addEventListener("mousemove", onPointerMove);
+  window.addEventListener("mouseup", onPointerUp);
+  window.addEventListener("touchstart", onPointerDown, { passive: true });
+  window.addEventListener("touchmove", onPointerMove, { passive: true });
+  window.addEventListener("touchend", onPointerUp);
+
+  return () => {
+    window.removeEventListener("mousedown", onPointerDown);
+    window.removeEventListener("mousemove", onPointerMove);
+    window.removeEventListener("mouseup", onPointerUp);
+    window.removeEventListener("touchstart", onPointerDown);
+    window.removeEventListener("touchmove", onPointerMove);
+    window.removeEventListener("touchend", onPointerUp);
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Helper: normalise drag delta → [-1, 1] axis value
+// ─────────────────────────────────────────────────────────────────
+function normaliseDrag(value) {
+  const abs = Math.abs(value);
+  if (abs < DRAG_DEAD_ZONE) return 0;
+  const clamped = Math.min(abs, DRAG_MAX_DISTANCE);
+  return (
+    ((clamped - DRAG_DEAD_ZONE) / (DRAG_MAX_DISTANCE - DRAG_DEAD_ZONE)) *
+    Math.sign(value)
+  );
+}
+
 export default function CharacterController({
-  characterType = "timmy", // "timmy" or "girl"
+  characterType = "timmy",
   scale,
   position,
   onPositionUpdate,
@@ -70,9 +142,7 @@ export default function CharacterController({
   const group = useRef();
   const rigidBodyRef = useRef();
 
-  // Get character configuration
   const config = CHARACTER_CONFIGS[characterType];
-
   if (!config) {
     console.error(`Unknown character type: ${characterType}`);
     return null;
@@ -81,7 +151,6 @@ export default function CharacterController({
   const { nodes, materials, animations } = useGLTF(config.modelPath);
   const { actions } = useAnimations(animations, group);
 
-  // Movement state
   const [currentAnimation, setCurrentAnimation] = useState(
     config.animations.IDLE,
   );
@@ -90,20 +159,18 @@ export default function CharacterController({
   const targetRotation = useRef(0);
   const currentRotation = useRef(0);
 
-  // Keyboard state
+  // Keyboard state — WASD + Arrow Keys
   const keys = useRef({
-    w: false,
-    a: false,
-    s: false,
-    d: false,
+    forward: false, // W or ArrowUp
+    backward: false, // S or ArrowDown
+    left: false, // A or ArrowLeft
+    right: false, // D or ArrowRight
     shift: false,
   });
 
-  // Idle timer
   const idleTimer = useRef(0);
   const isMoving = useRef(false);
 
-  // Movement speeds
   const WALK_SPEED = 1;
   const RUN_SPEED = 2;
   const ROTATION_SPEED = 3;
@@ -116,25 +183,74 @@ export default function CharacterController({
     }
   }, []);
 
-  // Keyboard event handlers
+  // Set up mouse / touchpad drag listeners (once)
+  useEffect(() => {
+    const cleanup = setupDragListeners();
+    return cleanup;
+  }, []);
+
+  // Keyboard event handlers — WASD + Arrow Keys
   useEffect(() => {
     if (disabled) return;
+
     const handleKeyDown = (e) => {
-      const key = e.key.toLowerCase();
-      if (key === "w") keys.current.w = true;
-      if (key === "a") keys.current.a = true;
-      if (key === "s") keys.current.s = true;
-      if (key === "d") keys.current.d = true;
-      if (key === "shift") keys.current.shift = true;
+      switch (e.key) {
+        case "w":
+        case "W":
+        case "ArrowUp":
+          keys.current.forward = true;
+          break;
+        case "s":
+        case "S":
+        case "ArrowDown":
+          keys.current.backward = true;
+          break;
+        case "a":
+        case "A":
+        case "ArrowLeft":
+          keys.current.left = true;
+          break;
+        case "d":
+        case "D":
+        case "ArrowRight":
+          keys.current.right = true;
+          break;
+        case "Shift":
+          keys.current.shift = true;
+          break;
+        default:
+          break;
+      }
     };
 
     const handleKeyUp = (e) => {
-      const key = e.key.toLowerCase();
-      if (key === "w") keys.current.w = false;
-      if (key === "a") keys.current.a = false;
-      if (key === "s") keys.current.s = false;
-      if (key === "d") keys.current.d = false;
-      if (key === "shift") keys.current.shift = false;
+      switch (e.key) {
+        case "w":
+        case "W":
+        case "ArrowUp":
+          keys.current.forward = false;
+          break;
+        case "s":
+        case "S":
+        case "ArrowDown":
+          keys.current.backward = false;
+          break;
+        case "a":
+        case "A":
+        case "ArrowLeft":
+          keys.current.left = false;
+          break;
+        case "d":
+        case "D":
+        case "ArrowRight":
+          keys.current.right = false;
+          break;
+        case "Shift":
+          keys.current.shift = false;
+          break;
+        default:
+          break;
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -150,20 +266,14 @@ export default function CharacterController({
   useEffect(() => {
     if (!actions[currentAnimation]) return;
 
-    // Fade out all animations
     Object.values(actions).forEach((action) => {
-      if (action !== actions[currentAnimation]) {
-        action.fadeOut(0.2);
-      }
+      if (action !== actions[currentAnimation]) action.fadeOut(0.2);
     });
 
-    // Fade in current animation
     actions[currentAnimation].reset().fadeIn(0.2).play();
 
     return () => {
-      if (actions[currentAnimation]) {
-        actions[currentAnimation].fadeOut(0.2);
-      }
+      if (actions[currentAnimation]) actions[currentAnimation].fadeOut(0.2);
     };
   }, [currentAnimation, actions]);
 
@@ -171,58 +281,67 @@ export default function CharacterController({
   useFrame((state, delta) => {
     if (!rigidBodyRef.current) return;
 
-    // 👇 HARD FREEZE CHARACTER
     if (disabled) {
-      // Stop all movement immediately
       rigidBodyRef.current.setLinvel({ x: 0, y: 0, z: 0 });
-
-      // Force idle animation
       if (currentAnimation !== config.animations.IDLE) {
         setCurrentAnimation(config.animations.IDLE);
       }
-
-      return; // ⛔ EXIT FRAME LOOP
+      return;
     }
 
-    const { w, a, s, d, shift } = keys.current;
+    const { forward, backward, left, right, shift } = keys.current;
 
-    // Check if any movement key is pressed
-    const hasInput = w || a || s || d;
+    // ── Drag / touch axis ────────────────────────────────────────
+    const dragX = normaliseDrag(dragState.deltaX); // left/right
+    const dragZ = normaliseDrag(dragState.deltaY); // forward/backward
+
+    // Combine keyboard + drag inputs into a single [-1,1] axis each
+    let axisZ = 0; // negative = forward, positive = backward
+    let axisX = 0; // negative = left,    positive = right
+
+    if (forward) axisZ -= 1;
+    if (backward) axisZ += 1;
+    if (left) axisX -= 1;
+    if (right) axisX += 1;
+
+    // Drag: dragging UP (negative deltaY) moves forward
+    axisZ += dragZ;
+    axisX += dragX;
+
+    // Clamp composite axes to [-1, 1]
+    axisZ = Math.max(-1, Math.min(1, axisZ));
+    axisX = Math.max(-1, Math.min(1, axisX));
+
+    const hasInput = Math.abs(axisZ) > 0.01 || Math.abs(axisX) > 0.01;
+    // Run if shift held OR drag extends beyond 60 % of max distance
+    const isDraggingFast =
+      dragState.active &&
+      Math.sqrt(dragState.deltaX ** 2 + dragState.deltaY ** 2) >
+        DRAG_MAX_DISTANCE * 0.6;
+    const isRunning = shift || isDraggingFast;
+
     isMoving.current = hasInput;
 
-    // Reset idle timer if moving
     if (hasInput) {
       idleTimer.current = 0;
     } else {
-      // Increment idle timer when not moving
       idleTimer.current += delta;
     }
 
-    // Determine movement direction relative to camera
-    moveDirection.current.set(0, 0, 0);
+    // Build move direction vector
+    moveDirection.current.set(axisX, 0, axisZ);
+    if (moveDirection.current.length() > 1) moveDirection.current.normalize();
 
-    if (w) moveDirection.current.z -= 1;
-    if (s) moveDirection.current.z += 1;
-    if (a) moveDirection.current.x -= 1;
-    if (d) moveDirection.current.x += 1;
-
-    // Normalize diagonal movement
-    if (moveDirection.current.length() > 0) {
-      moveDirection.current.normalize();
-    }
-
-    // Get camera direction
+    // Get camera-relative world direction
     const camera = state.camera;
     const cameraDirection = new THREE.Vector3();
     camera.getWorldDirection(cameraDirection);
     cameraDirection.y = 0;
     cameraDirection.normalize();
 
-    // Calculate right vector for strafing
     const cameraRight = new THREE.Vector3();
     cameraRight.crossVectors(camera.up, cameraDirection).normalize();
 
-    // Apply camera-relative movement
     const worldMoveDirection = new THREE.Vector3();
     worldMoveDirection.addScaledVector(
       cameraDirection,
@@ -231,26 +350,22 @@ export default function CharacterController({
     worldMoveDirection.addScaledVector(cameraRight, -moveDirection.current.x);
     worldMoveDirection.normalize();
 
-    // Get current velocity from physics body
     const currentVelocity = rigidBodyRef.current.linvel();
-
-    // Determine animation based on movement
     let targetAnimation = config.animations.IDLE;
 
     if (hasInput) {
-      // Moving - choose walk or run
-      const speed = shift ? RUN_SPEED : WALK_SPEED;
+      const speed = isRunning ? RUN_SPEED : WALK_SPEED;
       velocity.current.copy(worldMoveDirection).multiplyScalar(speed);
 
-      targetAnimation = shift ? config.animations.RUN : config.animations.WALK;
+      targetAnimation = isRunning
+        ? config.animations.RUN
+        : config.animations.WALK;
 
-      // Only rotate character when moving forward or sideways
-      // Don't rotate when only pressing S (backward)
-      const isMovingForward = w;
-      const isStrafing = a || d;
+      // Rotate toward movement direction (not when moving purely backward)
+      const movingForward = axisZ < -0.01;
+      const strafing = Math.abs(axisX) > 0.01;
 
-      if (isMovingForward || isStrafing) {
-        // Calculate target rotation towards movement direction
+      if (movingForward || strafing) {
         if (worldMoveDirection.length() > 0.1) {
           targetRotation.current = Math.atan2(
             worldMoveDirection.x,
@@ -258,19 +373,14 @@ export default function CharacterController({
           );
         }
       }
-      // If only pressing S, keep current rotation (walk backward)
 
-      // Apply velocity to rigid body (preserve Y velocity for gravity)
       rigidBodyRef.current.setLinvel({
         x: velocity.current.x,
         y: currentVelocity.y,
         z: velocity.current.z,
       });
-
-      // Wake up physics body
       rigidBodyRef.current.wakeUp();
     } else {
-      // Not moving - apply friction
       const frictionFactor = 0.85;
       rigidBodyRef.current.setLinvel({
         x: currentVelocity.x * frictionFactor,
@@ -278,48 +388,34 @@ export default function CharacterController({
         z: currentVelocity.z * frictionFactor,
       });
 
-      // Stop completely if velocity is very low
       if (
         Math.abs(currentVelocity.x) < 0.01 &&
         Math.abs(currentVelocity.z) < 0.01
       ) {
-        rigidBodyRef.current.setLinvel({
-          x: 0,
-          y: currentVelocity.y,
-          z: 0,
-        });
+        rigidBodyRef.current.setLinvel({ x: 0, y: currentVelocity.y, z: 0 });
       }
 
-      // Switch to sad idle after 15 seconds
-      if (idleTimer.current >= 15) {
-        targetAnimation = config.animations.SAD_IDLE;
-      } else {
-        targetAnimation = config.animations.IDLE;
-      }
+      targetAnimation =
+        idleTimer.current >= 15
+          ? config.animations.SAD_IDLE
+          : config.animations.IDLE;
     }
 
-    // Switch animation if needed
     if (targetAnimation !== currentAnimation) {
       setCurrentAnimation(targetAnimation);
     }
 
-    // Smooth rotation interpolation (only when we want to rotate)
-    if (hasInput && (w || a || d)) {
+    // Smooth rotation
+    if (hasInput && (axisZ < -0.01 || Math.abs(axisX) > 0.01)) {
       let rotationDiff = targetRotation.current - currentRotation.current;
-
-      // Normalize rotation difference to [-PI, PI]
       while (rotationDiff > Math.PI) rotationDiff -= Math.PI * 2;
       while (rotationDiff < -Math.PI) rotationDiff += Math.PI * 2;
-
       currentRotation.current += rotationDiff * ROTATION_SPEED * delta;
     }
 
-    // Apply rotation to character
     if (group.current) {
       group.current.rotation.y = currentRotation.current;
     }
-
-    // Physics position reporting removed for performance
   });
 
   return (
@@ -344,6 +440,5 @@ export default function CharacterController({
   );
 }
 
-// Preload both character models
 useGLTF.preload("/models/NewTimmy.glb");
 useGLTF.preload("/models/Woman.glb");

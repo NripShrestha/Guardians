@@ -36,9 +36,9 @@ export default function CharacterSelection() {
       <div className="absolute bottom-5 right-10 w-24 h-24 bg-teal-200 rounded-full blur-xl opacity-40"></div>
 
       {/* Main Container - Scaled down */}
-      <div className="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-[10px_10px_0_0_#1e1b4b] border-4 border-indigo-950 w-full max-w-2xl relative z-10">
+      <div className="bg-white p-5 md:p-6 rounded-[2rem] shadow-[8px_8px_0_0_#1e1b4b] border-4 border-indigo-950 w-full max-w-xl relative z-10">
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-black text-indigo-950 uppercase tracking-tighter">
+          <h1 className="text-2xl font-black text-indigo-950 uppercase tracking-tighter">
             Identify Your Hero
           </h1>
         </div>
@@ -71,7 +71,7 @@ export default function CharacterSelection() {
                 {/* Character Circle - Resized to 32 (128px) */}
                 <div
                   className={`
-                  w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-indigo-950 mb-3 overflow-hidden relative
+                  w-24 h-24 md:w-28 md:h-28 rounded-full border-4 border-indigo-950 mb-3 overflow-hidden relative
                   ${char.color} shadow-[inner_0_4px_0_rgba(0,0,0,0.1)]
                 `}
                 >
@@ -84,7 +84,7 @@ export default function CharacterSelection() {
                   />
                 </div>
 
-                <h2 className="text-lg font-black text-indigo-950 uppercase mb-1">
+                <h2 className="text-base font-black text-indigo-950 uppercase mb-1">
                   {char.name}
                 </h2>
 

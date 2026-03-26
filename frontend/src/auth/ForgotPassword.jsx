@@ -52,7 +52,9 @@ export default function ForgotPassword() {
         alert("🎉 Password reset successfully! Time to log in!");
         navigate("/login");
       } else {
-        alert("⚠️ " + (result.data.message || "Wait! That's not right. Try again!"));
+        alert(
+          "⚠️ " + (result.data.message || "Wait! That's not right. Try again!"),
+        );
       }
     } catch (err) {
       console.error(err);
@@ -68,20 +70,20 @@ export default function ForgotPassword() {
       <div className="absolute top-10 left-10 w-20 h-20 bg-yellow-400 rounded-full blur-xl opacity-50 animate-bounce"></div>
       <div className="absolute bottom-10 right-10 w-32 h-32 bg-pink-400 rounded-full blur-xl opacity-50"></div>
 
-      <div className="relative bg-white p-8 rounded-[2rem] shadow-[0_20px_0_0_rgba(0,0,0,0.1)] border-4 border-indigo-900 w-full max-w-sm">
-        <h1 className="text-3xl font-black text-center text-indigo-900 mb-2 uppercase tracking-tighter">
+      <div className="relative bg-white p-6 rounded-[1.5rem] shadow-[0_16px_0_0_rgba(0,0,0,0.1)] border-4 border-indigo-900 w-full max-w-xs">
+        <h1 className="text-2xl font-black text-center text-indigo-900 mb-2 uppercase tracking-tighter">
           Forgot Password?
         </h1>
         <p className="text-center text-indigo-600 font-bold mb-6">
           Answer your security question!
         </p>
 
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <input
               type="email"
               placeholder="Your Email"
-              className={`w-full px-5 py-4 rounded-2xl border-4 bg-indigo-50 font-bold focus:border-indigo-400 outline-none transition-all ${
+              className={`w-full px-4 py-3 rounded-2xl border-4 bg-indigo-50 font-bold focus:border-indigo-400 outline-none transition-all ${
                 errors.email ? "border-red-400" : "border-indigo-50"
               }`}
               value={email}
@@ -98,7 +100,7 @@ export default function ForgotPassword() {
             <input
               type="text"
               placeholder="Your School Name"
-              className={`w-full px-5 py-4 rounded-2xl border-4 bg-indigo-50 font-bold focus:border-indigo-400 outline-none transition-all ${
+              className={`w-full px-4 py-3 rounded-2xl border-4 bg-indigo-50 font-bold focus:border-indigo-400 outline-none transition-all ${
                 errors.schoolName ? "border-red-400" : "border-indigo-50"
               }`}
               value={schoolName}
@@ -115,7 +117,7 @@ export default function ForgotPassword() {
             <input
               type="password"
               placeholder="New Secret Password"
-              className={`w-full px-5 py-4 rounded-2xl border-4 bg-indigo-50 font-bold focus:border-indigo-400 outline-none transition-all ${
+              className={`w-full px-4 py-3 rounded-2xl border-4 bg-indigo-50 font-bold focus:border-indigo-400 outline-none transition-all ${
                 errors.newPassword ? "border-red-400" : "border-indigo-50"
               }`}
               value={newPassword}
@@ -134,7 +136,7 @@ export default function ForgotPassword() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full bg-yellow-400 hover:bg-yellow-500 text-indigo-900 py-4 rounded-2xl text-xl font-black border-b-8 border-yellow-600 active:border-b-0 active:translate-y-2 transition-all ${
+            className={`w-full bg-yellow-400 hover:bg-yellow-500 text-indigo-900 py-3 rounded-2xl text-base font-black border-b-4 border-yellow-600 active:border-b-0 active:translate-y-1 transition-all ${
               isSubmitting ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
@@ -142,7 +144,7 @@ export default function ForgotPassword() {
           </button>
         </form>
 
-        <p className="text-center mt-6 font-bold text-indigo-400">
+        <p className="text-center mt-4 font-bold text-indigo-400">
           Remembered it?{" "}
           <Link to="/login" className="text-pink-500 hover:underline">
             Log In Here 🔐

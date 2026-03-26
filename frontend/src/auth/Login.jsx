@@ -41,12 +41,18 @@ export default function Login() {
       if (result.data.success) {
         // ✅ FIXED: was "token", must match what MissionContext & HUD read
         localStorage.setItem("guardians_token", result.data.token);
-        
+
         try {
-          const progressRes = await axios.get("http://localhost:3001/progress", {
-            headers: { Authorization: `Bearer ${result.data.token}` }
-          });
-          if (progressRes.data.success && progressRes.data.progress.characterType) {
+          const progressRes = await axios.get(
+            "http://localhost:3001/progress",
+            {
+              headers: { Authorization: `Bearer ${result.data.token}` },
+            },
+          );
+          if (
+            progressRes.data.success &&
+            progressRes.data.progress.characterType
+          ) {
             navigate("/home");
           } else {
             navigate("/choose-character");
@@ -69,22 +75,22 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-yellow-400 p-4 font-sans">
-      <div className="bg-white p-10 rounded-[3rem] shadow-[10px_10px_0_0_#4338ca] border-4 border-indigo-900 w-full max-w-sm">
+      <div className="bg-white p-7 rounded-[2rem] shadow-[8px_8px_0_0_#4338ca] border-4 border-indigo-900 w-full max-w-xs">
         <div className="text-center mb-6">
-          <div className="inline-block p-4 bg-indigo-100 rounded-full mb-2">
-            <span className="text-4xl">🔐</span>
+          <div className="inline-block p-3 bg-indigo-100 rounded-full mb-2">
+            <span className="text-3xl">🔐</span>
           </div>
-          <h1 className="text-3xl font-black text-indigo-900 uppercase tracking-tighter">
+          <h1 className="text-2xl font-black text-indigo-900 uppercase tracking-tighter">
             Welcome Back!
           </h1>
         </div>
 
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <input
               type="email"
               placeholder="Your Email"
-              className={`w-full px-5 py-4 rounded-2xl border-4 bg-indigo-50 font-bold focus:border-indigo-400 outline-none transition-all ${
+              className={`w-full px-4 py-3 rounded-2xl border-4 bg-indigo-50 font-bold focus:border-indigo-400 outline-none transition-all ${
                 errors.email ? "border-red-400" : "border-indigo-50"
               }`}
               value={email}
@@ -101,7 +107,7 @@ export default function Login() {
             <input
               type="password"
               placeholder="Secret Password"
-              className={`w-full px-5 py-4 rounded-2xl border-4 bg-indigo-50 font-bold focus:border-indigo-400 outline-none transition-all ${
+              className={`w-full px-4 py-3 rounded-2xl border-4 bg-indigo-50 font-bold focus:border-indigo-400 outline-none transition-all ${
                 errors.password ? "border-red-400" : "border-indigo-50"
               }`}
               value={password}
@@ -117,7 +123,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full bg-pink-500 hover:bg-pink-600 text-white py-4 rounded-2xl text-xl font-black border-b-8 border-pink-800 active:border-b-0 active:translate-y-2 transition-all ${
+            className={`w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-2xl text-base font-black border-b-4 border-pink-800 active:border-b-0 active:translate-y-1 transition-all ${
               isSubmitting ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
@@ -125,7 +131,7 @@ export default function Login() {
           </button>
         </form>
 
-        <p className="text-center mt-8 font-bold text-gray-400 uppercase text-xs tracking-widest">
+        <p className="text-center mt-5 font-bold text-gray-400 uppercase text-xs tracking-widest">
           New Explorer?{" "}
           <Link
             to="/register"
