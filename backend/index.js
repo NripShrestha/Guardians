@@ -74,6 +74,21 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.get("/me", authenticateToken, async (req, res) => {
+  try {
+    const user = await SignupModel.findById(req.user.id).select(
+      "username email age gender schoolName",
+    );
+    if (!user)
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    res.json({ success: true, user });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
 // ── FORGOT PASSWORD ──────────────────────────────────────────────────────────
 app.post("/forgot-password", async (req, res) => {
   const { email, schoolName, newPassword } = req.body;
@@ -201,6 +216,8 @@ app.get("/progress", authenticateToken, async (req, res) => {
         currentMissionId: progress.currentMissionId,
         currentStage: progress.currentStage,
         shooterHighscore: progress.shooterHighscore || 0,
+        shooterPlays: progress.shooterPlays || 0,
+        shooterHighscoreCount: progress.shooterHighscoreCount || 0,
         characterType: progress.characterType,
         playerPosition: progress.playerPosition,
         taskResults: progress.taskResults,
@@ -215,7 +232,7 @@ app.get("/progress", authenticateToken, async (req, res) => {
 // ── SAVE PROGRESS ─────────────────────────────────────────────────────────────
 // Called when player clicks the Save button in HUD
 app.post("/progress", authenticateToken, async (req, res) => {
-  const { currentMissionId, currentStage, taskResult, shooterHighscore, characterType, playerPosition } = req.body;
+  const { currentMissionId, currentStage, taskResult, shooterHighscore, shooterPlays, shooterHighscoreCount, characterType, playerPosition, taskResults } = req.body;
 
   if (!currentMissionId || !currentStage) {
     return res
@@ -233,6 +250,8 @@ app.post("/progress", authenticateToken, async (req, res) => {
         currentMissionId,
         currentStage,
         shooterHighscore: shooterHighscore || 0,
+        shooterPlays: shooterPlays || 0,
+        shooterHighscoreCount: shooterHighscoreCount || 0,
         characterType: characterType || null,
         playerPosition: playerPosition || { x: -2, y: 2.5, z: 3 },
         taskResults: req.body.taskResults || (taskResult ? [taskResult] : []),
@@ -246,6 +265,12 @@ app.post("/progress", authenticateToken, async (req, res) => {
 
       if (shooterHighscore !== undefined) {
         progressDoc.shooterHighscore = Math.max(progressDoc.shooterHighscore || 0, shooterHighscore);
+      }
+      if (shooterPlays !== undefined) {
+        progressDoc.shooterPlays = shooterPlays;
+      }
+      if (shooterHighscoreCount !== undefined) {
+        progressDoc.shooterHighscoreCount = shooterHighscoreCount;
       }
 
       // Overwrite the existing logic and use the new array behavior

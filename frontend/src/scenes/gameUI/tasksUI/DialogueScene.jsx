@@ -634,6 +634,269 @@ const TASK7_FINAL_RESPONSES = {
   understood: "Exactly. Calm thinking is your best defense.",
 };
 
+// ─── TASK 8 DIALOGUE DATA ────────────────────────────────────────────────────
+
+const TASK8_SCENE_1_OPENING = [
+  {
+    speaker: "Manager",
+    text: "Before you continue, I need to prepare you for something different.",
+  },
+  {
+    speaker: "Manager",
+    text: "The threats we've covered so far have been directed at you.",
+  },
+  {
+    speaker: "Manager",
+    text: "But what happens when someone you know is the target?",
+  },
+  {
+    speaker: "Manager",
+    text: "You're about to receive a message on your phone.",
+  },
+  {
+    speaker: "Manager",
+    text: "A friend named Mia needs your help.",
+  },
+  {
+    speaker: "Manager",
+    text: "She's being cyberbullied — someone created a fake account using her identity.",
+  },
+  {
+    speaker: "Manager",
+    text: "Guide her through it carefully.",
+  },
+  {
+    speaker: "Manager",
+    text: "Every decision you make for her will have consequences.",
+  },
+];
+
+const TASK8_PASS_INITIAL = [
+  { speaker: "Manager", text: "You did the right things." },
+  { speaker: "Manager", text: "You didn't panic." },
+  { speaker: "Manager", text: "You didn't escalate the situation." },
+  { speaker: "Manager", text: "You helped her take control." },
+];
+
+const TASK8_PASS_LECTURE = [
+  {
+    speaker: "Manager",
+    text: "Cyberbullying isn't just about mean messages.",
+  },
+  {
+    speaker: "Manager",
+    text: "It's about reputation damage.",
+  },
+  {
+    speaker: "Manager",
+    text: "A fake account can destroy trust in minutes.",
+  },
+  {
+    speaker: "Manager",
+    text: "Reporting creates accountability.",
+  },
+  {
+    speaker: "Manager",
+    text: "Evidence creates protection.",
+  },
+  {
+    speaker: "Manager",
+    text: "And communication rebuilds trust.",
+  },
+  {
+    speaker: "Manager",
+    text: "But the most important thing you did…",
+  },
+  {
+    speaker: "Manager",
+    text: "…was stay calm.",
+  },
+];
+
+const TASK8_FAIL_INITIAL = [
+  { speaker: "Manager", text: "You tried to help…" },
+  { speaker: "Manager", text: "But some of your choices made things worse." },
+];
+
+const TASK8_FAIL_LECTURE = [
+  {
+    speaker: "Manager",
+    text: "Cyberbullying spreads fast.",
+  },
+  {
+    speaker: "Manager",
+    text: "Every wrong response increases the damage.",
+  },
+  {
+    speaker: "Manager",
+    text: "Fighting back gives attention to the attacker.",
+  },
+  {
+    speaker: "Manager",
+    text: "Ignoring it allows it to grow.",
+  },
+  {
+    speaker: "Manager",
+    text: "And deleting removes evidence.",
+  },
+  {
+    speaker: "Manager",
+    text: "The correct approach is structured.",
+  },
+  {
+    speaker: "Manager",
+    text: "Report. Preserve evidence. Communicate clearly. Involve responsible adults.",
+  },
+  {
+    speaker: "Manager",
+    text: "Let's make sure you remember that.",
+  },
+];
+
+const TASK8_REFLECTION_OPTIONS = [
+  { id: "why_people", label: "Why didn't people question it?" },
+  { id: "escalated", label: "It escalated really quickly." },
+  { id: "report_fail", label: "What if reporting doesn't work?" },
+];
+
+const TASK8_REFLECTION_RESPONSES = {
+  why_people: "People react faster than they verify.",
+  escalated: "That's how online systems work. Speed over truth.",
+  report_fail: "Then you escalate — with evidence.",
+};
+
+// ─── TASK 9 DIALOGUE DATA ────────────────────────────────────────────────────
+
+// USB found prompt — shown as an overlay (not the standard NPC dialogue box)
+// Handled directly inside Task9USBFound component below.
+
+// ── PATH A: PLUG IN (FAIL) ──
+
+const TASK9_FAIL_INCIDENT_LINES = [
+  {
+    speaker: "You",
+    text: "Something's wrong. I plugged in a USB I found… and the computer started acting weird.",
+  },
+  { speaker: "Manager", text: "You plugged in an unknown USB?" },
+  { speaker: "Manager", text: "That's extremely dangerous." },
+];
+
+const TASK9_FAIL_EXPLANATION = [
+  { speaker: "Manager", text: "That wasn't just a normal USB." },
+  { speaker: "Manager", text: "It was a BadUSB device." },
+  {
+    speaker: "Manager",
+    text: "Devices like that are programmed to act as keyboards or system tools.",
+  },
+  { speaker: "Manager", text: "They don't need permission." },
+  { speaker: "Manager", text: "They execute commands instantly." },
+  { speaker: "Manager", text: "The moment you plugged it in…" },
+  { speaker: "Manager", text: "It ran scripts…" },
+  { speaker: "Manager", text: "Installed malware…" },
+  { speaker: "Manager", text: "And opened a backdoor for attackers." },
+  { speaker: "Manager", text: "This is how real attacks happen." },
+  {
+    speaker: "Manager",
+    text: "People trust physical objects more than digital ones.",
+  },
+  {
+    speaker: "Manager",
+    text: "But a USB can be more dangerous than a suspicious email.",
+  },
+];
+
+const TASK9_FAIL_CHOICE_OPTIONS = [
+  { id: "didnt_know", label: "I didn't think a USB could do that." },
+  { id: "what_happened", label: "What could have happened?" },
+];
+
+const TASK9_FAIL_CHOICE_RESPONSES = {
+  didnt_know: "That's exactly why these attacks work.",
+  what_happened:
+    "Data theft. System control. Even spreading to other machines.",
+};
+
+const TASK9_FAIL_REVEAL = [
+  {
+    speaker: "Manager",
+    text: "Don't worry — that was my USB. No harm has been done to your PC.",
+  },
+  { speaker: "Manager", text: "I was testing you… and you failed." },
+  { speaker: "Manager", text: "But you learned something new." },
+  {
+    speaker: "Manager",
+    text: "You won't be making this mistake again, will you?",
+  },
+];
+
+const TASK9_FAIL_APOLOGY_OPTIONS = [
+  { id: "no_never", label: "No, I will never make this mistake again." },
+];
+
+const TASK9_FAIL_FINAL_LINES = [
+  { speaker: "Manager", text: "Good." },
+  { speaker: "Manager", text: "You should never plug in unknown devices." },
+  { speaker: "Manager", text: "Always report them instead." },
+];
+
+// ── PATH B: REPORT (PASS) ──
+
+const TASK9_PASS_OPENING_LINES = [
+  { speaker: "You", text: "I found a USB on the ground. I didn't plug it in." },
+  { speaker: "Manager", text: "Good. That was the right decision." },
+  { speaker: "Manager", text: "That USB… was actually reported missing." },
+  { speaker: "Manager", text: "And it wasn't safe." },
+];
+
+const TASK9_PASS_EXPLANATION = [
+  { speaker: "Manager", text: "That device contained a malicious payload." },
+  { speaker: "Manager", text: "If someone plugged it into a system…" },
+  { speaker: "Manager", text: "It would automatically execute commands." },
+  { speaker: "Manager", text: "No clicking required." },
+  { speaker: "Manager", text: "No warning." },
+  { speaker: "Manager", text: "It could have installed malware…" },
+  { speaker: "Manager", text: "Stolen files…" },
+  { speaker: "Manager", text: "Given remote access to attackers." },
+  { speaker: "Manager", text: "I should apologize." },
+  {
+    speaker: "Manager",
+    text: "That device shouldn't have been left unattended.",
+  },
+  { speaker: "Manager", text: "You could have been put at serious risk." },
+];
+
+const TASK9_PASS_USER_OPTIONS = [
+  { id: "figured", label: "I figured it might be dangerous." },
+  { id: "heard", label: "I've heard about things like this." },
+];
+
+const TASK9_PASS_CONTINUATION = [
+  { speaker: "Manager", text: "Most people don't." },
+  { speaker: "Manager", text: "They see a USB and assume it's harmless." },
+  { speaker: "Manager", text: "Some attackers even leave them intentionally…" },
+  { speaker: "Manager", text: "In public places…" },
+  { speaker: "Manager", text: "Hoping someone plugs them in." },
+  { speaker: "Manager", text: "You did exactly what should be done." },
+  { speaker: "Manager", text: "When you find unknown hardware:" },
+  { speaker: "Manager", text: "Do not use it. Do not trust it. Report it." },
+  { speaker: "Manager", text: "Security isn't just about software." },
+  { speaker: "Manager", text: "It's about behavior." },
+];
+
+// ── SHARED CLOSING ──
+
+const TASK9_CLOSING_OPTIONS = [
+  { id: "physical", label: "So even physical devices can be attacks?" },
+  { id: "trap", label: "This feels like a trap." },
+  { id: "fallfor", label: "People would actually fall for this?" },
+];
+
+const TASK9_CLOSING_RESPONSES = {
+  physical: "Yes. Sometimes they're the easiest way in.",
+  trap: "That's exactly what it is.",
+  fallfor: "All the time.",
+};
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function useTypewriter(text, speed = 30, active = true) {
@@ -1132,14 +1395,7 @@ function Task3Scene2({ result, selectedUrl, onComplete }) {
           label="🧑🏻‍💼"
           pass={phase === "initial" ? result === "PASS" : undefined}
         />
-        <div className="flex-1">
-          {renderContent()}
-          {phase === "finalChoice" && (
-            <p className="text-center text-sm font-bold mt-4 text-indigo-900 uppercase tracking-wide">
-              Choose your response above
-            </p>
-          )}
-        </div>
+        <div className="flex-1">{renderContent()}</div>
       </div>
     </div>
   );
@@ -1149,13 +1405,11 @@ function Task3Scene2({ result, selectedUrl, onComplete }) {
 
 function Task4Scene1({ onComplete }) {
   const [lineIndex, setLineIndex] = useState(0);
-
   const handleAdvance = () => {
     if (lineIndex < TASK4_SCENE_1_OPENING.length - 1)
       setLineIndex((i) => i + 1);
     else onComplete();
   };
-
   return (
     <div className="flex gap-4 items-start">
       <Avatar label="🧑🏻‍💼" />
@@ -1215,7 +1469,6 @@ function Task4Scene2({ result, onComplete }) {
     setPhase("explanation");
     setLineIndex(0);
   };
-
   const handleFinalChoice = (id) => {
     setPhase("finalResponse");
     setLineIndex(0);
@@ -1310,13 +1563,11 @@ function Task4Scene2({ result, onComplete }) {
 
 function Task5Scene1({ onComplete }) {
   const [lineIndex, setLineIndex] = useState(0);
-
   const handleAdvance = () => {
     if (lineIndex < TASK5_SCENE_1_OPENING.length - 1)
       setLineIndex((i) => i + 1);
     else onComplete();
   };
-
   return (
     <div className="flex gap-4 items-start">
       <Avatar label="🧑🏻‍💼" />
@@ -1334,12 +1585,10 @@ function Task5Scene1({ onComplete }) {
 function Task5Scene2({ onComplete }) {
   const [lineIndex, setLineIndex] = useState(0);
   const currentLine = TASK5_SCENE_2_LINES[lineIndex];
-
   const handleAdvance = () => {
     if (lineIndex < TASK5_SCENE_2_LINES.length - 1) setLineIndex((i) => i + 1);
     else onComplete();
   };
-
   return (
     <div className="flex gap-4 items-start">
       <Avatar label={currentLine.speaker === "You" ? "🧑" : "🧑🏻‍💼"} />
@@ -1358,15 +1607,12 @@ function Task5Scene3({ result, onComplete }) {
   const lines =
     result === "PASS" ? TASK5_DEBRIEFING_PASS : TASK5_DEBRIEFING_FAIL;
   const [lineIndex, setLineIndex] = useState(0);
-
   const handleAdvance = () => {
     if (lineIndex < lines.length - 1) setLineIndex((i) => i + 1);
     else onComplete();
   };
-
   const isLast = lineIndex === lines.length - 1;
   const currentLine = lines[lineIndex];
-
   return (
     <div className="space-y-4">
       <div className="flex gap-4 items-start">
@@ -1402,13 +1648,11 @@ function Task5Scene3({ result, onComplete }) {
 
 function Task6Scene1({ onComplete }) {
   const [lineIndex, setLineIndex] = useState(0);
-
   const handleAdvance = () => {
     if (lineIndex < TASK6_SCENE_1_OPENING.length - 1)
       setLineIndex((i) => i + 1);
     else onComplete();
   };
-
   return (
     <div className="flex gap-4 items-start">
       <Avatar label="🧑🏻‍💼" />
@@ -1461,7 +1705,6 @@ function Task6Scene2({ onComplete }) {
     setPhase("explanation");
     setLineIndex(0);
   };
-
   const handleFinalChoice = (id) => {
     setPhase("finalResponse");
     setLineIndex(0);
@@ -1557,13 +1800,11 @@ function Task6Scene2({ onComplete }) {
 
 function Task7Scene1({ onComplete }) {
   const [lineIndex, setLineIndex] = useState(0);
-
   const handleAdvance = () => {
     if (lineIndex < TASK7_SCENE_1_OPENING.length - 1)
       setLineIndex((i) => i + 1);
     else onComplete();
   };
-
   return (
     <div className="flex gap-4 items-start">
       <Avatar label="🧑🏻‍💼" />
@@ -1578,9 +1819,8 @@ function Task7Scene1({ onComplete }) {
   );
 }
 
-// FAIL: player submitted credentials → PC shutdown → NPC debriefing
 function Task7SceneFail({ onComplete }) {
-  const [phase, setPhase] = useState("lines"); // lines | userChoice | explanation | finalDone
+  const [phase, setPhase] = useState("lines");
   const [lineIndex, setLineIndex] = useState(0);
 
   const handleAdvance = () => {
@@ -1601,7 +1841,6 @@ function Task7SceneFail({ onComplete }) {
     setPhase("explanation");
     setLineIndex(0);
   };
-
   const isLast =
     phase === "explanation" && lineIndex === TASK7_FAIL_EXPLANATION.length - 1;
   const currentLine =
@@ -1645,9 +1884,8 @@ function Task7SceneFail({ onComplete }) {
   );
 }
 
-// PASS: player questioned or reported → NPC debriefing
 function Task7ScenePass({ onComplete }) {
-  const [phase, setPhase] = useState("userReturn"); // userReturn | initial | userChoice | explanation | lecture | finalChoice | finalResponse
+  const [phase, setPhase] = useState("userReturn");
   const [lineIndex, setLineIndex] = useState(0);
   const [finalResponseText, setFinalResponseText] = useState("");
 
@@ -1775,6 +2013,410 @@ function Task7ScenePass({ onComplete }) {
   );
 }
 
+// ─── TASK 8 SCENES ────────────────────────────────────────────────────────────
+
+function Task8Scene1({ onComplete }) {
+  const [lineIndex, setLineIndex] = useState(0);
+  const handleAdvance = () => {
+    if (lineIndex < TASK8_SCENE_1_OPENING.length - 1)
+      setLineIndex((i) => i + 1);
+    else onComplete();
+  };
+  return (
+    <div className="flex gap-4 items-start">
+      <Avatar label="🧑🏻‍💼" />
+      <div className="flex-1">
+        <DialogueBubble
+          key={lineIndex}
+          line={TASK8_SCENE_1_OPENING[lineIndex]}
+          onAdvance={handleAdvance}
+        />
+      </div>
+    </div>
+  );
+}
+
+function Task8Scene2({ result, onComplete }) {
+  const [phase, setPhase] = useState("userReturn");
+  const [lineIndex, setLineIndex] = useState(0);
+  const [reflectionResponse, setReflectionResponse] = useState("");
+
+  const initialLines =
+    result === "PASS" ? TASK8_PASS_INITIAL : TASK8_FAIL_INITIAL;
+  const lectureLines =
+    result === "PASS" ? TASK8_PASS_LECTURE : TASK8_FAIL_LECTURE;
+
+  const userReturn =
+    result === "PASS"
+      ? {
+          speaker: "You",
+          text: "My friend was getting cyberbullied online. I helped her. I guided her through it step by step.",
+        }
+      : {
+          speaker: "You",
+          text: "My friend was getting cyberbullied online. I wasn't sure… I just tried to help.",
+        };
+
+  const handleAdvance = () => {
+    if (phase === "userReturn") {
+      setPhase("initial");
+      setLineIndex(0);
+    } else if (phase === "initial") {
+      if (lineIndex < initialLines.length - 1) setLineIndex((i) => i + 1);
+      else {
+        setPhase("lecture");
+        setLineIndex(0);
+      }
+    } else if (phase === "lecture") {
+      if (lineIndex < lectureLines.length - 1) setLineIndex((i) => i + 1);
+      else {
+        setPhase("reflection");
+        setLineIndex(0);
+      }
+    } else if (phase === "reflectionResponse") {
+      onComplete();
+    }
+  };
+
+  const handleReflection = (id) => {
+    setReflectionResponse(TASK8_REFLECTION_RESPONSES[id]);
+    setPhase("reflectionResponse");
+    setLineIndex(0);
+  };
+
+  const isLast = phase === "reflectionResponse";
+
+  const renderContent = () => {
+    if (phase === "userReturn")
+      return (
+        <DialogueBubble
+          key="user-return"
+          line={userReturn}
+          onAdvance={handleAdvance}
+        />
+      );
+    if (phase === "initial")
+      return (
+        <DialogueBubble
+          key={`initial-${lineIndex}`}
+          line={initialLines[lineIndex]}
+          onAdvance={handleAdvance}
+        />
+      );
+    if (phase === "lecture")
+      return (
+        <DialogueBubble
+          key={`lecture-${lineIndex}`}
+          line={lectureLines[lineIndex]}
+          onAdvance={handleAdvance}
+        />
+      );
+    if (phase === "reflection")
+      return (
+        <ChoiceMenu
+          options={TASK8_REFLECTION_OPTIONS}
+          onSelect={handleReflection}
+        />
+      );
+    if (phase === "reflectionResponse")
+      return (
+        <DialogueBubble
+          key="reflection-response"
+          line={{ speaker: "Manager", text: reflectionResponse }}
+          onAdvance={handleAdvance}
+        />
+      );
+    return null;
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-4 items-start">
+        <Avatar
+          label={phase === "userReturn" ? "🧑" : "🧑🏻‍💼"}
+          pass={phase === "initial" ? result === "PASS" : undefined}
+        />
+        <div className="flex-1">
+          {renderContent()}
+          {isLast && (
+            <button
+              onClick={onComplete}
+              className="mt-4 w-full bg-yellow-400 hover:bg-yellow-500 text-indigo-900 py-3 rounded-2xl text-lg font-black border-b-8 border-yellow-600 active:border-b-0 active:translate-y-2 transition-all"
+            >
+              Finish Task
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── TASK 9 SCENES ────────────────────────────────────────────────────────────
+
+/**
+ * Task9USBFound
+ * Shown as a full-screen overlay (not inside the yellow dialogue box)
+ * when the player walks near the USB.
+ * Renders the two-choice prompt: Plug In vs Report.
+ */
+function Task9USBFound({ onPlugIn, onReport }) {
+  return (
+    <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[950] flex flex-col items-center">
+      <div className="bg-[#111111] bg-opacity-95 backdrop-blur-sm rounded-xl border border-gray-700 shadow-2xl p-4 w-[320px] flex flex-col gap-3">
+        <div className="text-center font-sans">
+          <h2 className="text-base font-black text-white leading-tight flex items-center justify-center gap-2">
+            <span>💾</span> Unknown USB Found
+          </h2>
+          <p className="text-[11px] text-gray-400 font-medium mt-1">
+            An unknown USB drive is on the floor. What will you do?
+          </p>
+        </div>
+
+        <div className="flex gap-2">
+          <button
+            onClick={onPlugIn}
+            className="flex-1 px-2 py-2.5 rounded-lg text-xs font-bold text-white bg-red-600 hover:bg-red-500 border border-red-700 shadow-sm transition-all text-center"
+          >
+            🔌 Plug it in
+          </button>
+          <button
+            onClick={onReport}
+            className="flex-1 px-2 py-2.5 rounded-lg text-xs font-bold text-white bg-green-600 hover:bg-green-500 border border-green-700 shadow-sm transition-all text-center"
+          >
+            🙋 Report it
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Task9DebriefFail
+ * Dialogue with manager after the BadUSB simulation (FAIL path).
+ */
+function Task9DebriefFail({ onComplete }) {
+  const [phase, setPhase] = useState("incident");
+  const [lineIndex, setLineIndex] = useState(0);
+  const [choiceResponse, setChoiceResponse] = useState("");
+
+  const handleAdvance = () => {
+    if (phase === "incident") {
+      if (lineIndex < TASK9_FAIL_INCIDENT_LINES.length - 1)
+        setLineIndex((i) => i + 1);
+      else {
+        setPhase("explanation");
+        setLineIndex(0);
+      }
+    } else if (phase === "explanation") {
+      if (lineIndex < TASK9_FAIL_EXPLANATION.length - 1)
+        setLineIndex((i) => i + 1);
+      else {
+        setPhase("choice");
+        setLineIndex(0);
+      }
+    } else if (phase === "choiceResponse") {
+      setPhase("reveal");
+      setLineIndex(0);
+    } else if (phase === "reveal") {
+      if (lineIndex < TASK9_FAIL_REVEAL.length - 1) setLineIndex((i) => i + 1);
+      else {
+        setPhase("apology");
+        setLineIndex(0);
+      }
+    } else if (phase === "final") {
+      if (lineIndex < TASK9_FAIL_FINAL_LINES.length - 1)
+        setLineIndex((i) => i + 1);
+      else {
+        setPhase("closing");
+        setLineIndex(0);
+      }
+    } else if (phase === "closingResponse") {
+      onComplete();
+    }
+  };
+
+  const handleChoice = (id) => {
+    setChoiceResponse(TASK9_FAIL_CHOICE_RESPONSES[id]);
+    setPhase("choiceResponse");
+    setLineIndex(0);
+  };
+
+  const handleApology = () => {
+    setPhase("final");
+    setLineIndex(0);
+  };
+  const handleClosing = (id) => {
+    setChoiceResponse(TASK9_CLOSING_RESPONSES[id]);
+    setPhase("closingResponse");
+    setLineIndex(0);
+  };
+
+  const isLast = phase === "closingResponse";
+
+  const currentLine = (() => {
+    if (phase === "incident") return TASK9_FAIL_INCIDENT_LINES[lineIndex];
+    if (phase === "explanation") return TASK9_FAIL_EXPLANATION[lineIndex];
+    if (phase === "choiceResponse")
+      return { speaker: "Manager", text: choiceResponse };
+    if (phase === "reveal") return TASK9_FAIL_REVEAL[lineIndex];
+    if (phase === "final") return TASK9_FAIL_FINAL_LINES[lineIndex];
+    if (phase === "closingResponse")
+      return { speaker: "Manager", text: choiceResponse };
+    return null;
+  })();
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-4 items-start">
+        <Avatar
+          label={currentLine?.speaker === "You" ? "🧑" : "🧑🏻‍💼"}
+          pass={
+            phase === "incident" || phase === "explanation" ? false : undefined
+          }
+        />
+        <div className="flex-1">
+          {phase === "choice" && (
+            <ChoiceMenu
+              options={TASK9_FAIL_CHOICE_OPTIONS}
+              onSelect={handleChoice}
+            />
+          )}
+          {phase === "apology" && (
+            <ChoiceMenu
+              options={TASK9_FAIL_APOLOGY_OPTIONS}
+              onSelect={handleApology}
+            />
+          )}
+          {phase === "closing" && (
+            <ChoiceMenu
+              options={TASK9_CLOSING_OPTIONS}
+              onSelect={handleClosing}
+            />
+          )}
+          {currentLine &&
+            phase !== "choice" &&
+            phase !== "apology" &&
+            phase !== "closing" && (
+              <DialogueBubble
+                key={`${phase}-${lineIndex}`}
+                line={currentLine}
+                onAdvance={handleAdvance}
+              />
+            )}
+          {isLast && (
+            <button
+              onClick={onComplete}
+              className="mt-4 w-full bg-yellow-400 hover:bg-yellow-500 text-indigo-900 py-3 rounded-2xl text-lg font-black border-b-8 border-yellow-600 active:border-b-0 active:translate-y-2 transition-all"
+            >
+              Finish Task
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Task9DebriefPass
+ * Dialogue with manager after reporting the USB (PASS path).
+ */
+function Task9DebriefPass({ onComplete }) {
+  const [phase, setPhase] = useState("opening");
+  const [lineIndex, setLineIndex] = useState(0);
+  const [choiceResponse, setChoiceResponse] = useState("");
+
+  const handleAdvance = () => {
+    if (phase === "opening") {
+      if (lineIndex < TASK9_PASS_OPENING_LINES.length - 1)
+        setLineIndex((i) => i + 1);
+      else {
+        setPhase("explanation");
+        setLineIndex(0);
+      }
+    } else if (phase === "explanation") {
+      if (lineIndex < TASK9_PASS_EXPLANATION.length - 1)
+        setLineIndex((i) => i + 1);
+      else {
+        setPhase("userChoice");
+        setLineIndex(0);
+      }
+    } else if (phase === "continuation") {
+      if (lineIndex < TASK9_PASS_CONTINUATION.length - 1)
+        setLineIndex((i) => i + 1);
+      else {
+        setPhase("closing");
+        setLineIndex(0);
+      }
+    } else if (phase === "closingResponse") {
+      onComplete();
+    }
+  };
+
+  const handleUserChoice = () => {
+    setPhase("continuation");
+    setLineIndex(0);
+  };
+  const handleClosing = (id) => {
+    setChoiceResponse(TASK9_CLOSING_RESPONSES[id]);
+    setPhase("closingResponse");
+    setLineIndex(0);
+  };
+
+  const isLast = phase === "closingResponse";
+
+  const currentLine = (() => {
+    if (phase === "opening") return TASK9_PASS_OPENING_LINES[lineIndex];
+    if (phase === "explanation") return TASK9_PASS_EXPLANATION[lineIndex];
+    if (phase === "continuation") return TASK9_PASS_CONTINUATION[lineIndex];
+    if (phase === "closingResponse")
+      return { speaker: "Manager", text: choiceResponse };
+    return null;
+  })();
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-4 items-start">
+        <Avatar
+          label={currentLine?.speaker === "You" ? "🧑" : "🧑🏻‍💼"}
+          pass={true}
+        />
+        <div className="flex-1">
+          {phase === "userChoice" && (
+            <ChoiceMenu
+              options={TASK9_PASS_USER_OPTIONS}
+              onSelect={handleUserChoice}
+            />
+          )}
+          {phase === "closing" && (
+            <ChoiceMenu
+              options={TASK9_CLOSING_OPTIONS}
+              onSelect={handleClosing}
+            />
+          )}
+          {currentLine && phase !== "userChoice" && phase !== "closing" && (
+            <DialogueBubble
+              key={`${phase}-${lineIndex}`}
+              line={currentLine}
+              onAdvance={handleAdvance}
+            />
+          )}
+          {isLast && (
+            <button
+              onClick={onComplete}
+              className="mt-4 w-full bg-yellow-400 hover:bg-yellow-500 text-indigo-900 py-3 rounded-2xl text-lg font-black border-b-8 border-yellow-600 active:border-b-0 active:translate-y-2 transition-all"
+            >
+              Finish Task
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Main DialogueScene ───────────────────────────────────────────────────────
 
 export default function DialogueScene() {
@@ -1805,27 +2447,86 @@ export default function DialogueScene() {
     mission.stage === "TASK7_DEBRIEFING" && mission.result === "FAIL";
   const isTask7ScenePass =
     mission.stage === "TASK7_DEBRIEFING" && mission.result === "PASS";
+  // Task 8
+  const isTask8Scene1 = mission.stage === "TASK8_TALKING_TO_MANAGER";
+  const isTask8Scene2 = mission.stage === "TASK8_DEBRIEFING";
+  // Task 9
+  const isTask9USBFound =
+    mission.id === "TASK_9_USB_BADUSB" && mission.stage === "TASK9_USB_FOUND";
+  const isTask9DebriefFail =
+    mission.id === "TASK_9_USB_BADUSB" &&
+    mission.stage === "TASK9_DEBRIEFING_FAIL";
+  const isTask9DebriefPass =
+    mission.id === "TASK_9_USB_BADUSB" &&
+    mission.stage === "TASK9_DEBRIEFING_PASS";
 
-  if (
-    !isTask1Scene1 &&
-    !isTask1Scene2 &&
-    !isTask2Scene1 &&
-    !isTask2Scene2 &&
-    !isTask3Scene1 &&
-    !isTask3Scene2 &&
-    !isTask4Scene1 &&
-    !isTask4Scene2 &&
-    !isTask5Scene1 &&
-    !isTask5Scene2 &&
-    !isTask5Scene3 &&
-    !isTask6Scene1 &&
-    !isTask6Scene2 &&
-    !isTask7Scene1 &&
-    !isTask7SceneFail &&
-    !isTask7ScenePass
-  ) {
-    return null;
+  const anyActive =
+    isTask1Scene1 ||
+    isTask1Scene2 ||
+    isTask2Scene1 ||
+    isTask2Scene2 ||
+    isTask3Scene1 ||
+    isTask3Scene2 ||
+    isTask4Scene1 ||
+    isTask4Scene2 ||
+    isTask5Scene1 ||
+    isTask5Scene2 ||
+    isTask5Scene3 ||
+    isTask6Scene1 ||
+    isTask6Scene2 ||
+    isTask7Scene1 ||
+    isTask7SceneFail ||
+    isTask7ScenePass ||
+    isTask8Scene1 ||
+    isTask8Scene2;
+
+  // ── Task 9 USB Found — rendered as full-screen overlay, NOT inside yellow box ──
+  if (isTask9USBFound) {
+    return (
+      <Task9USBFound
+        onPlugIn={() =>
+          setMission({
+            ...mission,
+            stage: "TASK9_GO_TO_PC_FAIL",
+            result: "FAIL",
+          })
+        }
+        onReport={() =>
+          setMission({
+            ...mission,
+            stage: "TASK9_REPORT_TO_NPC",
+            result: "PASS",
+          })
+        }
+      />
+    );
   }
+
+  // ── Task 9 debrief scenes — inside yellow box ──
+  if (isTask9DebriefFail || isTask9DebriefPass) {
+    return (
+      <div className="fixed inset-0 bg-opacity-0 z-[900] flex items-end justify-center p-4 font-sans">
+        <div className="w-full max-w-3xl bg-yellow-400 p-6 rounded-[2rem] border-4 border-indigo-900 shadow-[10px_10px_0_0_#4338ca] mb-4">
+          {isTask9DebriefFail && (
+            <Task9DebriefFail
+              onComplete={() =>
+                setMission({ ...mission, stage: "TASK9_COMPLETED" })
+              }
+            />
+          )}
+          {isTask9DebriefPass && (
+            <Task9DebriefPass
+              onComplete={() =>
+                setMission({ ...mission, stage: "TASK9_COMPLETED" })
+              }
+            />
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (!anyActive) return null;
 
   // ── Task 1 handlers ──
   const handleTask1Scene1Complete = () =>
@@ -1913,7 +2614,29 @@ export default function DialogueScene() {
   const handleTask7Scene1Complete = () =>
     setMission({ ...mission, stage: "TASK7_GO_TO_DESK" });
   const handleTask7DebriefComplete = () =>
-    setMission({ ...mission, stage: "TASK7_COMPLETED" });
+    setMission({
+      id: "TASK_8_CYBERBULLYING",
+      stage: "TASK8_TALK_TO_MANAGER",
+      result: null,
+      unsafeFields: [],
+      selectedUrl: null,
+      emailActions: {},
+      incorrectlyHandled: [],
+    });
+
+  // ── Task 8 handlers ──
+  const handleTask8Scene1Complete = () =>
+    setMission({ ...mission, stage: "TASK8_WAITING_FOR_MESSAGE" });
+  const handleTask8Scene2Complete = () =>
+    setMission({
+      id: "TASK_9_USB_BADUSB",
+      stage: "TASK9_FIND_USB",
+      result: null,
+      unsafeFields: [],
+      selectedUrl: null,
+      emailActions: {},
+      incorrectlyHandled: [],
+    });
 
   return (
     <div className="fixed inset-0 bg-opacity-0 z-[900] flex items-end justify-center p-4 font-sans">
@@ -1995,6 +2718,17 @@ export default function DialogueScene() {
         )}
         {isTask7ScenePass && (
           <Task7ScenePass onComplete={handleTask7DebriefComplete} />
+        )}
+
+        {/* Task 8 */}
+        {isTask8Scene1 && (
+          <Task8Scene1 onComplete={handleTask8Scene1Complete} />
+        )}
+        {isTask8Scene2 && (
+          <Task8Scene2
+            result={mission.result}
+            onComplete={handleTask8Scene2Complete}
+          />
         )}
       </div>
     </div>

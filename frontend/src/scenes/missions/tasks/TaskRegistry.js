@@ -86,8 +86,6 @@ export const TASK_REGISTRY = {
       "TASK2_COMPLETED",
     ],
 
-    // Note: TASK2_PHONE_CHAT is NOT locked by default
-    // The PhoneMessenger component handles locking when modal is open
     lockedStages: ["TASK2_TALKING_TO_MANAGER", "TASK2_DEBRIEFING"],
 
     stageInstructions: {
@@ -126,7 +124,6 @@ export const TASK_REGISTRY = {
       },
     },
 
-    // New config for phone UI visibility
     showPhoneInStages: ["TASK2_WAITING_FOR_MESSAGE", "TASK2_PHONE_CHAT"],
   },
 
@@ -207,7 +204,6 @@ export const TASK_REGISTRY = {
     },
   },
 
-  // ─── TASK 4: EMAIL SECURITY ────────────────────────────────────────────────
   TASK_4_EMAIL_SECURITY: {
     id: "TASK_4_EMAIL_SECURITY",
     name: "Email Security - Phishing Detection",
@@ -284,6 +280,7 @@ export const TASK_REGISTRY = {
       },
     },
   },
+
   TASK_5_PASSWORD_SECURITY: {
     id: "TASK_5_PASSWORD_SECURITY",
     name: "Password Security - Social Engineering via IT Support",
@@ -372,6 +369,7 @@ export const TASK_REGISTRY = {
 
     showPhoneInStages: ["TASK5_PHONE_CHAT"],
   },
+
   TASK_6_MALVERTISING: {
     id: "TASK_6_MALVERTISING",
     name: "Malvertising Awareness - Spot the Malicious Ads",
@@ -448,6 +446,7 @@ export const TASK_REGISTRY = {
       },
     },
   },
+
   TASK_7_FAKE_MODERATOR: {
     id: "TASK_7_FAKE_MODERATOR",
     name: "Fake Game Moderator Scam - Authority Impersonation",
@@ -523,50 +522,236 @@ export const TASK_REGISTRY = {
       },
     },
   },
+
+  // ─── TASK 8: CYBERBULLYING ─────────────────────────────────────────────────
+  TASK_8_CYBERBULLYING: {
+    id: "TASK_8_CYBERBULLYING",
+    name: "Cyberbullying Awareness - Help a Friend",
+
+    stages: [
+      "TASK8_TALK_TO_MANAGER",
+      "TASK8_TALKING_TO_MANAGER",
+      "TASK8_WAITING_FOR_MESSAGE",
+      "TASK8_PHONE_CHAT",
+      "TASK8_RETURN_TO_MANAGER",
+      "TASK8_DEBRIEFING",
+      "TASK8_COMPLETED",
+    ],
+
+    lockedStages: ["TASK8_TALKING_TO_MANAGER", "TASK8_DEBRIEFING"],
+
+    stageInstructions: {
+      TASK8_TALK_TO_MANAGER: "Go talk to your manager for your next assignment",
+      TASK8_TALKING_TO_MANAGER: "Listen carefully to your manager's briefing",
+      TASK8_WAITING_FOR_MESSAGE:
+        "Wait — your friend Mia is about to message you (check bottom-right)",
+      TASK8_PHONE_CHAT:
+        "Check your phone and help Mia handle the cyberbullying step by step",
+      TASK8_RETURN_TO_MANAGER: "Return to your manager to report what happened",
+      TASK8_DEBRIEFING: "Receiving feedback on how you helped your friend",
+      TASK8_COMPLETED:
+        "Outstanding! You know how to support someone being cyberbullied!",
+    },
+
+    triggers: [
+      {
+        type: "npc",
+        position: [-7.18, 0.03, 9.17],
+        size: [1, 2, 2.3],
+        stages: {
+          TASK8_TALK_TO_MANAGER: "TASK8_TALKING_TO_MANAGER",
+          TASK8_RETURN_TO_MANAGER: "TASK8_DEBRIEFING",
+        },
+      },
+    ],
+
+    markers: [],
+
+    cameras: {
+      TASK8_TALKING_TO_MANAGER: {
+        position: [-7.25, 1.73, 7.7],
+        lookAt: [-7, 1, 16],
+      },
+      TASK8_DEBRIEFING: {
+        position: [-7.25, 1.73, 7.7],
+        lookAt: [-7, 1, 16],
+      },
+    },
+
+    showPhoneInStages: ["TASK8_WAITING_FOR_MESSAGE", "TASK8_PHONE_CHAT"],
+  },
+
+  // ─── TASK 9: USB / BADUSB ATTACK ──────────────────────────────────────────
+  TASK_9_USB_BADUSB: {
+    id: "TASK_9_USB_BADUSB",
+    name: "Physical Cyber Threats - The Unknown USB (BadUSB Attack)",
+
+    stages: [
+      // USB is found on the ground — proximity triggers the choice
+      "TASK9_FIND_USB", // walking around looking for it
+      "TASK9_USB_FOUND", // player walks near USB → prompt appears
+      "TASK9_CHOICE_MADE", // player chose plug-in or report
+      // PATH A — PLUG IN (FAIL)
+      "TASK9_GO_TO_PC_FAIL", // walk to desk to plug in
+      "TASK9_BADUSB_SIMULATION", // BadUSB Windows desktop simulation
+      "TASK9_REPORT_INCIDENT", // walk back to NPC to report
+      "TASK9_DEBRIEFING_FAIL", // NPC debrief — fail path
+      // PATH B — REPORT (PASS)
+      "TASK9_REPORT_TO_NPC", // walk to NPC immediately
+      "TASK9_DEBRIEFING_PASS", // NPC debrief — pass path
+      // Shared closing
+      "TASK9_COMPLETED",
+    ],
+
+    // Lock player during dialogue and simulation screens
+    lockedStages: [
+      "TASK9_USB_FOUND",
+      "TASK9_BADUSB_SIMULATION",
+      "TASK9_DEBRIEFING_FAIL",
+      "TASK9_DEBRIEFING_PASS",
+    ],
+
+    stageInstructions: {
+      TASK9_FIND_USB: "Explore the office. Did someone drop a USB drive?",
+      TASK9_USB_FOUND:
+        "You found a USB drive on the ground — what will you do?",
+      TASK9_CHOICE_MADE: "Acting on your decision...",
+      TASK9_GO_TO_PC_FAIL:
+        "Go to your workstation and plug in the USB (follow the white marker)",
+      TASK9_BADUSB_SIMULATION:
+        "Watching what happens after plugging in the USB...",
+      TASK9_REPORT_INCIDENT:
+        "Something went wrong! Go report to your manager immediately",
+      TASK9_DEBRIEFING_FAIL: "Receiving feedback on your mistake",
+      TASK9_REPORT_TO_NPC:
+        "Good instinct! Go report the suspicious USB to your manager",
+      TASK9_DEBRIEFING_PASS: "Receiving feedback on your great decision",
+      TASK9_COMPLETED:
+        "Well done! You understand the dangers of unknown physical devices!",
+    },
+
+    triggers: [
+      // USB found trigger — physics-based to detect when player walks over the USB
+      {
+        type: "usb",
+        position: [-6.5, 0.0, 3.99],
+        size: [3, 3, 3],
+        stages: {
+          TASK9_FIND_USB: "TASK9_USB_FOUND",
+        },
+      },
+      // NPC trigger — used for both report paths and incident reporting
+      {
+        type: "npc",
+        position: [-7.18, 0.03, 9.17],
+        size: [1, 2, 2.3],
+        stages: {
+          TASK9_REPORT_INCIDENT: "TASK9_DEBRIEFING_FAIL",
+          TASK9_REPORT_TO_NPC: "TASK9_DEBRIEFING_PASS",
+        },
+      },
+      // Workspace trigger — only for the FAIL path (go plug in USB)
+      {
+        type: "workspace",
+        position: [-5.35, 0.03, 1.99],
+        size: [2, 2, 2],
+        stages: {
+          TASK9_GO_TO_PC_FAIL: "TASK9_BADUSB_SIMULATION",
+        },
+      },
+    ],
+
+    markers: [
+      // White marker pointing to workstation (fail path only)
+      {
+        type: "objective",
+        position: [-5.35, 0.03, 1.99],
+        visibleInStages: ["TASK9_GO_TO_PC_FAIL"],
+        color: "white",
+      },
+    ],
+
+    cameras: {
+      TASK9_BADUSB_SIMULATION: {
+        position: [-5.35, 1.44, 1.45],
+        lookAt: [-18, 1.2, 7.4],
+      },
+      TASK9_DEBRIEFING_FAIL: {
+        position: [-7.25, 1.73, 7.7],
+        lookAt: [-7, 1, 16],
+      },
+      TASK9_DEBRIEFING_PASS: {
+        position: [-7.25, 1.73, 7.7],
+        lookAt: [-7, 1, 16],
+      },
+    },
+  },
 };
 
-// Helper to get current task config
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
 export function getCurrentTaskConfig(missionId) {
   return TASK_REGISTRY[missionId];
 }
 
-// Helper to check if stage locks player
 export function isPlayerLocked(missionId, stage) {
   const config = TASK_REGISTRY[missionId];
   return config?.lockedStages.includes(stage) ?? false;
 }
 
-// Helper to get camera config for current stage
 export function getCameraConfig(missionId, stage) {
   const config = TASK_REGISTRY[missionId];
   return config?.cameras[stage];
 }
 
-// Helper to get instruction for current stage
 export function getStageInstruction(missionId, stage) {
   const config = TASK_REGISTRY[missionId];
   return config?.stageInstructions[stage] || "Complete your current objective";
 }
 
-// Helper to check if phone should be visible
 export function shouldShowPhone(missionId, stage) {
   const config = TASK_REGISTRY[missionId];
   return config?.showPhoneInStages?.includes(stage) ?? false;
 }
 
-// Helper to check if email client should be visible
 export function shouldShowEmailClient(missionId, stage) {
   return (
     missionId === "TASK_4_EMAIL_SECURITY" && stage === "TASK4_DESKTOP_EMAIL"
   );
 }
+
 export function shouldShowMalvertisingClient(missionId, stage) {
   return (
     missionId === "TASK_6_MALVERTISING" && stage === "TASK6_DESKTOP_BROWSER"
   );
 }
+
 export function shouldShowFakeModeratorClient(missionId, stage) {
   return (
     missionId === "TASK_7_FAKE_MODERATOR" && stage === "TASK7_DESKTOP_EMAIL"
   );
+}
+
+export function shouldShowCyberbullyingMessenger(missionId, stage) {
+  return (
+    missionId === "TASK_8_CYBERBULLYING" &&
+    ["TASK8_WAITING_FOR_MESSAGE", "TASK8_PHONE_CHAT"].includes(stage)
+  );
+}
+
+export function shouldShowBadUSBSimulation(missionId, stage) {
+  return (
+    missionId === "TASK_9_USB_BADUSB" && stage === "TASK9_BADUSB_SIMULATION"
+  );
+}
+
+// Returns true when the USB model should be visible on the floor
+export function shouldShowUSBModel(missionId, stage) {
+  if (missionId === "TASK_8_CYBERBULLYING" && stage === "TASK8_COMPLETED")
+    return true;
+  if (missionId === "TASK_9_USB_BADUSB") {
+    // Keep it on the floor for the duration of the task, remove when completed
+    return stage !== "TASK9_COMPLETED";
+  }
+  return false;
 }

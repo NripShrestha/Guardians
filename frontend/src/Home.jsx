@@ -16,16 +16,17 @@ import ITSupportMessenger from "./scenes/gameUI/tasksUI/ITSupportMessenger";
 import MalvertisingClient from "./scenes/gameUI/tasksUI/MalvertisingClient";
 import FakeModeratorClient from "./scenes/gameUI/tasksUI/FakeModerator";
 import CyberShooterGame from "./scenes/gameUI/tasksUI/shooter/CyberShooterGame";
+import CyberbullyingMessenger from "./scenes/gameUI/tasksUI/CyberBullyingmessenger";
+import BadUSBDesktop from "./scenes/gameUI/tasksUI/BadUSBDesktop"; // ← NEW
 
 // ── Inner component — must be inside MissionProvider to use useMission ──
 function AppContent() {
   const [cyberShooterOpen, setCyberShooterOpen] = useState(false);
-  const { savedHighScore, setSavedHighScore } = useMission(); // ← now valid
+  const { savedHighScore, setSavedHighScore, setShooterPlays, setShooterHighscoreCount } = useMission();
 
   return (
     <>
       {/* <MissionDebugger /> */}
-
       <Canvas shadows camera={{ fov: 50 }}>
         <Suspense fallback={null}>
           <Physics>
@@ -33,7 +34,6 @@ function AppContent() {
           </Physics>
         </Suspense>
       </Canvas>
-
       <DialogueScene />
       <DesktopSimulation />
       <FormPopup />
@@ -43,14 +43,22 @@ function AppContent() {
       <ITSupportMessenger />
       <MalvertisingClient />
       <FakeModeratorClient />
+      <CyberbullyingMessenger />
+      <BadUSBDesktop />{" "}
+      {/* ← NEW: renders only when stage === TASK9_BADUSB_SIMULATION */}
       <HUD />
-
       {cyberShooterOpen && (
         <CyberShooterGame
-          onClose={() => setCyberShooterOpen(false)}
+          onClose={() => {
+            setCyberShooterOpen(false);
+            setShooterPlays((prev) => prev + 1);
+          }}
           initialHighScore={savedHighScore}
           onScoreSubmit={(score) => {
-            if (score > savedHighScore) setSavedHighScore(score);
+            if (score > savedHighScore) {
+              setSavedHighScore(score);
+              setShooterHighscoreCount((prev) => prev + 1);
+            }
           }}
         />
       )}

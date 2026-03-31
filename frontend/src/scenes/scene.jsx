@@ -1,8 +1,9 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useMission } from "./missions/MissionContext";
 import {
   getCurrentTaskConfig,
   isPlayerLocked,
+  shouldShowUSBModel,
 } from "./missions/tasks/TaskRegistry";
 
 // Components
@@ -13,20 +14,18 @@ import SceneEnvironment from "./SceneEnvironment";
 import TriggerManager from "./triggers/TriggerManager";
 import MarkerManager from "./triggers/MarkerManager";
 import CameraManager from "./triggers/CameraManager";
+import USB from "./gameModels/usb";
 
 // Cyber Shooter
 import CyberShooterTrigger from "./gameUI/tasksUI/shooter/CyberShooterTrigger";
+
 /**
  * Main Scene Component
  * Clean orchestrator that delegates to specialized components
  */
 export default function Scene({ onOpenCyberShooter }) {
-  const { 
-    mission, 
-    isPhoneModalOpen,
-    savedCharacter,
-    setSavedCharacter
-  } = useMission();
+  const { mission, isPhoneModalOpen, savedCharacter, setSavedCharacter } =
+    useMission();
 
   const [activeCharacter, setActiveCharacter] = useState(null);
 
@@ -37,6 +36,9 @@ export default function Scene({ onOpenCyberShooter }) {
   const playerLocked =
     isPlayerLocked(mission.id, mission.stage) || isPhoneModalOpen;
 
+  // USB is only visible before picked up in Task 9
+  const showUSB = shouldShowUSBModel(mission.id, mission.stage);
+
   // Sync character between DB, Context, and Session
   useEffect(() => {
     if (savedCharacter) {
@@ -46,14 +48,12 @@ export default function Scene({ onOpenCyberShooter }) {
       const sessionChar = sessionStorage.getItem("selectedCharacter");
       if (sessionChar) {
         setActiveCharacter(sessionChar);
-        setSavedCharacter(sessionChar); // Sync back to MissionContext for HUD saving
+        setSavedCharacter(sessionChar);
       } else {
-        setActiveCharacter("timmy"); // ultimate fallback
+        setActiveCharacter("timmy");
       }
     }
   }, [savedCharacter, setSavedCharacter]);
-
-  // Position saving has been removed to improve performance
 
   return (
     <>
@@ -68,10 +68,13 @@ export default function Scene({ onOpenCyberShooter }) {
         <CharacterController
           characterType={activeCharacter}
           scale={1}
-          position={[-2, 2.5, 3]} // Fixed spawn position
+          position={[-2, 2.5, 3]}
           disabled={playerLocked}
         />
       )}
+
+      {/* ================= USB MODEL (only after Task 8 completed) ================= */}
+      {showUSB && <USB scale={0.05} position={[-6.5, 0.0, 3.99]} />}
 
       {/* ================= NPC ================= */}
       <Npc
@@ -93,7 +96,6 @@ export default function Scene({ onOpenCyberShooter }) {
       )}
 
       {/* ================= CYBER SHOOTER MINIGAME TRIGGER ================= */}
-      {/* Always present — triggers whenever player walks into the zone */}
       <CyberShooterTrigger onTrigger={onOpenCyberShooter} />
     </>
   );

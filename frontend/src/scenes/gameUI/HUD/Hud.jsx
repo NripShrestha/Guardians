@@ -55,6 +55,8 @@ export default function HUD() {
     mission,
     savedCharacter,
     savedHighScore,
+    shooterPlays,
+    shooterHighscoreCount,
     taskResults,
     setTaskResults,
   } = useMission();
@@ -69,15 +71,29 @@ export default function HUD() {
 
   // --- XP & Badge Logic ---
   const passedCount = taskResults.filter((r) => r.result === "PASS").length;
-  const xp = passedCount * 100;
+  const xp = passedCount * 100 + shooterPlays * 5 + shooterHighscoreCount * 50;
 
   const { badgeName, badgeColor, tierMin, tierMax } = useMemo(() => {
+    if (xp >= 1200)
+      return {
+        badgeName: "Legendary",
+        badgeColor: "text-fuchsia-500 border-fuchsia-500 bg-fuchsia-50",
+        tierMin: 1200,
+        tierMax: 1500,
+      };
+    if (xp >= 1000)
+      return {
+        badgeName: "Master",
+        badgeColor: "text-purple-500 border-purple-500 bg-purple-50",
+        tierMin: 1000,
+        tierMax: 1200,
+      };
     if (xp >= 800)
       return {
         badgeName: "Diamond",
         badgeColor: "text-cyan-400 border-cyan-400 bg-cyan-50",
         tierMin: 800,
-        tierMax: 900,
+        tierMax: 1000,
       };
     if (xp >= 600)
       return {
@@ -109,7 +125,7 @@ export default function HUD() {
   }, [xp]);
 
   // Detect badge upgrades — queue if player is mid-dialogue
-  const BADGE_ORDER = ["Bronze", "Silver", "Gold", "Platinum", "Diamond"];
+  const BADGE_ORDER = ["Bronze", "Silver", "Gold", "Platinum", "Diamond", "Master", "Legendary"];
   useEffect(() => {
     const prev = prevBadgeRef.current;
     if (prev !== null && prev !== badgeName) {
@@ -162,6 +178,8 @@ export default function HUD() {
           currentStage: mission.stage,
           characterType: savedCharacter,
           shooterHighscore: savedHighScore,
+          shooterPlays: shooterPlays,
+          shooterHighscoreCount: shooterHighscoreCount,
           taskResults: taskResults, // Save entire task history
         }),
       });

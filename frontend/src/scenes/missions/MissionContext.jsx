@@ -13,6 +13,9 @@ const DEBRIEFING_STAGES = new Set([
   "TASK5_DEBRIEFING",
   "TASK6_DEBRIEFING",
   "TASK7_DEBRIEFING",
+  "TASK8_DEBRIEFING",
+  "TASK9_DEBRIEFING_FAIL",
+  "TASK9_DEBRIEFING_PASS",
 ]);
 
 export function getAuthToken() {
@@ -28,6 +31,8 @@ export function MissionProvider({ children }) {
   const [savedCharacter, setSavedCharacter] = useState(null); // "timmy" | "girl" | null
   const [savedPosition, setSavedPosition] = useState({ x: -2, y: 2.5, z: 3 });
   const [savedHighScore, setSavedHighScore] = useState(0);
+  const [shooterPlays, setShooterPlays] = useState(0);
+  const [shooterHighscoreCount, setShooterHighscoreCount] = useState(0);
   const [taskResults, setTaskResults] = useState([]);
 
   // ── LOAD PROGRESS ON MOUNT ────────────────────────────────────────────────
@@ -64,6 +69,8 @@ export function MissionProvider({ children }) {
             data.progress.playerPosition || { x: -2, y: 2.5, z: 3 },
           );
           setSavedHighScore(data.progress.shooterHighscore || 0);
+          setShooterPlays(data.progress.shooterPlays || 0);
+          setShooterHighscoreCount(data.progress.shooterHighscoreCount || 0);
           setTaskResults(data.progress.taskResults || []);
         } else {
           setMission(defaultMission());
@@ -149,6 +156,10 @@ export function MissionProvider({ children }) {
         setSavedPosition,
         savedHighScore,
         setSavedHighScore,
+        shooterPlays,
+        setShooterPlays,
+        shooterHighscoreCount,
+        setShooterHighscoreCount,
         taskResults,
         setTaskResults,
       }}

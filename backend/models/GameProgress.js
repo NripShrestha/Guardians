@@ -41,6 +41,8 @@ const GameProgressSchema = new mongoose.Schema(
       z: { type: Number, default: 3 },
     },
     shooterHighscore: { type: Number, default: 0 },
+    shooterPlays: { type: Number, default: 0 },
+    shooterHighscoreCount: { type: Number, default: 0 },
     taskResults: [TaskResultSchema],
   },
   { timestamps: true },

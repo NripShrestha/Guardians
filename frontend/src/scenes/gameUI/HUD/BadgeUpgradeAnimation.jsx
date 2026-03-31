@@ -17,6 +17,8 @@ const BADGE_STYLES = {
   Gold:     { text: "text-yellow-500", border: "border-yellow-500", bg: "bg-yellow-50",  glow: "#eab308", particle: "#fde68a" },
   Platinum: { text: "text-slate-400",  border: "border-slate-400",  bg: "bg-slate-50",   glow: "#94a3b8", particle: "#cbd5e1" },
   Diamond:  { text: "text-cyan-400",   border: "border-cyan-400",   bg: "bg-cyan-50",    glow: "#22d3ee", particle: "#a5f3fc" },
+  Master:   { text: "text-purple-500", border: "border-purple-500", bg: "bg-purple-50",  glow: "#a855f7", particle: "#d8b4fe" },
+  Legendary:{ text: "text-fuchsia-500",border: "border-fuchsia-500",bg: "bg-fuchsia-50", glow: "#d946ef", particle: "#f5d0fe" },
 };
 
 const SPARKLE_COUNT = 16;
