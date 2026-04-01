@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { useRapier } from "@react-three/rapier";
 
 export default function ThirdPersonCamera({
   offset = { x: 0, y: 2.5, z: 5 },
@@ -16,8 +17,7 @@ export default function ThirdPersonCamera({
   const targetBody = useRef(null);
   const characterGroup = useRef(null);
 
-  // Raycaster for obstruction detection (reused every frame for performance)
-  const raycaster = useRef(new THREE.Raycaster());
+  // Removed Three.js Raycaster since we will use Rapier Physics BVH
 
   // Current camera distance (smoothly interpolated)
   const currentDistance = useRef(null);
@@ -29,6 +29,7 @@ export default function ThirdPersonCamera({
   const MIN_DISTANCE = 0.5;
 
   const { scene, camera } = useThree();
+  const { rapier, world } = useRapier();
 
   useEffect(() => {
     console.log("ThirdPersonCamera mounted - searching for character...");
@@ -106,7 +107,7 @@ export default function ThirdPersonCamera({
     );
 
     // ═══════════════════════════════════════════════════════════════
-    // OBSTRUCTION DETECTION - Core AAA TPP Camera Logic
+    // OBSTRUCTION DETECTION - Physics BVH TPP Camera Logic
     // ═══════════════════════════════════════════════════════════════
 
     // Calculate ideal distance from look-at point to desired camera position
@@ -122,37 +123,29 @@ export default function ThirdPersonCamera({
       .subVectors(idealCameraPosition, lookAtTarget)
       .normalize();
 
-    // Setup raycaster: shoot ray from character toward ideal camera position
-    raycaster.current.set(lookAtTarget, rayDirection);
-
-    // Raycast against all scene objects
-    const intersects = raycaster.current.intersectObjects(scene.children, true);
-
-    // Filter out character's own meshes (we don't want to collide with ourselves)
-    const validIntersects = intersects.filter((intersect) => {
-      // Traverse up the hierarchy to check if this object is part of the character
-      let obj = intersect.object;
-      while (obj) {
-        if (obj === characterGroup.current) {
-          return false; // Skip character's own meshes
-        }
-        obj = obj.parent;
-      }
-      return true; // Valid obstruction
-    });
-
     // Determine actual camera distance based on obstructions
     let targetDistance = idealDistance;
 
-    if (validIntersects.length > 0) {
-      // We hit something! Find the closest obstruction
-      const closestHit = validIntersects[0];
-      const hitDistance = closestHit.distance;
+    // Start ray slightly outside character's collision capsule (radius ~0.15) to avoid hitting ourselves
+    const rayOriginOffset = 0.4;
+    const rayDistance = idealDistance - rayOriginOffset;
 
-      // Only adjust if obstruction is between character and ideal camera position
-      if (hitDistance < idealDistance) {
-        // Pull camera closer, but leave safety margin to prevent wall clipping
-        targetDistance = Math.max(hitDistance - SAFETY_OFFSET, MIN_DISTANCE);
+    if (rayDistance > 0) {
+      const rayOrigin = lookAtTarget.clone().add(rayDirection.clone().multiplyScalar(rayOriginOffset));
+      
+      // Use Rapier's physics BVH world castRay. Sub-millisecond performance compared to visual mesh raycasting
+      const ray = new rapier.Ray(rayOrigin, rayDirection);
+      const hit = world.castRay(ray, rayDistance, true);
+
+      if (hit) {
+        // We hit a physics collider! hit.toi is the exact time of impact (distance from ray origin)
+        const hitDistance = hit.toi + rayOriginOffset;
+
+        // Only adjust if obstruction is between character and ideal camera position
+        if (hitDistance < idealDistance) {
+          // Pull camera closer, but leave safety margin to prevent wall clipping
+          targetDistance = Math.max(hitDistance - SAFETY_OFFSET, MIN_DISTANCE);
+        }
       }
     }
 

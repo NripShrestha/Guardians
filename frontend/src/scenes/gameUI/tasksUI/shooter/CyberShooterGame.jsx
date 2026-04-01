@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -273,6 +273,35 @@ let _id = 0;
 const uid = () => ++_id;
 
 // ─── TEXTURE FACTORIES ────────────────────────────────────────────────────────
+
+const TEX_CACHE = new Map();
+function getCachedTexture(label, emoji, isDanger) {
+  const key = `${label}_${emoji}_${isDanger}`;
+  if (!TEX_CACHE.has(key)) {
+    TEX_CACHE.set(key, makeTexture(label, emoji, isDanger));
+  }
+  return TEX_CACHE.get(key);
+}
+
+let CLOCK_TEX = null;
+function getClockTexture() {
+  if (!CLOCK_TEX) CLOCK_TEX = makeClockTexture();
+  return CLOCK_TEX;
+}
+
+const BOOSTER_TEX_CACHE = new Map();
+function getBoosterTexture(type) {
+  if (!BOOSTER_TEX_CACHE.has(type)) {
+    const isFreeze = type === "freeze";
+    BOOSTER_TEX_CACHE.set(
+      type,
+      isFreeze
+        ? makeBoosterTexture("FIREWALL\nFREEZE", "🧊", "#E3F2FD", "#B3E5FC", "#0277BD")
+        : makeBoosterTexture("PAYLOAD\nDROP", "💣", "#F3E5F5", "#E1BEE7", "#7B1FA2")
+    );
+  }
+  return BOOSTER_TEX_CACHE.get(type);
+}
 
 function makeTexture(label, emoji, isDanger) {
   const cv = document.createElement("canvas");
@@ -611,7 +640,7 @@ function Target({
   onDead,
 }) {
   const meshRef = useRef();
-  const [tex] = useState(() => makeTexture(label, emoji, type === "danger"));
+  const tex = useMemo(() => getCachedTexture(label, emoji, type === "danger"), [label, emoji, type]);
   const dying = useRef(false);
   const opacity = useRef(1);
   const pos = useRef(new THREE.Vector3(...initPos));
@@ -631,7 +660,7 @@ function Target({
     mesh.userData.targetType = type;
     mesh.userData.targetId = id;
     return () => registry.current.delete(id);
-  });
+  }, [id, type, registry]);
 
   useFrame((state, dt) => {
     const mesh = meshRef.current;
@@ -709,7 +738,7 @@ function FloatingCloud({ position, scale, speed }) {
 
 function ClockTarget({ id, initPos, speedMult, registry, onDead }) {
   const meshRef = useRef();
-  const [tex] = useState(() => makeClockTexture());
+  const tex = useMemo(() => getClockTexture(), []);
   const dying = useRef(false);
   const opacity = useRef(1);
   const pos = useRef(new THREE.Vector3(...initPos));
@@ -734,7 +763,7 @@ function ClockTarget({ id, initPos, speedMult, registry, onDead }) {
     mesh.userData.targetType = "clock";
     mesh.userData.targetId = id;
     return () => registry.current.delete(id);
-  });
+  }, [id, registry]);
 
   useFrame((state, dt) => {
     const mesh = meshRef.current;
@@ -798,23 +827,7 @@ function ClockTarget({ id, initPos, speedMult, registry, onDead }) {
 
 function BoosterTarget({ id, boosterType, initPos, registry, onDead }) {
   const meshRef = useRef();
-  const [tex] = useState(() => {
-    if (boosterType === "freeze")
-      return makeBoosterTexture(
-        "FIREWALL\nFREEZE",
-        "🧊",
-        "#E3F2FD",
-        "#B3E5FC",
-        "#0277BD",
-      );
-    return makeBoosterTexture(
-      "PAYLOAD\nDROP",
-      "💣",
-      "#F3E5F5",
-      "#E1BEE7",
-      "#7B1FA2",
-    );
-  });
+  const tex = useMemo(() => getBoosterTexture(boosterType), [boosterType]);
   const dying = useRef(false);
   const opacity = useRef(1);
   const pos = useRef(new THREE.Vector3(...initPos));
@@ -839,7 +852,7 @@ function BoosterTarget({ id, boosterType, initPos, registry, onDead }) {
       boosterType === "freeze" ? "booster_freeze" : "booster_payload";
     mesh.userData.targetId = id;
     return () => registry.current.delete(id);
-  });
+  }, [id, boosterType, registry]);
 
   useFrame((state, dt) => {
     const mesh = meshRef.current;
@@ -1088,7 +1101,7 @@ function GameScene({
   }, [payloadDrop, onSpecialHit]);
 
   // Extended cloud layout — more clouds across the sky
-  const clouds = [
+  const clouds = useMemo(() => [
     [[-5, 3, -10], [1.2, 0.7, 1], 0.3],
     [[4, 3.5, -11], [0.9, 0.6, 1], 0.25],
     [[-8, 2.5, -9], [1.0, 0.7, 1], 0.35],
@@ -1101,7 +1114,17 @@ function GameScene({
     [[2, 4.5, -13], [1.4, 0.75, 1], 0.15],
     [[-6, 4.2, -13], [0.65, 0.5, 1], 0.24],
     [[8, 3.5, -13], [0.9, 0.6, 1], 0.19],
-  ];
+  ], []);
+
+  const starMeshElements = useMemo(() => Array.from({ length: 12 }, (_, i) => (
+    <mesh
+      key={`s${i}`}
+      position={[Math.sin(i * 1.7) * 9, Math.cos(i * 2.3) * 2 + 2.5, -11.5]}
+    >
+      <octahedronGeometry args={[0.06, 0]} />
+      <meshBasicMaterial color="#FFDD44" />
+    </mesh>
+  )), []);
 
   return (
     <>
@@ -1124,15 +1147,7 @@ function GameScene({
       {clouds.map(([pos, scale, speed], i) => (
         <FloatingCloud key={i} position={pos} scale={scale} speed={speed} />
       ))}
-      {Array.from({ length: 12 }, (_, i) => (
-        <mesh
-          key={`s${i}`}
-          position={[Math.sin(i * 1.7) * 9, Math.cos(i * 2.3) * 2 + 2.5, -11.5]}
-        >
-          <octahedronGeometry args={[0.06, 0]} />
-          <meshBasicMaterial color="#FFDD44" />
-        </mesh>
-      ))}
+      {starMeshElements}
       <CartoonGun
         firing={firing}
         aimDirRef={aimDirRef}
@@ -1191,7 +1206,19 @@ function GameScene({
 
 // ─── CROSSHAIR ────────────────────────────────────────────────────────────────
 
-function Crosshair({ mousePos, firing }) {
+function Crosshair({ playing, firing }) {
+  const [mousePos, setMousePos] = useState({
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2,
+  });
+
+  useEffect(() => {
+    if (!playing) return;
+    const fn = (e) => setMousePos({ x: e.clientX, y: e.clientY });
+    window.addEventListener("mousemove", fn);
+    return () => window.removeEventListener("mousemove", fn);
+  }, [playing]);
+
   const color = firing ? "#FF4444" : "#FF8800";
   return (
     <div
@@ -1542,10 +1569,6 @@ export default function CyberShooterGame({
   const [quizIdx, setQuizIdx] = useState(0);
   const [quiz, setQuiz] = useState(null);
   const [quizFb, setQuizFb] = useState(null);
-  const [mousePos, setMousePos] = useState({
-    x: window.innerWidth / 2,
-    y: window.innerHeight / 2,
-  });
   const mousePosRef = useRef({
     x: window.innerWidth / 2,
     y: window.innerHeight / 2,
@@ -1638,7 +1661,6 @@ export default function CyberShooterGame({
   useEffect(() => {
     if (gameState !== "playing") return;
     const fn = (e) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
       mousePosRef.current = { x: e.clientX, y: e.clientY };
     };
     window.addEventListener("mousemove", fn);
@@ -2068,7 +2090,7 @@ export default function CyberShooterGame({
       {/* ── HUD ── */}
       {playing && (
         <>
-          <Crosshair mousePos={mousePos} firing={firing} />
+          <Crosshair playing={playing} firing={firing} />
 
           {/* Freeze overlay — no blur, icy crystal effect */}
           {freezeActive && <FreezeOverlay freezeTimeLeft={freezeTimeLeft} />}
