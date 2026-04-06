@@ -53,12 +53,18 @@ function SaveToast({ status }) {
 export default function HUD() {
   const {
     mission,
+    setMission,
     savedCharacter,
     savedHighScore,
     shooterPlays,
     shooterHighscoreCount,
     taskResults,
     setTaskResults,
+    quizScore,
+    quizHighScore,
+    quizAnswers,
+    quizCompletedOnce,
+    quizPerfectOnce,
   } = useMission();
 
   const [showSettings, setShowSettings] = useState(false);
@@ -71,7 +77,8 @@ export default function HUD() {
 
   // --- XP & Badge Logic ---
   const passedCount = taskResults.filter((r) => r.result === "PASS").length;
-  const xp = passedCount * 100 + shooterPlays * 5 + shooterHighscoreCount * 50;
+  const quizXP = (quizCompletedOnce ? 50 : 0) + (quizPerfectOnce ? 50 : 0);
+  const xp = passedCount * 100 + shooterPlays * 5 + shooterHighscoreCount * 50 + quizXP;
 
   const { badgeName, badgeColor, tierMin, tierMax } = useMemo(() => {
     if (xp >= 1200)
@@ -180,7 +187,12 @@ export default function HUD() {
           shooterHighscore: savedHighScore,
           shooterPlays: shooterPlays,
           shooterHighscoreCount: shooterHighscoreCount,
-          taskResults: taskResults, // Save entire task history
+          taskResults: taskResults,
+          quizScore: quizScore,
+          quizHighScore: quizHighScore,
+          quizAnswers: quizAnswers,
+          quizCompletedOnce: quizCompletedOnce,
+          quizPerfectOnce: quizPerfectOnce,
         }),
       });
 
@@ -266,6 +278,26 @@ export default function HUD() {
         <TaskHistoryOverlay
           onClose={() => setShowTaskHistory(false)}
           taskResults={taskResults}
+          quizScore={quizScore}
+          quizHighScore={quizHighScore}
+          quizAnswers={quizAnswers}
+          onRetakeQuiz={() => {
+            // Only allow retake if game has reached quiz phase or beyond
+            if (
+              mission.id === "TASK_10_FINAL_QUIZ" ||
+              mission.id === "TASK_11_OUTRO"
+            ) {
+              setMission({
+                id: "TASK_10_FINAL_QUIZ",
+                stage: "TASK10_QUIZ",
+                result: null,
+                unsafeFields: [],
+                selectedUrl: null,
+                emailActions: {},
+                incorrectlyHandled: [],
+              });
+            }
+          }}
         />
       )}
 

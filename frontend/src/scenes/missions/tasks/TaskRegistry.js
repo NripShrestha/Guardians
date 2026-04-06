@@ -686,6 +686,97 @@ export const TASK_REGISTRY = {
       },
     },
   },
+
+  // ─── TASK 10: FINAL QUIZ ─────────────────────────────────────────────────
+  TASK_10_FINAL_QUIZ: {
+    id: "TASK_10_FINAL_QUIZ",
+    name: "Final Assessment — Cybersecurity Quiz",
+
+    stages: [
+      "TASK10_TALK_TO_MANAGER",
+      "TASK10_TALKING_TO_MANAGER",
+      "TASK10_QUIZ",
+      "TASK10_COMPLETED",
+    ],
+
+    lockedStages: ["TASK10_TALKING_TO_MANAGER", "TASK10_QUIZ"],
+
+    stageInstructions: {
+      TASK10_TALK_TO_MANAGER:
+        "All tasks complete! Go to your manager for your final assessment",
+      TASK10_TALKING_TO_MANAGER: "Listen to your manager",
+      TASK10_QUIZ: "Complete the cybersecurity quiz",
+      TASK10_COMPLETED:
+        "Quiz complete! When you're ready to go home, visit your manager to say goodbye.",
+    },
+
+    triggers: [
+      {
+        type: "npc",
+        position: [-7.18, 0.03, 9.17],
+        size: [1, 2, 2.3],
+        stages: {
+          TASK10_TALK_TO_MANAGER: "TASK10_TALKING_TO_MANAGER",
+        },
+      },
+    ],
+
+    markers: [],
+
+    cameras: {
+      TASK10_TALKING_TO_MANAGER: {
+        position: [-7.25, 1.73, 7.7],
+        lookAt: [-7, 1, 16],
+      },
+    },
+  },
+
+  // ─── TASK 11: OUTRO / GOODBYE ──────────────────────────────────────────────
+  TASK_11_OUTRO: {
+    id: "TASK_11_OUTRO",
+    name: "Farewell — Say Your Goodbyes",
+
+    stages: [
+      "TASK11_GO_TO_MANAGER",
+      "TASK11_GOODBYE_PROMPT",
+      "TASK11_GOODBYE_DIALOGUE",
+      "TASK11_CREDITS",
+    ],
+
+    lockedStages: [
+      "TASK11_GOODBYE_PROMPT",
+      "TASK11_GOODBYE_DIALOGUE",
+      "TASK11_CREDITS",
+    ],
+
+    stageInstructions: {
+      TASK11_GO_TO_MANAGER:
+        "Ready to go home? Go to your manager and say your goodbyes.",
+      TASK11_GOODBYE_PROMPT: "Make your decision…",
+      TASK11_GOODBYE_DIALOGUE: "Saying your goodbyes…",
+      TASK11_CREDITS: "Thank you for playing!",
+    },
+
+    triggers: [
+      {
+        type: "npc",
+        position: [-7.18, 0.03, 9.17],
+        size: [1, 2, 2.3],
+        stages: {
+          TASK11_GO_TO_MANAGER: "TASK11_GOODBYE_PROMPT",
+        },
+      },
+    ],
+
+    markers: [],
+
+    cameras: {
+      TASK11_GOODBYE_DIALOGUE: {
+        position: [-7.25, 1.73, 7.7],
+        lookAt: [-7, 1, 16],
+      },
+    },
+  },
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -754,4 +845,16 @@ export function shouldShowUSBModel(missionId, stage) {
     return stage !== "TASK9_COMPLETED";
   }
   return false;
+}
+
+export function shouldShowQuiz(missionId, stage) {
+  return missionId === "TASK_10_FINAL_QUIZ" && stage === "TASK10_QUIZ";
+}
+
+export function shouldShowGoodbyePrompt(missionId, stage) {
+  return missionId === "TASK_11_OUTRO" && stage === "TASK11_GOODBYE_PROMPT";
+}
+
+export function shouldShowCredits(missionId, stage) {
+  return missionId === "TASK_11_OUTRO" && stage === "TASK11_CREDITS";
 }

@@ -34,6 +34,11 @@ export function MissionProvider({ children }) {
   const [shooterPlays, setShooterPlays] = useState(0);
   const [shooterHighscoreCount, setShooterHighscoreCount] = useState(0);
   const [taskResults, setTaskResults] = useState([]);
+  const [quizScore, setQuizScore] = useState(null);
+  const [quizHighScore, setQuizHighScore] = useState(null);
+  const [quizAnswers, setQuizAnswers] = useState([]);
+  const [quizCompletedOnce, setQuizCompletedOnce] = useState(false);
+  const [quizPerfectOnce, setQuizPerfectOnce] = useState(false);
 
   // ── LOAD PROGRESS ON MOUNT ────────────────────────────────────────────────
   useEffect(() => {
@@ -72,6 +77,11 @@ export function MissionProvider({ children }) {
           setShooterPlays(data.progress.shooterPlays || 0);
           setShooterHighscoreCount(data.progress.shooterHighscoreCount || 0);
           setTaskResults(data.progress.taskResults || []);
+          setQuizScore(data.progress.quizScore ?? null);
+          setQuizHighScore(data.progress.quizHighScore ?? null);
+          setQuizAnswers(data.progress.quizAnswers || []);
+          setQuizCompletedOnce(data.progress.quizCompletedOnce || false);
+          setQuizPerfectOnce(data.progress.quizPerfectOnce || false);
         } else {
           setMission(defaultMission());
         }
@@ -162,6 +172,16 @@ export function MissionProvider({ children }) {
         setShooterHighscoreCount,
         taskResults,
         setTaskResults,
+        quizScore,
+        setQuizScore,
+        quizHighScore,
+        setQuizHighScore,
+        quizAnswers,
+        setQuizAnswers,
+        quizCompletedOnce,
+        setQuizCompletedOnce,
+        quizPerfectOnce,
+        setQuizPerfectOnce,
       }}
     >
       {children}

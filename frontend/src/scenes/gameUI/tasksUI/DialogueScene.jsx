@@ -897,6 +897,90 @@ const TASK9_CLOSING_RESPONSES = {
   fallfor: "All the time.",
 };
 
+// ─── TASK 10 DIALOGUE DATA ───────────────────────────────────────────────────
+
+const TASK10_SCENE_1_OPENING = [
+  {
+    speaker: "Manager",
+    text: "You've completed all nine tasks. Every challenge, every test — you made it through.",
+  },
+  {
+    speaker: "Manager",
+    text: "Hopefully you've learnt a lot along the way.",
+  },
+  {
+    speaker: "Manager",
+    text: "Actually… I want to test that.",
+  },
+  {
+    speaker: "Manager",
+    text: "On your screen, you should be able to see a new button. Click it to access the final quiz.",
+  },
+  {
+    speaker: "Manager",
+    text: "This will cover everything you've learned — from personal data to physical threats.",
+  },
+  {
+    speaker: "Manager",
+    text: "Show me what you've retained. Good luck, recruit.",
+  },
+];
+
+// ─── TASK 11 DIALOGUE DATA (GOODBYE) ─────────────────────────────────────────
+
+const TASK11_GOODBYE_LINES = [
+  {
+    speaker: "Manager",
+    text: "So… this is it.",
+  },
+  {
+    speaker: "Manager",
+    text: "When you first walked in here, you didn't know what a phishing email was.",
+  },
+  {
+    speaker: "Manager",
+    text: "Now look at you.",
+  },
+  {
+    speaker: "Manager",
+    text: "You can spot social engineering, fake websites, malicious ads, and even physical threats.",
+  },
+  {
+    speaker: "Manager",
+    text: "You've become a true Digital Defender.",
+  },
+  {
+    speaker: "Manager",
+    text: "But remember — cybersecurity isn't a one-time lesson.",
+  },
+  {
+    speaker: "Manager",
+    text: "The threats evolve. And so must you.",
+  },
+  {
+    speaker: "Manager",
+    text: "Stay alert. Stay curious. And always think before you click.",
+  },
+  {
+    speaker: "Manager",
+    text: "It's been an honor training you, recruit.",
+  },
+  {
+    speaker: "Manager",
+    text: "Now go out there and protect the digital world. 🛡️",
+  },
+];
+
+const TASK11_GOODBYE_OPTIONS = [
+  { id: "thanks", label: "Thank you for everything, sir. I won't forget what I learned." },
+  { id: "honor", label: "The honor was mine. I'll make you proud." },
+];
+
+const TASK11_GOODBYE_RESPONSES = {
+  thanks: "You already have. Now go — the digital world needs you.",
+  honor: "You already have, recruit. You already have.",
+};
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function useTypewriter(text, speed = 30, active = true) {
@@ -2162,29 +2246,24 @@ function Task8Scene2({ result, onComplete }) {
  */
 function Task9USBFound({ onPlugIn, onReport }) {
   return (
-    <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[950] flex flex-col items-center">
-      <div className="bg-[#111111] bg-opacity-95 backdrop-blur-sm rounded-xl border border-gray-700 shadow-2xl p-4 w-[320px] flex flex-col gap-3">
-        <div className="text-center font-sans">
-          <h2 className="text-base font-black text-white leading-tight flex items-center justify-center gap-2">
-            <span>💾</span> Unknown USB Found
-          </h2>
-          <p className="text-[11px] text-gray-400 font-medium mt-1">
-            An unknown USB drive is on the floor. What will you do?
-          </p>
-        </div>
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[950] flex flex-col items-center font-sans">
+      <div className="bg-yellow-400 rounded-2xl border-4 border-indigo-900 shadow-[6px_6px_0_0_#4338ca] px-5 py-4 w-[300px] flex flex-col gap-3">
+        <p className="text-center text-sm font-black text-indigo-900 leading-snug">
+          💾 Unknown USB found on the floor!
+        </p>
 
         <div className="flex gap-2">
           <button
             onClick={onPlugIn}
-            className="flex-1 px-2 py-2.5 rounded-lg text-xs font-bold text-white bg-red-600 hover:bg-red-500 border border-red-700 shadow-sm transition-all text-center"
+            className="flex-1 py-2.5 rounded-xl text-xs font-black text-white bg-pink-500 border-b-4 border-pink-800 hover:bg-pink-600 active:translate-y-0.5 active:border-b-2 transition-all text-center"
           >
-            🔌 Plug it in
+            🔌 Plug In
           </button>
           <button
             onClick={onReport}
-            className="flex-1 px-2 py-2.5 rounded-lg text-xs font-bold text-white bg-green-600 hover:bg-green-500 border border-green-700 shadow-sm transition-all text-center"
+            className="flex-1 py-2.5 rounded-xl text-xs font-black text-white bg-pink-500 border-b-4 border-pink-800 hover:bg-pink-600 active:translate-y-0.5 active:border-b-2 transition-all text-center"
           >
-            🙋 Report it
+            🙋 Report
           </button>
         </div>
       </div>
@@ -2417,6 +2496,94 @@ function Task9DebriefPass({ onComplete }) {
   );
 }
 
+// ─── TASK 10 SCENES ───────────────────────────────────────────────────────────
+
+function Task10Scene1({ onComplete }) {
+  const [lineIndex, setLineIndex] = useState(0);
+  const handleAdvance = () => {
+    if (lineIndex < TASK10_SCENE_1_OPENING.length - 1)
+      setLineIndex((i) => i + 1);
+    else onComplete();
+  };
+  return (
+    <div className="flex gap-4 items-start">
+      <Avatar label="🧑🏻‍💼" />
+      <div className="flex-1">
+        <DialogueBubble
+          key={lineIndex}
+          line={TASK10_SCENE_1_OPENING[lineIndex]}
+          onAdvance={handleAdvance}
+        />
+      </div>
+    </div>
+  );
+}
+
+// ─── TASK 11 SCENES ───────────────────────────────────────────────────────────
+
+function Task11GoodbyeScene({ onComplete }) {
+  const [phase, setPhase] = useState("lines");
+  const [lineIndex, setLineIndex] = useState(0);
+  const [finalResponse, setFinalResponse] = useState("");
+
+  const handleAdvance = () => {
+    if (phase === "lines") {
+      if (lineIndex < TASK11_GOODBYE_LINES.length - 1)
+        setLineIndex((i) => i + 1);
+      else {
+        setPhase("choice");
+        setLineIndex(0);
+      }
+    } else if (phase === "finalResponse") {
+      onComplete();
+    }
+  };
+
+  const handleChoice = (id) => {
+    setFinalResponse(TASK11_GOODBYE_RESPONSES[id]);
+    setPhase("finalResponse");
+    setLineIndex(0);
+  };
+
+  const isLast = phase === "finalResponse";
+  const currentLine =
+    phase === "lines"
+      ? TASK11_GOODBYE_LINES[lineIndex]
+      : phase === "finalResponse"
+        ? { speaker: "Manager", text: finalResponse }
+        : null;
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-4 items-start">
+        <Avatar label="🧑🏻‍💼" pass={true} />
+        <div className="flex-1">
+          {phase === "choice" ? (
+            <ChoiceMenu
+              options={TASK11_GOODBYE_OPTIONS}
+              onSelect={handleChoice}
+            />
+          ) : currentLine ? (
+            <DialogueBubble
+              key={`${phase}-${lineIndex}`}
+              line={currentLine}
+              onAdvance={handleAdvance}
+            />
+          ) : null}
+          {isLast && (
+            <button
+              onClick={onComplete}
+              className="mt-4 w-full bg-yellow-400 hover:bg-yellow-500 text-indigo-900 py-3 rounded-2xl text-lg font-black border-b-8 border-yellow-600 active:border-b-0 active:translate-y-2 transition-all"
+            >
+              Goodbye 👋
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Main DialogueScene ───────────────────────────────────────────────────────
 
 export default function DialogueScene() {
@@ -2459,6 +2626,10 @@ export default function DialogueScene() {
   const isTask9DebriefPass =
     mission.id === "TASK_9_USB_BADUSB" &&
     mission.stage === "TASK9_DEBRIEFING_PASS";
+  // Task 10
+  const isTask10Scene1 = mission.stage === "TASK10_TALKING_TO_MANAGER";
+  // Task 11
+  const isTask11Goodbye = mission.stage === "TASK11_GOODBYE_DIALOGUE";
 
   const anyActive =
     isTask1Scene1 ||
@@ -2478,7 +2649,9 @@ export default function DialogueScene() {
     isTask7SceneFail ||
     isTask7ScenePass ||
     isTask8Scene1 ||
-    isTask8Scene2;
+    isTask8Scene2 ||
+    isTask10Scene1 ||
+    isTask11Goodbye;
 
   // ── Task 9 USB Found — rendered as full-screen overlay, NOT inside yellow box ──
   if (isTask9USBFound) {
@@ -2510,14 +2683,30 @@ export default function DialogueScene() {
           {isTask9DebriefFail && (
             <Task9DebriefFail
               onComplete={() =>
-                setMission({ ...mission, stage: "TASK9_COMPLETED" })
+                setMission({
+                  id: "TASK_10_FINAL_QUIZ",
+                  stage: "TASK10_TALK_TO_MANAGER",
+                  result: null,
+                  unsafeFields: [],
+                  selectedUrl: null,
+                  emailActions: {},
+                  incorrectlyHandled: [],
+                })
               }
             />
           )}
           {isTask9DebriefPass && (
             <Task9DebriefPass
               onComplete={() =>
-                setMission({ ...mission, stage: "TASK9_COMPLETED" })
+                setMission({
+                  id: "TASK_10_FINAL_QUIZ",
+                  stage: "TASK10_TALK_TO_MANAGER",
+                  result: null,
+                  unsafeFields: [],
+                  selectedUrl: null,
+                  emailActions: {},
+                  incorrectlyHandled: [],
+                })
               }
             />
           )}
@@ -2627,6 +2816,14 @@ export default function DialogueScene() {
   // ── Task 8 handlers ──
   const handleTask8Scene1Complete = () =>
     setMission({ ...mission, stage: "TASK8_WAITING_FOR_MESSAGE" });
+  // ── Task 10 handlers ──
+  const handleTask10Scene1Complete = () =>
+    setMission({ ...mission, stage: "TASK10_QUIZ" });
+
+  // ── Task 11 handlers ──
+  const handleTask11GoodbyeComplete = () =>
+    setMission({ ...mission, stage: "TASK11_CREDITS" });
+
   const handleTask8Scene2Complete = () =>
     setMission({
       id: "TASK_9_USB_BADUSB",
@@ -2728,6 +2925,17 @@ export default function DialogueScene() {
           <Task8Scene2
             result={mission.result}
             onComplete={handleTask8Scene2Complete}
+          />
+        )}
+
+        {/* Task 10 */}
+        {isTask10Scene1 && (
+          <Task10Scene1 onComplete={handleTask10Scene1Complete} />
+        )}
+
+        {/* Task 11 */}
+        {isTask11Goodbye && (
+          <Task11GoodbyeScene onComplete={handleTask11GoodbyeComplete}
           />
         )}
       </div>

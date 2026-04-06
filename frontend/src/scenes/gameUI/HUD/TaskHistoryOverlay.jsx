@@ -8,13 +8,16 @@ import {
   Mail,
   School,
   Calendar,
+  FileText,
 } from "lucide-react";
 import { TASK_REGISTRY } from "../../missions/tasks/TaskRegistry";
+import QuizReviewOverlay from "./QuizReviewOverlay";
 import axios from "axios";
 
-export default function TaskHistoryOverlay({ onClose, taskResults }) {
+export default function TaskHistoryOverlay({ onClose, taskResults, quizScore, quizHighScore, quizAnswers, onRetakeQuiz }) {
   const [userData, setUserData] = useState(null);
   const [activeTab, setActiveTab] = useState("profile"); // "profile" | "history"
+  const [showQuizReview, setShowQuizReview] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("guardians_token");
@@ -30,17 +33,29 @@ export default function TaskHistoryOverlay({ onClose, taskResults }) {
   }, []);
 
   const allTasks = Object.values(TASK_REGISTRY);
-  const displayTasks = [...allTasks];
-  while (displayTasks.length < 9) {
-    displayTasks.push({
-      id: `FUTURE_TASK_${displayTasks.length + 1}`,
-      name: `Classified Mission ${displayTasks.length + 1} (Coming Soon)`,
-    });
-  }
+  // Only show the 9 educational tasks + quiz row
+  const educationalTasks = allTasks.filter(
+    (t) => t.id !== "TASK_10_FINAL_QUIZ" && t.id !== "TASK_11_OUTRO"
+  );
 
   const passCount = taskResults.filter((r) => r.result === "PASS").length;
   const failCount = taskResults.filter((r) => r.result === "FAIL").length;
-  const totalReal = Object.values(TASK_REGISTRY).length;
+  const totalReal = educationalTasks.length;
+
+  if (showQuizReview) {
+    return (
+      <QuizReviewOverlay
+        onClose={() => setShowQuizReview(false)}
+        quizAnswers={quizAnswers}
+        quizScore={quizScore}
+        onRetake={() => {
+          setShowQuizReview(false);
+          onClose();
+          if (onRetakeQuiz) onRetakeQuiz();
+        }}
+      />
+    );
+  }
 
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 pointer-events-auto backdrop-blur-[2px]">
@@ -193,7 +208,7 @@ export default function TaskHistoryOverlay({ onClose, taskResults }) {
           {/* Mission History Tab */}
           {activeTab === "history" && (
             <div className="p-5 space-y-3">
-              {displayTasks.map((task, idx) => {
+              {educationalTasks.map((task, idx) => {
                 const resultObj = taskResults.find((r) => r.taskId === task.id);
                 const status = resultObj?.result || "PENDING";
 
@@ -211,9 +226,6 @@ export default function TaskHistoryOverlay({ onClose, taskResults }) {
                   statusColor = "text-red-500";
                   bgColor =
                     "bg-red-50 border-red-200 shadow-[2px_2px_0_0_#fecaca]";
-                } else if (task.id.startsWith("FUTURE")) {
-                  bgColor =
-                    "bg-gray-100 border-gray-200 opacity-60 border-dashed";
                 }
 
                 return (
@@ -236,6 +248,53 @@ export default function TaskHistoryOverlay({ onClose, taskResults }) {
                   </div>
                 );
               })}
+
+              {/* ── QUIZ SCORE ROW ── */}
+              <div className="mt-2 pt-2 border-t-2 border-indigo-100">
+                <div
+                  onClick={() => {
+                    if (quizScore !== null) setShowQuizReview(true);
+                  }}
+                  className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${
+                    quizScore !== null
+                      ? quizScore === 25
+                        ? "bg-yellow-50 border-yellow-300 shadow-[2px_2px_0_0_#fde68a] cursor-pointer hover:bg-yellow-100"
+                        : "bg-indigo-50 border-indigo-200 shadow-[2px_2px_0_0_#c7d2fe] cursor-pointer hover:bg-indigo-100"
+                      : "bg-gray-50 border-gray-200"
+                  }`}
+                >
+                  <div className="text-sm font-black text-indigo-900 w-8 h-8 flex items-center justify-center bg-white rounded-xl border-2 border-indigo-100 shadow-sm shrink-0">
+                    <FileText className="w-4 h-4" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-indigo-900">
+                      Final Quiz
+                    </h3>
+                    {quizScore !== null ? (
+                      <p className="text-sm font-bold text-gray-500 mt-0.5">
+                        Score: <span className={quizScore === 25 ? "text-yellow-600" : quizScore >= 15 ? "text-green-600" : "text-red-600"}>{quizScore}/25</span>
+                        {quizHighScore !== null && quizHighScore > quizScore && (
+                          <span className="text-xs text-gray-400 ml-2">(Best: {quizHighScore}/25)</span>
+                        )}
+                        <span className="text-xs text-indigo-400 ml-2">Click to review</span>
+                      </p>
+                    ) : (
+                      <p className="text-sm font-bold text-gray-400 uppercase tracking-widest mt-0.5">
+                        NOT TAKEN
+                      </p>
+                    )}
+                  </div>
+                  {quizScore !== null ? (
+                    quizScore === 25 ? (
+                      <span className="text-2xl">🏆</span>
+                    ) : (
+                      <CheckCircle className="w-6 h-6 text-indigo-500 shrink-0" />
+                    )
+                  ) : (
+                    <Clock className="w-6 h-6 text-gray-400 shrink-0" />
+                  )}
+                </div>
+              </div>
             </div>
           )}
         </div>

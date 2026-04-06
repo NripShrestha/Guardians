@@ -221,6 +221,11 @@ app.get("/progress", authenticateToken, async (req, res) => {
         characterType: progress.characterType,
         playerPosition: progress.playerPosition,
         taskResults: progress.taskResults,
+        quizScore: progress.quizScore ?? null,
+        quizHighScore: progress.quizHighScore ?? null,
+        quizAnswers: progress.quizAnswers || [],
+        quizCompletedOnce: progress.quizCompletedOnce || false,
+        quizPerfectOnce: progress.quizPerfectOnce || false,
       },
     });
   } catch (err) {
@@ -232,7 +237,7 @@ app.get("/progress", authenticateToken, async (req, res) => {
 // ── SAVE PROGRESS ─────────────────────────────────────────────────────────────
 // Called when player clicks the Save button in HUD
 app.post("/progress", authenticateToken, async (req, res) => {
-  const { currentMissionId, currentStage, taskResult, shooterHighscore, shooterPlays, shooterHighscoreCount, characterType, playerPosition, taskResults } = req.body;
+  const { currentMissionId, currentStage, taskResult, shooterHighscore, shooterPlays, shooterHighscoreCount, characterType, playerPosition, taskResults, quizScore, quizHighScore, quizAnswers, quizCompletedOnce, quizPerfectOnce } = req.body;
 
   if (!currentMissionId || !currentStage) {
     return res
@@ -286,10 +291,54 @@ app.post("/progress", authenticateToken, async (req, res) => {
           progressDoc.taskResults.push(taskResult);
         }
       }
+
+      // ── Quiz fields ───────────────────────────────────────────────────
+      if (quizScore !== undefined) progressDoc.quizScore = quizScore;
+      if (quizHighScore !== undefined) {
+        progressDoc.quizHighScore = Math.max(progressDoc.quizHighScore || 0, quizHighScore);
+      }
+      if (Array.isArray(quizAnswers)) progressDoc.quizAnswers = quizAnswers;
+      if (quizCompletedOnce !== undefined) progressDoc.quizCompletedOnce = quizCompletedOnce;
+      if (quizPerfectOnce !== undefined) progressDoc.quizPerfectOnce = quizPerfectOnce;
     }
 
     await progressDoc.save();
     res.json({ success: true, message: "Progress saved" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// ── RESET PROGRESS (Goodbye) ────────────────────────────────────────────────
+// Resets everything except shooterHighscore and quizHighScore
+app.post("/progress/reset", authenticateToken, async (req, res) => {
+  try {
+    const progressDoc = await GameProgress.findOne({ userId: req.user.id });
+    if (!progressDoc) {
+      return res.json({ success: true, message: "Nothing to reset" });
+    }
+
+    // Preserve high scores
+    const keepShooterHighscore = progressDoc.shooterHighscore || 0;
+    const keepQuizHighScore = progressDoc.quizHighScore || null;
+
+    // Reset everything else
+    progressDoc.currentMissionId = "TASK_1_PERSONAL_DATA";
+    progressDoc.currentStage = "TALK_TO_MANAGER";
+    progressDoc.playerPosition = { x: -2, y: 2.5, z: 3 };
+    progressDoc.shooterHighscore = keepShooterHighscore;
+    progressDoc.shooterPlays = 0;
+    progressDoc.shooterHighscoreCount = 0;
+    progressDoc.taskResults = [];
+    progressDoc.quizScore = null;
+    progressDoc.quizHighScore = keepQuizHighScore;
+    progressDoc.quizAnswers = [];
+    progressDoc.quizCompletedOnce = false;
+    progressDoc.quizPerfectOnce = false;
+
+    await progressDoc.save();
+    res.json({ success: true, message: "Progress reset" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: "Server error" });

@@ -183,6 +183,23 @@ export default function CharacterController({
     }
   }, []);
 
+  // Listen for reset player position event
+  useEffect(() => {
+    const handleReset = () => {
+      if (rigidBodyRef.current && position) {
+        // Reset rigid body position to the default position
+        rigidBodyRef.current.setTranslation({ x: position[0], y: position[1], z: position[2] }, true);
+        // Also wipe velocity to prevent sliding
+        rigidBodyRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+      }
+    };
+
+    window.addEventListener("reset-player-position", handleReset);
+    return () => {
+      window.removeEventListener("reset-player-position", handleReset);
+    };
+  }, [position]);
+
   // Set up mouse / touchpad drag listeners (once)
   useEffect(() => {
     const cleanup = setupDragListeners();

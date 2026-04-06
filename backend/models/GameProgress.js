@@ -44,6 +44,18 @@ const GameProgressSchema = new mongoose.Schema(
     shooterPlays: { type: Number, default: 0 },
     shooterHighscoreCount: { type: Number, default: 0 },
     taskResults: [TaskResultSchema],
+    // ── Quiz fields ───────────────────────────────────────────────────────
+    quizScore: { type: Number, default: null },       // last quiz score
+    quizHighScore: { type: Number, default: null },   // best ever (preserved on reset)
+    quizAnswers: [
+      {
+        questionIndex: Number,
+        selectedAnswer: Number,
+        correct: Boolean,
+      },
+    ],
+    quizCompletedOnce: { type: Boolean, default: false }, // first-attempt XP flag
+    quizPerfectOnce: { type: Boolean, default: false },   // first-perfect XP flag
   },
   { timestamps: true },
 );
