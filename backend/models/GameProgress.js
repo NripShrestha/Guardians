@@ -56,6 +56,7 @@ const GameProgressSchema = new mongoose.Schema(
     ],
     quizCompletedOnce: { type: Boolean, default: false }, // first-attempt XP flag
     quizPerfectOnce: { type: Boolean, default: false },   // first-perfect XP flag
+    hasSeenTutorial: { type: Boolean, default: false },   // tutorial completion flag
   },
   { timestamps: true },
 );

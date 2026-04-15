@@ -65,6 +65,7 @@ export default function HUD() {
     quizAnswers,
     quizCompletedOnce,
     quizPerfectOnce,
+    hasSeenTutorial,
   } = useMission();
 
   const [showSettings, setShowSettings] = useState(false);
@@ -193,6 +194,7 @@ export default function HUD() {
           quizAnswers: quizAnswers,
           quizCompletedOnce: quizCompletedOnce,
           quizPerfectOnce: quizPerfectOnce,
+          hasSeenTutorial: hasSeenTutorial,
         }),
       });
 

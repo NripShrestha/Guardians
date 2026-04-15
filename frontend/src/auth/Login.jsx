@@ -6,6 +6,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
@@ -29,6 +30,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
+    setServerError("");
     if (!validateForm()) return;
 
     setIsSubmitting(true);
@@ -39,7 +41,6 @@ export default function Login() {
       });
 
       if (result.data.success) {
-        // ✅ FIXED: was "token", must match what MissionContext & HUD read
         localStorage.setItem("guardians_token", result.data.token);
 
         try {
@@ -61,13 +62,11 @@ export default function Login() {
           navigate("/choose-character");
         }
       } else {
-        alert(
-          "⚠️ " + (result.data.message || "Wait! That's not right. Try again!"),
-        );
+        setServerError(result.data.message || "That's not right. Try again!");
       }
     } catch (err) {
       console.error(err);
-      alert("🌙 The servers are sleepy. Try again later!");
+      setServerError("The servers are sleepy. Try again later!");
     } finally {
       setIsSubmitting(false);
     }
@@ -119,6 +118,15 @@ export default function Login() {
               </p>
             )}
           </div>
+
+          {serverError && (
+            <div className="flex items-center gap-2 bg-red-50 border-2 border-red-300 rounded-2xl px-4 py-3">
+              <span className="flex-shrink-0 w-5 h-5 bg-red-500 text-white text-xs font-black rounded-full flex items-center justify-center">
+                !
+              </span>
+              <p className="text-red-700 text-xs font-bold">{serverError}</p>
+            </div>
+          )}
 
           <button
             type="submit"

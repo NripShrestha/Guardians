@@ -8,6 +8,7 @@ export default function ForgotPassword() {
   const [newPassword, setNewPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState(null); // { type: "success" | "error", text: string }
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -38,6 +39,7 @@ export default function ForgotPassword() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
+    setStatusMessage(null);
     if (!validateForm()) return;
 
     setIsSubmitting(true);
@@ -49,16 +51,25 @@ export default function ForgotPassword() {
       });
 
       if (result.data.success) {
-        alert("🎉 Password reset successfully! Time to log in!");
-        navigate("/login");
+        setStatusMessage({
+          type: "success",
+          text: "🎉 Password reset successfully! Time to log in!",
+        });
+        setTimeout(() => navigate("/login"), 2000);
       } else {
-        alert(
-          "⚠️ " + (result.data.message || "Wait! That's not right. Try again!"),
-        );
+        setStatusMessage({
+          type: "error",
+          text:
+            "⚠️ " +
+            (result.data.message || "Wait! That's not right. Try again!"),
+        });
       }
     } catch (err) {
       console.error(err);
-      alert("🌙 The servers are sleepy. Try again later!");
+      setStatusMessage({
+        type: "error",
+        text: "🌙 The servers are sleepy. Try again later!",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -77,6 +88,19 @@ export default function ForgotPassword() {
         <p className="text-center text-indigo-600 font-bold mb-6">
           Answer your security question!
         </p>
+
+        {/* Inline status message */}
+        {statusMessage && (
+          <div
+            className={`mb-4 px-4 py-3 rounded-2xl border-4 font-bold text-sm text-center ${
+              statusMessage.type === "success"
+                ? "bg-green-50 border-green-400 text-green-700"
+                : "bg-red-50 border-red-400 text-red-600"
+            }`}
+          >
+            {statusMessage.text}
+          </div>
+        )}
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>

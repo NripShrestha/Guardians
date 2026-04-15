@@ -15,6 +15,9 @@ import TriggerManager from "./triggers/TriggerManager";
 import MarkerManager from "./triggers/MarkerManager";
 import CameraManager from "./triggers/CameraManager";
 import USB from "./gameModels/usb";
+import SittingGuy from "./gameModels/sittingGuy";
+import TalkingNPC from "./gameModels/talkingNPC";
+import TalkingNPC2 from "./gameModels/talkingNPC2";
 
 // Cyber Shooter
 import CyberShooterTrigger from "./gameUI/tasksUI/shooter/CyberShooterTrigger";
@@ -24,7 +27,7 @@ import CyberShooterTrigger from "./gameUI/tasksUI/shooter/CyberShooterTrigger";
  * Clean orchestrator that delegates to specialized components
  */
 export default function Scene({ onOpenCyberShooter }) {
-  const { mission, isPhoneModalOpen, savedCharacter, setSavedCharacter } =
+  const { mission, isPhoneModalOpen, isTutorialOpen, savedCharacter, setSavedCharacter } =
     useMission();
 
   const [activeCharacter, setActiveCharacter] = useState(null);
@@ -32,9 +35,9 @@ export default function Scene({ onOpenCyberShooter }) {
   // Get current task configuration
   const taskConfig = getCurrentTaskConfig(mission.id);
 
-  // Player is locked if stage requires it OR phone modal is open
+  // Player is locked if stage requires it OR phone modal is open OR tutorial is open
   const playerLocked =
-    isPlayerLocked(mission.id, mission.stage) || isPhoneModalOpen;
+    isPlayerLocked(mission.id, mission.stage) || isPhoneModalOpen || isTutorialOpen;
 
   // USB is only visible before picked up in Task 9
   const showUSB = shouldShowUSBModel(mission.id, mission.stage);
@@ -75,7 +78,11 @@ export default function Scene({ onOpenCyberShooter }) {
 
       {/* ================= USB MODEL (only after Task 8 completed) ================= */}
       {showUSB && <USB scale={0.05} position={[-6.5, 0.0, 3.99]} />}
+      <SittingGuy scale={1.2} position={[-5.9, 0.04, 5.2]} rotation={[0, 1.5, 0]} />
+      
 
+      <TalkingNPC scale={1.2} position={[-13.4, 0.0, 3.2]} rotation={[0, 0.4, 0]} />
+      <TalkingNPC2 scale={1.2} position={[-13.4, 0.0, 4.8]} rotation={[0, 2.8, 0]} />
       {/* ================= NPC ================= */}
       <Npc
         scale={1.2}

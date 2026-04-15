@@ -10,13 +10,14 @@ export default function Signup() {
   const [schoolName, setSchoolName] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
+  const [serverSuccess, setServerSuccess] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const validateForm = () => {
     const newErrors = {};
 
-    // Username validation
     if (!username.trim()) {
       newErrors.username = "Pick a cool hero name!";
     } else if (username.length < 3 || username.length > 20) {
@@ -25,33 +26,28 @@ export default function Signup() {
       newErrors.username = "Only letters, numbers, and _ allowed!";
     }
 
-    // Email validation
     if (!email.trim()) {
       newErrors.email = "We need your email address!";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       newErrors.email = "Check your email spelling!";
     }
 
-    // Age validation
     if (!age) {
       newErrors.age = "How old are you, hero?";
     } else if (age < 5 || age > 18) {
       newErrors.age = "Age must be between 5 and 18!";
     }
 
-    // Gender validation
     if (!gender) {
       newErrors.gender = "Pick your gender";
     }
 
-    // School name validation
     if (!schoolName.trim()) {
       newErrors.schoolName = "What is your school's name?";
     } else if (schoolName.length < 2) {
       newErrors.schoolName = "School name needs to be at least 2 characters!";
     }
 
-    // Password validation
     if (!password) {
       newErrors.password = "Create a secret code!";
     } else if (password.length < 6) {
@@ -66,9 +62,9 @@ export default function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Clear previous errors
     setErrors({});
+    setServerError("");
+    setServerSuccess("");
 
     if (!validateForm()) return;
 
@@ -84,16 +80,16 @@ export default function Signup() {
       });
 
       if (result.data.success) {
-        alert("🎉 Hero created! Time to log in!");
-        navigate("/login");
+        setServerSuccess("Hero created! Redirecting to login...");
+        setTimeout(() => navigate("/login"), 1500);
       } else if (result.data.errors) {
         setErrors(result.data.errors);
       } else {
-        alert(result.data.message || "Oops! Something went wrong!");
+        setServerError(result.data.message || "Oops! Something went wrong!");
       }
     } catch (err) {
       console.error(err);
-      alert("Oops! Something went wrong. Try again!");
+      setServerError("Oops! Something went wrong. Try again!");
     } finally {
       setIsSubmitting(false);
     }
@@ -101,7 +97,6 @@ export default function Signup() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-indigo-500 p-4 font-sans">
-      {/* Playful background shapes */}
       <div className="absolute top-10 left-10 w-20 h-20 bg-yellow-400 rounded-full blur-xl opacity-50 animate-bounce"></div>
       <div className="absolute bottom-10 right-10 w-32 h-32 bg-pink-400 rounded-full blur-xl opacity-50"></div>
 
@@ -239,6 +234,26 @@ export default function Signup() {
               💡 6+ chars, UPPERCASE, lowercase, numbers
             </p>
           </div>
+
+          {serverError && (
+            <div className="flex items-center gap-2 bg-red-50 border-2 border-red-300 rounded-2xl px-4 py-3">
+              <span className="flex-shrink-0 w-5 h-5 bg-red-500 text-white text-xs font-black rounded-full flex items-center justify-center">
+                !
+              </span>
+              <p className="text-red-700 text-xs font-bold">{serverError}</p>
+            </div>
+          )}
+
+          {serverSuccess && (
+            <div className="flex items-center gap-2 bg-green-50 border-2 border-green-300 rounded-2xl px-4 py-3">
+              <span className="flex-shrink-0 w-5 h-5 bg-green-500 text-white text-xs font-black rounded-full flex items-center justify-center">
+                ✓
+              </span>
+              <p className="text-green-700 text-xs font-bold">
+                {serverSuccess}
+              </p>
+            </div>
+          )}
 
           <button
             type="submit"

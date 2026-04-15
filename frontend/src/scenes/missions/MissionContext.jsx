@@ -25,6 +25,7 @@ export function getAuthToken() {
 export function MissionProvider({ children }) {
   const [mission, setMission] = useState(null);
   const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Saved from DB — shared with Scene and CharacterSelection
@@ -39,6 +40,7 @@ export function MissionProvider({ children }) {
   const [quizAnswers, setQuizAnswers] = useState([]);
   const [quizCompletedOnce, setQuizCompletedOnce] = useState(false);
   const [quizPerfectOnce, setQuizPerfectOnce] = useState(false);
+  const [hasSeenTutorial, setHasSeenTutorial] = useState(false);
 
   // ── LOAD PROGRESS ON MOUNT ────────────────────────────────────────────────
   useEffect(() => {
@@ -82,6 +84,7 @@ export function MissionProvider({ children }) {
           setQuizAnswers(data.progress.quizAnswers || []);
           setQuizCompletedOnce(data.progress.quizCompletedOnce || false);
           setQuizPerfectOnce(data.progress.quizPerfectOnce || false);
+          setHasSeenTutorial(data.progress.hasSeenTutorial || false);
         } else {
           setMission(defaultMission());
         }
@@ -160,6 +163,8 @@ export function MissionProvider({ children }) {
         setMission,
         isPhoneModalOpen,
         setIsPhoneModalOpen,
+        isTutorialOpen,
+        setIsTutorialOpen,
         savedCharacter,
         setSavedCharacter,
         savedPosition,
@@ -182,6 +187,8 @@ export function MissionProvider({ children }) {
         setQuizCompletedOnce,
         quizPerfectOnce,
         setQuizPerfectOnce,
+        hasSeenTutorial,
+        setHasSeenTutorial,
       }}
     >
       {children}

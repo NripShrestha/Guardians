@@ -1,14 +1,30 @@
+import { useRef } from "react";
+import { useFrame } from "@react-three/fiber";
 import { useMission } from "../missions/MissionContext";
 
 /**
  * Single Mission Marker
  */
 function Marker({ position, color }) {
+  const meshRef = useRef();
+
+  useFrame((state, delta) => {
+    if (!meshRef.current) return;
+    meshRef.current.rotation.y += delta * 1.5;
+    meshRef.current.position.y = Math.sin(state.clock.elapsedTime * 3) * 0.15;
+  });
+
   return (
-    <mesh position={position}>
-      <cylinderGeometry args={[0.2, 0.2, 1]} />
-      <meshStandardMaterial color={color} emissive={color} />
-    </mesh>
+    <group position={position}>
+      <mesh ref={meshRef} rotation-x={Math.PI}>
+        <coneGeometry args={[0.25, 0.5, 4]} />
+        <meshStandardMaterial 
+          color={color} 
+          emissive={color} 
+          emissiveIntensity={0.8}
+        />
+      </mesh>
+    </group>
   );
 }
 

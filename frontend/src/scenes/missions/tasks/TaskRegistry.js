@@ -50,7 +50,7 @@ export const TASK_REGISTRY = {
     markers: [
       {
         type: "objective",
-        position: [-5.35, 0.03, 1.99],
+        position: [-5.35, 2, 1.99],
         visibleInStages: ["GO_TO_WORKSPACE"],
         color: "yellow",
       },
@@ -171,7 +171,7 @@ export const TASK_REGISTRY = {
       },
       {
         type: "workspace",
-        position: [-5.35, 0.03, 1.99],
+        position: [-5.35, 2, 1.99],
         size: [2, 2, 2],
         stages: {
           TASK3_GO_TO_LAPTOP: "TASK3_DESKTOP_SIMULATION",
@@ -182,7 +182,7 @@ export const TASK_REGISTRY = {
     markers: [
       {
         type: "objective",
-        position: [-5.35, 0.03, 1.99],
+        position: [-5.35, 2, 1.99],
         visibleInStages: ["TASK3_GO_TO_LAPTOP"],
         color: "green",
       },
@@ -248,7 +248,7 @@ export const TASK_REGISTRY = {
       },
       {
         type: "workspace",
-        position: [-5.35, 0.03, 1.99],
+        position: [-5.35, 2, 1.99],
         size: [2, 2, 2],
         stages: {
           TASK4_GO_TO_LAPTOP: "TASK4_DESKTOP_EMAIL",
@@ -259,7 +259,7 @@ export const TASK_REGISTRY = {
     markers: [
       {
         type: "objective",
-        position: [-5.35, 0.03, 1.99],
+        position: [-5.35, 2, 1.99],
         visibleInStages: ["TASK4_GO_TO_LAPTOP"],
         color: "blue",
       },
@@ -331,7 +331,7 @@ export const TASK_REGISTRY = {
       },
       {
         type: "workspace",
-        position: [-5.35, 0.03, 1.99],
+        position: [-5.35, 2, 1.99],
         size: [2, 2, 2],
         stages: {
           TASK5_GO_TO_LAPTOP: "TASK5_LAPTOP_LOCKED",
@@ -342,7 +342,7 @@ export const TASK_REGISTRY = {
     markers: [
       {
         type: "objective",
-        position: [-5.35, 0.03, 1.99],
+        position: [-5.35, 2, 1.99],
         visibleInStages: ["TASK5_GO_TO_LAPTOP"],
         color: "purple",
       },
@@ -414,7 +414,7 @@ export const TASK_REGISTRY = {
       },
       {
         type: "workspace",
-        position: [-5.35, 0.03, 1.99],
+        position: [-5.35, 2, 1.99],
         size: [2, 2, 2],
         stages: {
           TASK6_GO_TO_LAPTOP: "TASK6_DESKTOP_BROWSER",
@@ -425,7 +425,7 @@ export const TASK_REGISTRY = {
     markers: [
       {
         type: "objective",
-        position: [-5.35, 0.03, 1.99],
+        position: [-5.35, 2, 1.99],
         visibleInStages: ["TASK6_GO_TO_LAPTOP"],
         color: "orange",
       },
@@ -490,7 +490,7 @@ export const TASK_REGISTRY = {
       },
       {
         type: "workspace",
-        position: [-5.35, 0.03, 1.99],
+        position: [-5.35, 2, 1.99],
         size: [2, 2, 2],
         stages: {
           TASK7_GO_TO_DESK: "TASK7_DESKTOP_EMAIL",
@@ -501,7 +501,7 @@ export const TASK_REGISTRY = {
     markers: [
       {
         type: "objective",
-        position: [-5.35, 0.03, 1.99],
+        position: [-5.35, 2, 1.99],
         visibleInStages: ["TASK7_GO_TO_DESK"],
         color: "red",
       },
@@ -653,7 +653,7 @@ export const TASK_REGISTRY = {
       // Workspace trigger — only for the FAIL path (go plug in USB)
       {
         type: "workspace",
-        position: [-5.35, 0.03, 1.99],
+        position: [-5.35, 2, 1.99],
         size: [2, 2, 2],
         stages: {
           TASK9_GO_TO_PC_FAIL: "TASK9_BADUSB_SIMULATION",
@@ -665,7 +665,7 @@ export const TASK_REGISTRY = {
       // White marker pointing to workstation (fail path only)
       {
         type: "objective",
-        position: [-5.35, 0.03, 1.99],
+        position: [-5.35, 2, 1.99],
         visibleInStages: ["TASK9_GO_TO_PC_FAIL"],
         color: "white",
       },

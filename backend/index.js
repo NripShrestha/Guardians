@@ -206,6 +206,7 @@ app.get("/progress", authenticateToken, async (req, res) => {
           currentStage: "TALK_TO_MANAGER",
           shooterHighscore: 0,
           taskResults: [],
+          hasSeenTutorial: false,
         },
       });
     }
@@ -226,6 +227,7 @@ app.get("/progress", authenticateToken, async (req, res) => {
         quizAnswers: progress.quizAnswers || [],
         quizCompletedOnce: progress.quizCompletedOnce || false,
         quizPerfectOnce: progress.quizPerfectOnce || false,
+        hasSeenTutorial: progress.hasSeenTutorial || false,
       },
     });
   } catch (err) {
@@ -237,7 +239,7 @@ app.get("/progress", authenticateToken, async (req, res) => {
 // ── SAVE PROGRESS ─────────────────────────────────────────────────────────────
 // Called when player clicks the Save button in HUD
 app.post("/progress", authenticateToken, async (req, res) => {
-  const { currentMissionId, currentStage, taskResult, shooterHighscore, shooterPlays, shooterHighscoreCount, characterType, playerPosition, taskResults, quizScore, quizHighScore, quizAnswers, quizCompletedOnce, quizPerfectOnce } = req.body;
+  const { currentMissionId, currentStage, taskResult, shooterHighscore, shooterPlays, shooterHighscoreCount, characterType, playerPosition, taskResults, quizScore, quizHighScore, quizAnswers, quizCompletedOnce, quizPerfectOnce, hasSeenTutorial } = req.body;
 
   if (!currentMissionId || !currentStage) {
     return res
@@ -260,6 +262,7 @@ app.post("/progress", authenticateToken, async (req, res) => {
         characterType: characterType || null,
         playerPosition: playerPosition || { x: -2, y: 2.5, z: 3 },
         taskResults: req.body.taskResults || (taskResult ? [taskResult] : []),
+        hasSeenTutorial: hasSeenTutorial || false,
       });
     } else {
       // Update the current position
@@ -300,6 +303,7 @@ app.post("/progress", authenticateToken, async (req, res) => {
       if (Array.isArray(quizAnswers)) progressDoc.quizAnswers = quizAnswers;
       if (quizCompletedOnce !== undefined) progressDoc.quizCompletedOnce = quizCompletedOnce;
       if (quizPerfectOnce !== undefined) progressDoc.quizPerfectOnce = quizPerfectOnce;
+      if (hasSeenTutorial !== undefined) progressDoc.hasSeenTutorial = hasSeenTutorial;
     }
 
     await progressDoc.save();
@@ -319,9 +323,10 @@ app.post("/progress/reset", authenticateToken, async (req, res) => {
       return res.json({ success: true, message: "Nothing to reset" });
     }
 
-    // Preserve high scores
+    // Preserve high scores & tutorial flag
     const keepShooterHighscore = progressDoc.shooterHighscore || 0;
     const keepQuizHighScore = progressDoc.quizHighScore || null;
+    const keepHasSeenTutorial = progressDoc.hasSeenTutorial || false;
 
     // Reset everything else
     progressDoc.currentMissionId = "TASK_1_PERSONAL_DATA";
@@ -336,6 +341,7 @@ app.post("/progress/reset", authenticateToken, async (req, res) => {
     progressDoc.quizAnswers = [];
     progressDoc.quizCompletedOnce = false;
     progressDoc.quizPerfectOnce = false;
+    progressDoc.hasSeenTutorial = keepHasSeenTutorial;
 
     await progressDoc.save();
     res.json({ success: true, message: "Progress reset" });

@@ -21,6 +21,7 @@ import BadUSBDesktop from "./scenes/gameUI/tasksUI/BadUSBDesktop";
 import FinalQuiz from "./scenes/gameUI/tasksUI/FinalQuiz";
 import GoodbyePrompt from "./scenes/gameUI/tasksUI/GoodbyePrompt";
 import CreditsRoll from "./scenes/gameUI/tasksUI/CreditsRoll";
+import TutorialOverlay from "./scenes/gameUI/TutorialOverlay";
 
 // ── Inner component — must be inside MissionProvider to use useMission ──
 function AppContent() {
@@ -60,6 +61,7 @@ function AppContent() {
         <FinalQuiz />
         <GoodbyePrompt />
         <CreditsRoll />
+        <TutorialOverlay />
       </Fragment>
       <HUD />
       {cyberShooterOpen && (
