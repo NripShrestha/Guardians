@@ -841,8 +841,8 @@ export function shouldShowUSBModel(missionId, stage) {
   if (missionId === "TASK_8_CYBERBULLYING" && stage === "TASK8_COMPLETED")
     return true;
   if (missionId === "TASK_9_USB_BADUSB") {
-    // Keep it on the floor for the duration of the task, remove when completed
-    return stage !== "TASK9_COMPLETED";
+    // Keep it on the floor until the player makes a choice
+    return ["TASK9_FIND_USB", "TASK9_USB_FOUND"].includes(stage);
   }
   return false;
 }
