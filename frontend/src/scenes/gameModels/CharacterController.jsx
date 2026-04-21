@@ -159,6 +159,11 @@ export default function CharacterController({
   const targetRotation = useRef(0);
   const currentRotation = useRef(0);
 
+  // Cached vectors for useFrame
+  const cameraDirectionRef = useRef(new THREE.Vector3());
+  const cameraRightRef = useRef(new THREE.Vector3());
+  const worldMoveDirectionRef = useRef(new THREE.Vector3());
+
   // Keyboard state — WASD + Arrow Keys
   const keys = useRef({
     forward: false, // W or ArrowUp
@@ -351,15 +356,16 @@ export default function CharacterController({
 
     // Get camera-relative world direction
     const camera = state.camera;
-    const cameraDirection = new THREE.Vector3();
+    const cameraDirection = cameraDirectionRef.current;
     camera.getWorldDirection(cameraDirection);
     cameraDirection.y = 0;
     cameraDirection.normalize();
 
-    const cameraRight = new THREE.Vector3();
+    const cameraRight = cameraRightRef.current;
     cameraRight.crossVectors(camera.up, cameraDirection).normalize();
 
-    const worldMoveDirection = new THREE.Vector3();
+    const worldMoveDirection = worldMoveDirectionRef.current;
+    worldMoveDirection.set(0, 0, 0);
     worldMoveDirection.addScaledVector(
       cameraDirection,
       -moveDirection.current.z,

@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 const MissionContext = createContext();
 
-const API_BASE = "http://localhost:3001";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 // Stages that signal a task has been evaluated and feedback is being shown
 const DEBRIEFING_STAGES = new Set([

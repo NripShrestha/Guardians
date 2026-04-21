@@ -537,12 +537,8 @@ function Bullet({ startPos, direction, onHit, registry }) {
     if (!ref.current || done.current) return;
     pos.current.addScaledVector(dir.current, speed * dt);
     ref.current.position.copy(pos.current);
-    const meshes = [];
-    registry.current.forEach((mesh) => {
-      if (mesh?.parent) meshes.push(mesh);
-    });
-    for (const mesh of meshes) {
-      if (pos.current.distanceTo(mesh.position) < 1.5) {
+    for (const mesh of registry.current.values()) {
+      if (mesh?.parent && pos.current.distanceToSquared(mesh.position) < 2.25) { // 1.5 * 1.5 = 2.25
         done.current = true;
         ref.current.visible = false;
         onHit(mesh, pos.current.toArray());
@@ -937,7 +933,9 @@ function GameScene({
     if (mousePosRef?.current) {
       const ndcX = (mousePosRef.current.x / size.width) * 2 - 1;
       const ndcY = -(mousePosRef.current.y / size.height) * 2 + 1;
-      raycaster.current.setFromCamera(new THREE.Vector2(ndcX, ndcY), camera);
+      if (!raycaster.current._ndc) raycaster.current._ndc = new THREE.Vector2();
+      raycaster.current._ndc.set(ndcX, ndcY);
+      raycaster.current.setFromCamera(raycaster.current._ndc, camera);
       aimDirRef.current.copy(raycaster.current.ray.direction);
     }
     if (paused) return;
@@ -1207,14 +1205,18 @@ function GameScene({
 // ─── CROSSHAIR ────────────────────────────────────────────────────────────────
 
 function Crosshair({ playing, firing }) {
-  const [mousePos, setMousePos] = useState({
-    x: window.innerWidth / 2,
-    y: window.innerHeight / 2,
-  });
+  const crosshairRef = useRef();
 
   useEffect(() => {
     if (!playing) return;
-    const fn = (e) => setMousePos({ x: e.clientX, y: e.clientY });
+    if (crosshairRef.current) {
+      crosshairRef.current.style.transform = `translate(${window.innerWidth / 2 - 28}px, ${window.innerHeight / 2 - 28}px)`;
+    }
+    const fn = (e) => {
+      if (crosshairRef.current) {
+        crosshairRef.current.style.transform = `translate(${e.clientX - 28}px, ${e.clientY - 28}px)`;
+      }
+    };
     window.addEventListener("mousemove", fn);
     return () => window.removeEventListener("mousemove", fn);
   }, [playing]);
@@ -1222,12 +1224,14 @@ function Crosshair({ playing, firing }) {
   const color = firing ? "#FF4444" : "#FF8800";
   return (
     <div
+      ref={crosshairRef}
       style={{
         position: "absolute",
-        left: mousePos.x - 28,
-        top: mousePos.y - 28,
+        left: 0,
+        top: 0,
         pointerEvents: "none",
         zIndex: 20,
+        willChange: "transform",
       }}
     >
       <svg width="56" height="56" viewBox="0 0 56 56">

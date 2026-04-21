@@ -22,6 +22,17 @@ export default function ThirdPersonCamera({
 
   const { scene, camera } = useThree();
 
+  // Optimised vectors
+  const _localOffset = useRef(new THREE.Vector3());
+  const _rotatedOffset = useRef(new THREE.Vector3());
+  const _lookAtTarget = useRef(new THREE.Vector3());
+  const _idealCameraPos = useRef(new THREE.Vector3());
+  const _rayDirection = useRef(new THREE.Vector3());
+  const _rayOrigin = useRef(new THREE.Vector3());
+  const _actualCameraPos = useRef(new THREE.Vector3());
+  const _yAxis = useRef(new THREE.Vector3(0, 1, 0));
+  const _raycaster = useRef(new THREE.Raycaster());
+
   useFrame((state, delta) => {
     if (!enabled) return;
 
@@ -56,49 +67,42 @@ export default function ThirdPersonCamera({
     const characterYRotation = characterGroup.current.rotation.y;
 
     // ── Build ideal camera position ──────────────────────────────
-    const localOffset = new THREE.Vector3(offset.x, offset.y, offset.z);
-    const rotatedOffset = localOffset
-      .clone()
-      .applyAxisAngle(new THREE.Vector3(0, 1, 0), characterYRotation);
+    _localOffset.current.set(offset.x, offset.y, offset.z);
+    _rotatedOffset.current.copy(_localOffset.current).applyAxisAngle(_yAxis.current, characterYRotation);
 
-    const lookAtTarget = new THREE.Vector3(
+    _lookAtTarget.current.set(
       characterPosition.x + lookAtOffset.x,
       characterPosition.y + lookAtOffset.y,
       characterPosition.z + lookAtOffset.z,
     );
 
-    const idealCameraPosition = new THREE.Vector3(
-      characterPosition.x + rotatedOffset.x,
-      characterPosition.y + rotatedOffset.y,
-      characterPosition.z + rotatedOffset.z,
+    _idealCameraPos.current.set(
+      characterPosition.x + _rotatedOffset.current.x,
+      characterPosition.y + _rotatedOffset.current.y,
+      characterPosition.z + _rotatedOffset.current.z,
     );
 
-    const idealDistance = lookAtTarget.distanceTo(idealCameraPosition);
+    const idealDistance = _lookAtTarget.current.distanceTo(_idealCameraPos.current);
     if (currentDistance.current === null)
       currentDistance.current = idealDistance;
 
     // Direction from character (look-at point) → ideal camera
-    const rayDirection = new THREE.Vector3()
-      .subVectors(idealCameraPosition, lookAtTarget)
-      .normalize();
+    _rayDirection.current.subVectors(_idealCameraPos.current, _lookAtTarget.current).normalize();
 
     // ── Three.js Obstruction raycast ─────────────────────────────
     // Cast FROM character TOWARD camera to find the first thing in the way.
-    // Use Three.js Raycaster for exact visual bounds since physics colliders 
-    // might be missing or approximations.
     const RAY_ORIGIN_OFFSET = 0.2; // skip character's own center
     const rayDistance = idealDistance - RAY_ORIGIN_OFFSET;
 
     let targetDistance = idealDistance;
 
     if (rayDistance > 0) {
-      const rayOrigin = lookAtTarget
-        .clone()
-        .add(rayDirection.clone().multiplyScalar(RAY_ORIGIN_OFFSET));
+      _rayOrigin.current.copy(_lookAtTarget.current).addScaledVector(_rayDirection.current, RAY_ORIGIN_OFFSET);
 
-      const raycaster = new THREE.Raycaster(rayOrigin, rayDirection, 0, rayDistance);
-      // Optional: limit to only meshes (no sensors, lines, etc.) if needed.
-      const hits = raycaster.intersectObjects(scene.children, true);
+      _raycaster.current.set(_rayOrigin.current, _rayDirection.current);
+      _raycaster.current.far = rayDistance;
+      
+      const hits = _raycaster.current.intersectObjects(scene.children, true);
 
       // Find the first valid hit that isn't the character itself
       let minHitDistance = rayDistance;
@@ -145,22 +149,20 @@ export default function ThirdPersonCamera({
     );
 
     // ── Final camera position along the ray ─────────────────────
-    const actualCameraPosition = lookAtTarget
-      .clone()
-      .add(rayDirection.clone().multiplyScalar(currentDistance.current));
+    _actualCameraPos.current.copy(_lookAtTarget.current).addScaledVector(_rayDirection.current, currentDistance.current);
 
     // ── Lerp camera into place ───────────────────────────────────
     if (!initialized.current) {
-      currentPosition.current.copy(actualCameraPosition);
-      currentLookAt.current.copy(lookAtTarget);
-      camera.position.copy(actualCameraPosition);
-      camera.lookAt(lookAtTarget);
+      currentPosition.current.copy(_actualCameraPos.current);
+      currentLookAt.current.copy(_lookAtTarget.current);
+      camera.position.copy(_actualCameraPos.current);
+      camera.lookAt(_lookAtTarget.current);
       initialized.current = true;
       return;
     }
 
-    currentPosition.current.lerp(actualCameraPosition, smoothness);
-    currentLookAt.current.lerp(lookAtTarget, smoothness);
+    currentPosition.current.lerp(_actualCameraPos.current, smoothness);
+    currentLookAt.current.lerp(_lookAtTarget.current, smoothness);
 
     camera.position.copy(currentPosition.current);
     camera.lookAt(currentLookAt.current);

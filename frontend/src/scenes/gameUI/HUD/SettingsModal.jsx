@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Volume2, Sun, LogOut, Check } from "lucide-react";
+import { X, Volume2, VolumeX, Sun, LogOut, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useBrightness } from "../../utils/BrightnessContext";
 import { useVolume } from "../../utils/VolumeContext"; // Add this import
@@ -8,7 +8,7 @@ export default function SettingsModal({ onClose }) {
   const navigate = useNavigate();
   const [confirmExit, setConfirmExit] = useState(false);
   const { brightness, setBrightness } = useBrightness();
-  const { volume, setVolume } = useVolume(); // Add this hook
+  const { volume, setVolume, isMuted, toggleMute } = useVolume(); // Add this hook
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-indigo-900/20 backdrop-blur-md px-4">
@@ -31,9 +31,16 @@ export default function SettingsModal({ onClose }) {
             <div className="space-y-8">
               {/* VOLUME SLIDER - NOW FUNCTIONAL */}
               <div className="flex items-center gap-4">
-                <div className="bg-indigo-100 p-3 rounded-xl border-2 border-indigo-900">
-                  <Volume2 className="text-indigo-900" />
-                </div>
+                <button
+                  onClick={toggleMute}
+                  className="bg-indigo-100 p-3 rounded-xl border-2 border-indigo-900 hover:bg-indigo-200 transition-colors cursor-pointer"
+                >
+                  {isMuted || volume === 0 ? (
+                    <VolumeX className="text-indigo-900" />
+                  ) : (
+                    <Volume2 className="text-indigo-900" />
+                  )}
+                </button>
                 <input
                   type="range"
                   min="0"

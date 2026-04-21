@@ -115,13 +115,9 @@ export default function BadUSBDesktop() {
   useEffect(() => {
     if (!isActive || phase !== "terminal") return;
     if (currentLineIndex >= TERMINAL_LINES.length) {
-      // All lines shown → flicker + freeze + alert
-      setTimeout(() => setScreenFlicker(true), 500);
-      setTimeout(() => setMouseFrozen(true), 800);
-      setTimeout(() => {
-        setScreenFlicker(false);
-        setPhase("alert");
-      }, 1600);
+      // All lines shown → freeze + alert (no flicker)
+      setTimeout(() => setMouseFrozen(true), 300);
+      setTimeout(() => setPhase("alert"), 800);
       return;
     }
 
@@ -157,10 +153,7 @@ export default function BadUSBDesktop() {
 
   // ── Render ──
   return (
-    <div
-      className={`fixed inset-0 z-[950] flex items-center justify-center p-4 font-sans
-        ${screenFlicker ? "animate-pulse bg-red-900/20" : ""}`}
-    >
+    <div className="fixed inset-0 z-[950] flex items-center justify-center p-4 font-sans">
       {/* Monitor Frame */}
       <div className="relative w-[70%] h-[90vh] bg-[#0c0c0c] rounded-xl p-8 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] border-[12px] border-[#222]">
         {/* Screen */}

@@ -1,10 +1,6 @@
 import { useBrightness } from "./utils/BrightnessContext";
-import { PositionalAudio } from "@react-three/drei";
+import PositionalAudio from "./utils/PositionalAudio";
 
-/**
- * Scene Environment
- * Handles all lighting and ambient audio
- */
 export default function SceneEnvironment() {
   const { brightness } = useBrightness();
 

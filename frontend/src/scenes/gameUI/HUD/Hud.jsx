@@ -11,7 +11,7 @@ import {
   isPlayerLocked,
 } from "../../missions/tasks/TaskRegistry";
 
-const API_BASE = "http://localhost:3001";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 // Reusable Icon Button
 const IconButton = ({ onClick, icon: Icon, color = "bg-white" }) => (
@@ -283,6 +283,7 @@ export default function HUD() {
           quizScore={quizScore}
           quizHighScore={quizHighScore}
           quizAnswers={quizAnswers}
+          shooterHighScore={savedHighScore}
           onRetakeQuiz={() => {
             // Only allow retake if game has reached quiz phase or beyond
             if (

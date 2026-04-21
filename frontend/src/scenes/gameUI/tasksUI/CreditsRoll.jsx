@@ -2,25 +2,25 @@ import { useState, useEffect, useRef } from "react";
 import { useMission, getAuthToken } from "../../missions/MissionContext";
 import { shouldShowCredits } from "../../missions/tasks/TaskRegistry";
 
-const API_BASE = "http://localhost:3001";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 const CREDITS_DATA = [
   { type: "title", text: "Guardians of the Digital Realm" },
   { type: "spacer" },
   { type: "heading", text: "Game Design & Development" },
-  { type: "name", text: "The Guardians Team" },
+  { type: "name", text: "Nrip Shrestha" },
   { type: "spacer" },
   { type: "heading", text: "Educational Content" },
   { type: "name", text: "Cybersecurity Awareness Program" },
   { type: "spacer" },
   { type: "heading", text: "3D Art & Animation" },
-  { type: "name", text: "The Guardians Team" },
+  { type: "name", text: "Nrip Shrestha" },
   { type: "spacer" },
   { type: "heading", text: "UI/UX Design" },
-  { type: "name", text: "The Guardians Team" },
+  { type: "name", text: "Nrip Shrestha" },
   { type: "spacer" },
   { type: "heading", text: "Sound & Music" },
-  { type: "name", text: "The Guardians Team" },
+  { type: "name", text: "Nrip Shrestha" },
   { type: "spacer" },
   { type: "spacer" },
   { type: "heading", text: "Special Thanks" },

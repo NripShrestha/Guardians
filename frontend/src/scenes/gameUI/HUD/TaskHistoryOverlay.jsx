@@ -9,12 +9,13 @@ import {
   School,
   Calendar,
   FileText,
+  Target,
 } from "lucide-react";
 import { TASK_REGISTRY } from "../../missions/tasks/TaskRegistry";
 import QuizReviewOverlay from "./QuizReviewOverlay";
 import axios from "axios";
 
-export default function TaskHistoryOverlay({ onClose, taskResults, quizScore, quizHighScore, quizAnswers, onRetakeQuiz }) {
+export default function TaskHistoryOverlay({ onClose, taskResults, quizScore, quizHighScore, quizAnswers, onRetakeQuiz, shooterHighScore }) {
   const [userData, setUserData] = useState(null);
   const [activeTab, setActiveTab] = useState("profile"); // "profile" | "history"
   const [showQuizReview, setShowQuizReview] = useState(false);
@@ -293,6 +294,23 @@ export default function TaskHistoryOverlay({ onClose, taskResults, quizScore, qu
                   ) : (
                     <Clock className="w-6 h-6 text-gray-400 shrink-0" />
                   )}
+                </div>
+              </div>
+
+              {/* ── CYBER SHOOTER ROW ── */}
+              <div className="mt-2 pt-2 border-t-2 border-indigo-100">
+                <div className="flex items-center gap-3 p-3 rounded-xl border-2 bg-indigo-50 border-indigo-200">
+                  <div className="text-sm font-black text-indigo-900 w-8 h-8 flex items-center justify-center bg-white rounded-xl border-2 border-indigo-100 shadow-sm shrink-0">
+                    <Target className="w-4 h-4" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-indigo-900">
+                      Cyber Shooter
+                    </h3>
+                    <p className="text-sm font-bold text-gray-500 mt-0.5">
+                      High Score: <span className="text-indigo-600">{shooterHighScore || 0}</span>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
