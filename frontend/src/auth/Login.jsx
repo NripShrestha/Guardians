@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-
+const API_BASE = import.meta.env.VITE_API_BASE;
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,7 +35,7 @@ export default function Login() {
 
     setIsSubmitting(true);
     try {
-      const result = await axios.post("http://localhost:3001/login", {
+      const result = await axios.post(`${API_BASE}/login`, {
         email,
         password,
       });
@@ -44,12 +44,10 @@ export default function Login() {
         localStorage.setItem("guardians_token", result.data.token);
 
         try {
-          const progressRes = await axios.get(
-            "http://localhost:3001/progress",
-            {
-              headers: { Authorization: `Bearer ${result.data.token}` },
-            },
-          );
+          const progressRes = await axios.get(`${API_BASE}/progress`, {
+            headers: { Authorization: `Bearer ${result.data.token}` },
+          });
+
           if (
             progressRes.data.success &&
             progressRes.data.progress.characterType

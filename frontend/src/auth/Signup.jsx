@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function Signup() {
   const [username, setUsername] = useState("");
@@ -70,7 +71,7 @@ export default function Signup() {
 
     setIsSubmitting(true);
     try {
-      const result = await axios.post("http://localhost:3001/register", {
+      const result = await axios.post(`${API_BASE}/register`, {
         username,
         email,
         age: Number(age),

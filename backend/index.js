@@ -11,8 +11,9 @@ app.use(cors());
 
 mongoose.connect("mongodb://127.0.0.1:27017/Guardians");
 
-const JWT_SECRET = "fyp_secret_key";
-
+// const JWT_SECRET = "fyp_secret_key";
+require("dotenv").config();
+const JWT_SECRET = process.env.JWT_SECRET;
 // ── VALIDATION HELPERS ───────────────────────────────────────────────────────
 const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 const validatePassword = (password) =>

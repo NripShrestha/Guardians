@@ -14,6 +14,7 @@ import {
 import { TASK_REGISTRY } from "../../missions/tasks/TaskRegistry";
 import QuizReviewOverlay from "./QuizReviewOverlay";
 import axios from "axios";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function TaskHistoryOverlay({ onClose, taskResults, quizScore, quizHighScore, quizAnswers, onRetakeQuiz, shooterHighScore }) {
   const [userData, setUserData] = useState(null);
@@ -23,8 +24,9 @@ export default function TaskHistoryOverlay({ onClose, taskResults, quizScore, qu
   useEffect(() => {
     const token = localStorage.getItem("guardians_token");
     if (!token) return;
+
     axios
-      .get("http://localhost:3001/me", {
+      .get(`${API_BASE}/me`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {

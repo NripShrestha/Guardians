@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
+const API_BASE = import.meta.env.VITE_API_BASE;
+
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [schoolName, setSchoolName] = useState("");
@@ -44,7 +46,7 @@ export default function ForgotPassword() {
 
     setIsSubmitting(true);
     try {
-      const result = await axios.post("http://localhost:3001/forgot-password", {
+      const result = await axios.post(`${API_BASE}/forgot-password`, {
         email,
         schoolName,
         newPassword,
