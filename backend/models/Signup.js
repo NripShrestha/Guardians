@@ -22,7 +22,6 @@ const SignupSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Age is required"],
       min: [5, "Age must be at least 5"],
-      max: [18, "Age cannot exceed 18"],
     },
     gender: {
       type: String,

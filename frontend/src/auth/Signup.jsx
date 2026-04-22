@@ -35,8 +35,8 @@ export default function Signup() {
 
     if (!age) {
       newErrors.age = "How old are you, hero?";
-    } else if (age < 5 || age > 18) {
-      newErrors.age = "Age must be between 5 and 18!";
+    } else if (age < 5) {
+      newErrors.age = "Age must be at least 5!";
     }
 
     if (!gender) {
@@ -101,7 +101,7 @@ export default function Signup() {
       <div className="absolute top-10 left-10 w-20 h-20 bg-yellow-400 rounded-full blur-xl opacity-50 animate-bounce"></div>
       <div className="absolute bottom-10 right-10 w-32 h-32 bg-pink-400 rounded-full blur-xl opacity-50"></div>
 
-      <div className="relative bg-white p-6 rounded-[1.5rem] shadow-[0_16px_0_0_rgba(0,0,0,0.1)] border-4 border-indigo-900 w-full max-w-sm transform transition-all hover:scale-[1.01]">
+      <div className="relative bg-white p-6 rounded-[1.5rem] shadow-[0_16px_0_0_rgba(0,0,0,0.1)] border-4 border-indigo-900 w-full max-w-sm transform transition-all hover:scale-[1.01] max-h-[90vh] overflow-y-auto">
         <h1 className="text-3xl font-black text-center text-indigo-900 mb-2 tracking-tight">
           HERO SIGNUP
         </h1>

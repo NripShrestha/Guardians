@@ -19,7 +19,7 @@ const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 const validatePassword = (password) =>
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/.test(password);
 const validateUsername = (username) => /^[a-zA-Z0-9_]{3,20}$/.test(username);
-const validateAge = (age) => age >= 5 && age <= 18;
+const validateAge = (age) => age >= 5;
 
 // ── AUTH MIDDLEWARE ──────────────────────────────────────────────────────────
 function authenticateToken(req, res, next) {
@@ -143,7 +143,7 @@ app.post("/register", async (req, res) => {
   if (!age) {
     errors.age = "Age is required";
   } else if (!validateAge(age)) {
-    errors.age = "Age must be between 5 and 18";
+    errors.age = "Age must be at least 5";
   }
 
   if (!gender) {
